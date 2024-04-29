@@ -16,13 +16,13 @@ NAME		=	raytracer
 
 WARNINGS	=	-Wall -Wextra -Wshadow
 
-INCLUDE		=	-I./include
+INCLUDE		=	-I./include -I./Interfaces
 
 VALGRIND	=	-g3
 
 LIBS		=	-lconfig
 
-CXX_FLAGS	=	$(INCLUDE) $(WARNINGS) $(LIBS) #$(VALGRIND)
+CXXFLAGS	=	$(INCLUDE) $(WARNINGS) $(LIBS) #$(VALGRIND)
 
 #-------------- Tests Variables --------------#
 
@@ -50,7 +50,7 @@ TESTS_FLAGS		=	$(TESTS_INCLUDE) $(WARNINGS) $(TESTS_LIBS) $(TESTS_COMPILATION_FL
 all:	$(NAME)
 
 $(NAME):	$(OBJ)
-	g++ -o $(NAME) $(OBJ) $(CXX_FLAGS)
+	g++ -o $(NAME) $(OBJ) $(CXXFLAGS)
 	@if [ -f $(NAME) ]; then \
 		printf "\033[1;32mCompilation completed ✅\033[0m\n"; \
 	else \
