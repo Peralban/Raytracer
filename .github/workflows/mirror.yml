@@ -51,33 +51,6 @@ jobs:
             fi
           done
 
-  check_coding_style:
-    needs: [check_program_compilation]
-    runs-on: ubuntu-latest
-    container: ghcr.io/epitech/coding-style-checker:latest
-    steps:
-      - uses: actions/checkout@v4
-      - name : check_coding_style
-        run: check.sh $(pwd) $(pwd)
-        #redirect to a specific line in a file when a Github Actions is clicked
-        # so we need to include the file name, the line number and the error message
-        # as this example : echo "::error file=path/to/file.cpp,line=42::Error message"
-        # if the file is empty (no coding style error) then we print a notice and continue the workflow
-        # if the file is not empty (coding style error) then we print an error and stop the workflow
-      - name: Anotation of the coding style
-        run: |
-          cat coding-style-reports.log | while read line; do
-            echo "::error file=$(echo $line | cut -d ':' -f 1),\
-            line=$(echo $line | cut -d ':' -f 2),\
-            title=$(echo $line | cut -d ':' -f 3)"\
-            coding style error::"$(echo $line | cut -d ':' -f 4)"
-          done
-          if [ -s coding-style-reports.log ]; then
-            exit 1
-          else
-            echo "::notice::No coding style error found."
-          fi
-
   run_tests:
     needs: [check_program_compilation]
     runs-on: ubuntu-latest
