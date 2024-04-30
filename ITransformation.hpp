@@ -27,9 +27,10 @@ namespace RayTracer {
             /// @return If possible, the untransformed coordinates
             ///
             /// (Yes, some transformations are not reversible: for example, a
-            /// transformation that scales to 0 is not reversible since all points
-            /// are transformed to 0;0;0, thus it not possible where the point
-            /// was before the transformation from its 0;0;0 transformed coords)
+            /// transformation that scales to 0 is not reversible since all
+            /// points are transformed to 0;0;0, thus it is not possible
+            /// to know where the point was before the
+            /// transformation from its 0;0;0 transformed coords)
             virtual std::optional<Math::Point3D>
             untransformCoordinates(const Math::Point3D &p) = 0;
 
