@@ -8,6 +8,7 @@
 #pragma once
 
 #include <string>
+#include <exception>
 
 class IError : public std::exception {
     public:
