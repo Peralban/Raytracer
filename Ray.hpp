@@ -23,6 +23,12 @@ namespace RayTracer {
             Math::Point3D orig;
             Math::Vector3D dir;
 
+            Ray &transform(const ITransformation &tr);
+            std::optional<Ray &> &untransform(const ITransformation &tr);
+
+            Ray transformed(const ITransformation &tr) const;
+            std::optional<Ray> untransformed(const ITransformation &tr) const;
+
         protected:
         private:
     };
