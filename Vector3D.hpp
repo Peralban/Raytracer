@@ -16,7 +16,7 @@ namespace Math {
     class Vector3D {
         public:
             Vector3D();
-            static Vector3D fromPoint(const Point3D &p);
+            //static Vector3D fromPoint(const Point3D &p);
             Vector3D(double x, double y, double z);
             ~Vector3D() = default;
 
@@ -46,6 +46,7 @@ namespace Math {
 
             double dot(const Vector3D &other) const noexcept;
             double square() const noexcept;
+            void getUnitVector();
 
             double x;
             double y;
