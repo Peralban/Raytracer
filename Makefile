@@ -6,7 +6,9 @@
 ##
 
 #-------------- Main Variables --------------#
-SRC			=	main.cpp
+
+SRC			=	main.cpp								\
+				DataRetriever/Parsing.cpp				\
 
 TRUE_SRC 	= 	$(patsubst %,src/%, $(SRC))
 
@@ -16,26 +18,27 @@ NAME		=	raytracer
 
 WARNINGS	=	-Wall -Wextra -Wshadow
 
-INCLUDE		=	-I./include -I./Interfaces
+INCLUDE		=	-I./src -I.
 
 VALGRIND	=	-g3
 
-LIBS		=	-lconfig
+LIBS		=	-lconfig++
 
 CXXFLAGS	=	$(INCLUDE) $(WARNINGS) $(LIBS) #$(VALGRIND)
 
 #-------------- Tests Variables --------------#
 
-TEST_SRC		=	MainTests.cpp
-
-TEST_TRUE_SRC	=	$(patsubst %,Tests/src/%, $(TEST_SRC))	\
-					$(filter-out src/main.cpp, $(TRUE_SRC))
+TEST_SRC		=	MainTests.cpp						\
+					DataRetriever/ParsingTests.cpp		\
 
 TESTS_LIBS		=	-lcriterion -lconfig++
 
-TESTS_INCLUDE 		= -I./tests/include
+TESTS_INCLUDE 		= -I./Tests/Include -I./src -I. -I./Interfaces
 
 TESTS_COMPILATION_FLAGS	=	--coverage
+
+TEST_TRUE_SRC	=	$(patsubst %,Tests/src/%, $(TEST_SRC))	\
+					$(filter-out src/main.cpp, $(TRUE_SRC))
 
 TESTS_FLAGS		=	$(TESTS_INCLUDE) $(WARNINGS) $(TESTS_LIBS) $(TESTS_COMPILATION_FLAGS)
 
