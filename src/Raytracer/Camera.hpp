@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "Ray3D.hpp"
+#include "Math/Ray3D.hpp"
 
 namespace RayTracer {
     // Forward declaration of Ray3D class

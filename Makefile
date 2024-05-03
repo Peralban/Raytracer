@@ -9,6 +9,13 @@
 
 SRC			=	main.cpp								\
 				DataRetriever/Parsing.cpp				\
+				Graphical/Sdl2.cpp						\
+				Math/Ray3D.cpp							\
+				Math/Vector3D.cpp						\
+				Raytracer/Camera.cpp					\
+				Shapes/Material.cpp						\
+				Shapes/ShapeList.cpp					\
+				Shapes/Sphere.cpp						\
 
 TRUE_SRC 	= 	$(patsubst %,src/%, $(SRC))
 
@@ -22,7 +29,7 @@ INCLUDE		=	-I./src -I.
 
 VALGRIND	=	-g3
 
-LIBS		=	-lconfig++
+LIBS		=	-lconfig++ -lSDL2 -lSDL2_image -lSDL2_ttf
 
 CXXFLAGS	=	$(INCLUDE) $(WARNINGS) $(LIBS) #$(VALGRIND)
 

@@ -8,7 +8,7 @@
 #pragma once
 
 #include <optional>
-#include "IMaterial.hpp"
+#include "Interfaces/IMaterial.hpp"
 
 namespace RayTracer {
 

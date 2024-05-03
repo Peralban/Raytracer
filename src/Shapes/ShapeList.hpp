@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "IShape.hpp"
+#include "Interfaces/IShape.hpp"
 #include <vector>
 #include <memory>
 
