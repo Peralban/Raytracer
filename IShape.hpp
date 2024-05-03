@@ -5,27 +5,61 @@
 ** IShape
 */
 
-#ifndef ISHAPE_HPP_
-    #define ISHAPE_HPP_
+#pragma  once
 
-    #include <optional>
-    #include "Ray.hpp"
+#include "Ray.hpp"
+#include "Vector3D.hpp"
+#include "Ray3D.hpp"
+#include <memory>
 
 namespace RayTracer {
+    class IMaterial;
+
+    /**
+     * @struct hits
+     * @brief Represents the result of a ray hitting a shape.
+     *
+     * The hits struct contains information about a ray hitting a shape, including the hit point, the normal at the hit point, and the material of the shape.
+     */
+    struct hits {
+        float t; ///< The parameter t from the ray equation that represents the hit point.
+        Math:: Vector3D point; ///< The point in 3D space where the ray hit the shape.
+        Math::Vector3D normal; ///< The normal vector at the hit point.
+        IMaterial *material; ///< The material of the shape that was hit.
+    };
+
+    /**
+     * @class IShape
+     * @brief Represents a shape in the 3D space.
+     *
+     * The IShape class is an interface that defines the behavior of shapes in the scene.
+     * Different types of shapes will implement this interface to provide their own specific behavior.
+     */
     class IShape {
         public:
+            /**
+             * @brief Default constructor for the IShape class.
+             *
+             * Initializes a new instance of the IShape class.
+             */
             IShape() = default;
+
+            /**
+             * @brief Default destructor for the IShape class.
+             */
             virtual ~IShape() = default;
 
-            /// @brief Function used to describe the shape
-            /// @param ray The ray on which to compute a potential collision
-            /// @return If the ray doesn't hit the shape: an empty optional
-            ///         Otherwise: A ray starting at the impact point with a
-            ///           director vector normal to the surface of the shape
-            virtual std::optional<Ray> hits(const Ray &ray) = 0;
-
-        protected:
-        private:
+            /**
+             * @brief Determines if a ray hits the shape.
+             *
+             * This method is called to check if a ray hits the shape. If it does, it fills a hits struct with information about the hit.
+             *
+             * @param ray The ray to check.
+             * @param tmin The minimum t value to consider for a hit.
+             * @param tmax The maximum t value to consider for a hit.
+             * @param hit The hits struct to fill with information about the hit.
+             * @return A boolean indicating whether the ray hit the shape.
+             */
+            virtual bool hit(const Math::Ray3D &ray, float tmin, float tmax, hits &hit) const = 0;
     };
 }
-#endif /* !ISHAPE_HPP_ */
