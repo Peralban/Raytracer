@@ -8,8 +8,8 @@
 #pragma once
 
 #include <optional>
-#include "Vector3D.hpp"
-#include "IShape.hpp"
+#include "Math/Vector3D.hpp"
+#include "Interfaces/IShape.hpp"
 #include <memory>
 
 namespace RayTracer {

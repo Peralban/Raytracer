@@ -8,15 +8,15 @@
 #Program Name
 NAME 		 	= raytracer
 
-#Sources
-SRC_CORE      	= Sdl2.cpp \
-								main.cpp \
-								Vector3D.cpp \
-								Ray3D.cpp \
-								Sphere.cpp \
-								ShapeList.cpp \
-								Camera.cpp \
-								Material.cpp \
+SRC			=	main.cpp								\
+				DataRetriever/Parsing.cpp				\
+				Graphical/Sdl2.cpp						\
+				Math/Ray3D.cpp							\
+				Math/Vector3D.cpp						\
+				Raytracer/Camera.cpp					\
+				Shapes/Material.cpp						\
+				Shapes/ShapeList.cpp					\
+				Shapes/Sphere.cpp						\
 
 
 #Objects
@@ -41,8 +41,7 @@ LINKER			= g++
 GREEN 			= /bin/echo -e "\x1b[32m $1\x1b[0m"
 YELLOW 			= /bin/echo -e "\x1b[33m $1\x1b[0m"
 
-#Rules
-all: core
+LIBS		=	-lconfig++ -lSDL2 -lSDL2_image -lSDL2_ttf
 
 #-----------------Games Rules--------------------
 

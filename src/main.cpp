@@ -1,14 +1,15 @@
 
 
 
-#include "Sdl2.hpp"
-#include "Vector3D.hpp"
-#include "Sphere.hpp"
-#include "ShapeList.hpp"
-#include "Camera.hpp"
-#include "Material.hpp"
+#include "Graphical/Sdl2.hpp"
+#include "src/Math/Vector3D.hpp"
+#include "src/Shapes/Sphere.hpp"
+#include "src/Shapes/ShapeList.hpp"
+#include "src/Raytracer/Camera.hpp"
+#include "src/Shapes/Material.hpp"
 #include <thread>
 #include <vector>
+#include <mutex>
 
 Math::Vector3D color (const Math::Ray3D &ray, RayTracer::IShape *scene, int depth)
 {
@@ -17,8 +18,7 @@ Math::Vector3D color (const Math::Ray3D &ray, RayTracer::IShape *scene, int dept
     {
         Math::Ray3D scattered;
         Math::Vector3D attenuation;
-        if (depth < 50 && hit.material->scatter(ray, hit, attenuation, scattered))
-        {
+        if (depth < 50 && hit.material->scatter(ray, hit, attenuation, scattered)) {
             return attenuation * color(scattered, scene, depth + 1);
         } else {
             return Math::Vector3D(0, 0, 0);
@@ -55,8 +55,6 @@ void renderSection(int startX, int endX, int startY, int endY, int samples, Sdl&
         }
     }
 }
-
-#include <mutex>
 
 int main()
 {
@@ -96,8 +94,8 @@ int main()
 
     while (sdl.isRunning())
     {
-    sdl.startRendering();
-    sdl.stopRendering();
+        sdl.startRendering();
+        sdl.stopRendering();
     }
 
     sdl.closeWindow();
