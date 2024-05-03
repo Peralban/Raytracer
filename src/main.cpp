@@ -2,15 +2,14 @@
 
 
 #include "Graphical/Sdl2.hpp"
-#include "src/Math/Vector3D.hpp"
-#include "src/Shapes/Sphere.hpp"
-#include "src/Shapes/ShapeList.hpp"
-#include "src/Raytracer/Camera.hpp"
-#include "src/Shapes/Material.hpp"
+#include "Math/Vector3D.hpp"
+#include "Math/Ray3D.hpp"
+#include "Raytracer/Camera.hpp"
+#include "Shapes/ShapeList.hpp"
+#include "Shapes/Sphere.hpp"
+#include "Shapes/Material.hpp"
 #include <thread>
 #include <vector>
-#include <mutex>
-
 Math::Vector3D color (const Math::Ray3D &ray, RayTracer::IShape *scene, int depth)
 {
     RayTracer::hits  hit;
@@ -18,7 +17,8 @@ Math::Vector3D color (const Math::Ray3D &ray, RayTracer::IShape *scene, int dept
     {
         Math::Ray3D scattered;
         Math::Vector3D attenuation;
-        if (depth < 50 && hit.material->scatter(ray, hit, attenuation, scattered)) {
+        if (depth < 50 && hit.material->scatter(ray, hit, attenuation, scattered))
+        {
             return attenuation * color(scattered, scene, depth + 1);
         } else {
             return Math::Vector3D(0, 0, 0);
@@ -30,32 +30,7 @@ Math::Vector3D color (const Math::Ray3D &ray, RayTracer::IShape *scene, int dept
     }
 }
 
-void renderSection(int startX, int endX, int startY, int endY, int samples, Sdl& sdl, RayTracer::ShapeList& scene, RayTracer::Camera& camera, std::mutex& mutex)
-{
-    int width = 400;
-    int height = 200;
-    (void) sdl;
-    (void) mutex;
-    for (int y = startY; y < endY; y++) {
-        for (int x = startX; x < endX; x++) {
-            Math::Vector3D col(0, 0, 0);
-            for (int s = 0; s < samples; s++) {
-                float u = float(x + drand48()) / float(width);
-                float v = float(y + drand48()) / float(height);
-                Math::Ray3D ray = camera.getRay(u, v);
-                Math::Vector3D p = ray.pointOnRay(2.0);
-                col += color(ray, &scene, 0);
-            }
-            col /= float(samples);
-            col = Math::Vector3D(sqrt(col.x), sqrt(col.y), sqrt(col.z));
-            unsigned char r = (unsigned char) (255.99 * col.x);
-            unsigned char g = (unsigned char) (255.99 * col.y);
-            unsigned char b = (unsigned char) (255.99 * col.z);
-            sdl.drawPoint(x, y, r, g, b);
-        }
-    }
-}
-
+/**
 int main()
 {
     Sdl sdl;
@@ -69,27 +44,150 @@ int main()
     RayTracer::ShapeList scene;
     scene._shapes.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(0, 0, -1), 0.5, new RayTracer::Metal(Math::Vector3D(0.8, 0.3, 0.3), 0.0)));
     scene._shapes.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(0, -100.5, -1), 100, new RayTracer::Metal(Math::Vector3D(0.8, 0.8, 0.0), 0.0)));
-    scene._shapes.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(0.7, -0.3, -0.7), 0.2, new RayTracer::Metal(Math::Vector3D(0.8, 0.6, 0.2), 0.3)));
+    scene._shapes.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(0.7, -0.3, -0.7), 0.2, new RayTracer::Metal(Math::Vector3D(0.8, 0.6, 0.2), 0.1)));
+    scene._shapes.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(-1, 0, -1), 0.4, new RayTracer::Metal(Math::Vector3D(0.6, 0.3, 0.5), 1.0)));
+    RayTracer::Camera camera;
+    for (int y = height - 1; y >= 0; y--) {
+        for (int x = 0; x < width; x++) {
+            Math::Vector3D col(0, 0, 0);
+            for (int s = 0; s < samples; s++) {
+                float u = float(x + drand48()) / float(width);
+                float v = float(y + drand48()) / float(height);
+                Math::Ray3D ray = camera.getRay(u, v);
+                Math::Vector3D p = ray.pointOnRay(2.0);
+                col += color(ray, &scene, 0);
+            }
+            col /= float(samples);
+            col = Math::Vector3D(sqrt(col.x), sqrt(col.y), sqrt(col.z));
+            unsigned char r = (unsigned char) (255.99 * col.x);
+            unsigned char g = (unsigned char) (255.99 * col.y);
+            unsigned char b = (unsigned char) (255.99 * col.z);
+            //sdl.drawPoint(x, height-y, r, g, b);
+           std::cout << (int)r << " " << (int)g << " " << (int)b << std::endl;
+        }
+    }
+
+    return 0;
+    while (sdl.isRunning())
+    {
+        sdl.startRendering();
+        sdl.stopRendering();
+    }
+
+    sdl.closeWindow();
+    return 0;
+}
+*/
+
+/**
+
+#include <thread>
+#include <vector>
+#include <mutex>
+
+std::mutex mtx;
+void drawPoints(int startY, int endY, Sdl &sdl) {
+    for (int y = startY; y < endY; ++y) {
+        mtx.lock();
+        for (int x = 0; x < 6400; ++x) {
+            unsigned char r = (unsigned char) (255.99 * (float)x / 400);
+            unsigned char g = (unsigned char) (255.99 * (float)y / 200);
+            unsigned char b = (unsigned char) (255.99 * 0.2);
+            sdl.drawPoint(x, y, sdl.createColor(r, g, b, 255));
+        }
+        mtx.unlock();
+    }
+}
+
+int main () {
+    Sdl sdl;
+    sdl.initWindow();
+    int width = 6400;
+    int height = 3200;
+
+    int numThreads = 1; // Limit the number of threads to the number of cores
+    std::vector<std::thread> threads(numThreads);
+    int range = height / numThreads;
+
+    for (int i = 0; i < numThreads; ++i) {
+        int startY = i * range;
+        int endY = (i == numThreads - 1) ? height : startY + range;
+        threads[i] = std::thread(drawPoints, startY, endY, std::ref(sdl));
+    }
+
+    for (int i = 0; i < numThreads; ++i)
+        threads[i].join();
+
+    return 0;
+    while (sdl.isRunning())
+    {
+        sdl.startRendering();
+        sdl.stopRendering();
+    }
+    sdl.closeWindow();
+}
+*/
+
+
+#include <thread>
+#include <vector>
+#include <mutex>
+#include <future>
+std::mutex mtx;
+
+thread_local int threadId = 0;
+
+void render(int startY, int endY, int width, int samples, RayTracer::ShapeList& scene, RayTracer::Camera& camera, Sdl& sdl, int x) {
+    for (int y = startY; y <=  endY; y++) {
+        Math::Vector3D col(0, 0, 0);
+        for (int s = 0; s < samples; s++) {
+            float u = float(x + drand48()) / float(width);
+            float v = float(y + drand48()) / float(500);
+            Math::Ray3D ray = camera.getRay(u, v);
+            Math::Vector3D p = ray.pointOnRay(2.0);
+            col += color(ray, &scene, 0);
+        }
+        col /= float(samples);
+        col = Math::Vector3D(sqrt(col.x), sqrt(col.y), sqrt(col.z));
+        unsigned char r = (unsigned char) (255.99 * col.x);
+        unsigned char g = (unsigned char) (255.99 * col.y);
+        unsigned char b = (unsigned char) (255.99 * col.z);
+        mtx.lock();
+        sdl.drawPoint(x, 500-y, r, g, b);
+        mtx.unlock();
+    }
+    threadId++;
+}
+
+int main()
+{
+    Sdl sdl;
+    sdl.initWindow();
+    int width = 1000;
+    int height = 500;
+    int samples = 30;
+    std::cout << "P3" << std::endl;
+    std::cout  << width << "  " << height << std::endl;
+    std::cout << "255" << std::endl;
+    RayTracer::ShapeList scene;
+    scene._shapes.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(0, 0, -1), 0.5, new RayTracer::Metal(Math::Vector3D(0.8, 0.3, 0.3), 0.0)));
+    scene._shapes.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(0, -100.5, -1), 100, new RayTracer::Metal(Math::Vector3D(0.8, 0.8, 0.0), 0.0)));
+    scene._shapes.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(0.7, -0.3, -0.7), 0.2, new RayTracer::Metal(Math::Vector3D(0.8, 0.6, 0.2), 0.1)));
     scene._shapes.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(-1, 0, -1), 0.4, new RayTracer::Metal(Math::Vector3D(0.6, 0.3, 0.5), 1.0)));
     RayTracer::Camera camera;
 
     int numThreads = std::thread::hardware_concurrency();
-    int sectionHeight = height / numThreads;
-    int sectionWidth = width / numThreads;
-    // mutex initialisation
-    std::vector<std::thread> threads(numThreads);
+    std::vector<std::future<void>> futures(numThreads);
+    int range = height / numThreads;
 
-    std::mutex mutex;
-
-    std::cout << "Num threads: " << numThreads << std::endl;
-
-    for (int i = 0; i < numThreads; i++) {
-        std::cerr << "Thread finished" << std::endl;
-        threads[i] = std::thread(renderSection, i * sectionWidth, (i + 1) * sectionWidth, i * sectionHeight, (i + 1) * sectionHeight, samples, std::ref(sdl), std::ref(scene), std::ref(camera), std::ref(mutex));
-    }
-
-    for (int i = 0; i < numThreads; i++) {
-        threads[i].join();
+    for (int i = 0; i < width ; i++) {
+        for (int j = 0; j < numThreads; ++j) {
+            int startY = j * range;
+            int endY = (j == numThreads - 1) ? height : startY + range;
+            futures[j] = std::async(std::launch::async, render, startY, endY, width, samples, std::ref(scene), std::ref(camera), std::ref(sdl), i);
+        }
+        for (int j = 0; j < numThreads; ++j)
+            futures[j].get();
     }
 
     while (sdl.isRunning())
@@ -97,7 +195,6 @@ int main()
         sdl.startRendering();
         sdl.stopRendering();
     }
-
     sdl.closeWindow();
     return 0;
 }

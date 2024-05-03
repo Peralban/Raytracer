@@ -113,6 +113,13 @@ namespace Math {
         z /= len;
     }
 
+    Vector3D Vector3D::getUnitVector() const noexcept
+    {
+        double len = length();
+        return Vector3D(x / len, y / len, z / len);
+
+    }
+
     Vector3D Vector3D::getUnitVector()
     {
         double len = length();
@@ -123,6 +130,19 @@ namespace Math {
     Vector3D reflect(const Vector3D &v, const Vector3D &n)
     {
         return v - n * 2 * v.dot(n);
+    }
+
+    bool refract(const Vector3D &v, const Vector3D &n, double niOverNt, Vector3D &refracted)
+    {
+        Vector3D uv = v.getUnitVector();
+        double dotProduct = uv.dot(n);
+        double discriminant = 1.0 - niOverNt * niOverNt * (1 - dotProduct * dotProduct);
+        if (discriminant > 0) {
+            refracted = (uv - n * dotProduct) * niOverNt - n * std::sqrt(discriminant);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     void Vector3D::output(std::ostream &os) const noexcept

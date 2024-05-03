@@ -210,6 +210,7 @@ namespace Math {
              *
              * @return A unit vector in the same direction as the current vector.
              */
+            Vector3D getUnitVector() const noexcept;
             Vector3D getUnitVector();
 
 
@@ -240,6 +241,20 @@ namespace Math {
      * @return The reflected vector.
      */
     Vector3D reflect(const Vector3D &v, const Vector3D &n);
+
+    /**
+     *  @brief Refracts a vector through a surface with a given normal.
+     *
+     *  This function calculates the refraction of a vector uv through a surface with a normal vector n.
+     *  The function is not a member of the Vector3D class.
+     *
+     * @param uv incidence ray direction
+     * @param n normal surface vector
+     * @param niOverNt  the ratio of the refractive indices of the two media
+     * @param refracted the refracted ray direction
+     * @return true if the refraction is possible, false otherwise
+     */
+    bool refract(const Vector3D &uv, const Vector3D &n, double niOverNt, Vector3D &refracted);
 }
 
 /**
