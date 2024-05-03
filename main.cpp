@@ -52,7 +52,6 @@ void renderSection(int startX, int endX, int startY, int endY, int samples, Sdl&
             unsigned char g = (unsigned char) (255.99 * col.y);
             unsigned char b = (unsigned char) (255.99 * col.z);
             sdl.drawPoint(x, y, r, g, b);
-            std::cout << x << " " << y << " " << std::endl;
         }
     }
 }
