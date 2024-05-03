@@ -31,14 +31,18 @@ bool RayTracer::Matte::scatter(const Math::Ray3D &ray, const hits &hit, Math::Ve
 }
 
 RayTracer::Metal::Metal(const Math::Vector3D &a, float f)
-    : _albedo(a), _fuzziness(f)
+    : _albedo(a)
 {
+    if (f < 1)
+        _fuzziness = f;
+    else
+        _fuzziness = 1;
 }
 
 bool RayTracer::Metal::scatter(const Math::Ray3D &ray, const hits &hit, Math::Vector3D &attenuation, Math::Ray3D &scattered) const
 {
     Math::Vector3D reflectedRay = reflect(ray.getDirection().getUnitVector(), hit.normal);
-    scattered = Math::Ray3D(hit.point, reflectedRay);
+    scattered = Math::Ray3D(hit.point, reflectedRay + randomInUnitSphere() * _fuzziness);
     attenuation = _albedo;
     return scattered.getDirection().dot(hit.normal) > 0;
 }
