@@ -5,6 +5,7 @@
 ** Vector3D
 */
 
+
 #include <ostream>
 #include <complex>
 #include "Vector3D.hpp"
