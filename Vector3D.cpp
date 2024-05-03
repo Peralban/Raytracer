@@ -104,12 +104,24 @@ namespace Math {
         return x * x + y * y + z * z;
     }
 
-    void Vector3D::getUnitVector()
+    void Vector3D::makeUnitVector()
     {
         double len = length();
         x /= len;
         y /= len;
         z /= len;
+    }
+
+    Vector3D Vector3D::getUnitVector()
+    {
+        double len = length();
+        return Vector3D(x / len, y / len, z / len);
+
+    }
+
+    Vector3D reflect(const Vector3D &v, const Vector3D &n)
+    {
+        return v - n * 2 * v.dot(n);
     }
 
     void Vector3D::output(std::ostream &os) const noexcept
