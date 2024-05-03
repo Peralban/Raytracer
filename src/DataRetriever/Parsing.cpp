@@ -14,7 +14,6 @@
 #include "Parsing.hpp"
 #include <filesystem>
 
-
 void App::Parsing::checkArguments(int ac, char **av) {
     if (ac < 2)
         throw ErrorTooFewArguments();
