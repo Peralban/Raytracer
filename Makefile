@@ -13,6 +13,11 @@ SRC_CORE      	= Sdl2.cpp \
 								main.cpp \
 								Vector3D.cpp \
 								Ray3D.cpp \
+								Sphere.cpp \
+								ShapeList.cpp \
+								Camera.cpp \
+								Material.cpp \
+
 
 #Objects
 OBJ_CORE		= $(SRC_CORE:.cpp=.o)
