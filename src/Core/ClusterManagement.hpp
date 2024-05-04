@@ -119,6 +119,13 @@ namespace App {
              */
             std::vector<std::pair<std::pair<unsigned int, unsigned int>, std::string>> getConfig() const { return _config; }
 
+            /**
+             * @brief Get the configuration as a map.
+             * @return A map of pairs, each containing a pair of unsigned integers and a string.
+             * @param filename The name of the file to be printed.
+             */
+            void createPPMFile(std::string filename = "output.ppm");
+
         // Sorter
             /**
              * @brief Sort the configuration based on the pair of unsigned integers in ascending order.

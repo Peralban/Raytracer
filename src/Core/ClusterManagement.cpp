@@ -12,7 +12,10 @@
 #include "Raytracer/Camera.hpp"
 #include "Shapes/ShapeList.hpp"
 #include "Shapes/Material.hpp"
+
 #include <algorithm>
+#include <iostream>
+#include <fstream>
 
 App::Cluster::Cluster(unsigned int startY, unsigned int endY, int cluster_id)
     : id(cluster_id)
@@ -116,4 +119,15 @@ void App::ClusterManagement::sortConfig()
         else
             return a.first.second > b.first.second;
     });
+}
+
+void App::ClusterManagement::createPPMFile(std::string filename)
+{
+    std::ofstream file(filename);
+    file << "P3" << std::endl;
+    file << _windowWidth << " " << _windowHeight << std::endl;
+    file << "255" << std::endl;
+    for (auto &node : _config) {
+        file << node.second << std::endl;
+    }
 }
