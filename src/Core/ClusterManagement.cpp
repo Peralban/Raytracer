@@ -11,9 +11,7 @@
 #include "Math/Ray3D.hpp"
 #include "Raytracer/Camera.hpp"
 #include "Shapes/ShapeList.hpp"
-#include "Shapes/Sphere.hpp"
 #include "Shapes/Material.hpp"
-#include <iostream>
 #include <algorithm>
 
 App::Cluster::Cluster(unsigned int startY, unsigned int endY, int cluster_id)
