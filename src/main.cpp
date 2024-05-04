@@ -10,6 +10,8 @@
 #include "Shapes/Material.hpp"
 #include <thread>
 #include <vector>
+#include <iostream>
+
 Math::Vector3D color (const Math::Ray3D &ray, RayTracer::IShape *scene, int depth)
 {
     RayTracer::hits  hit;
@@ -142,7 +144,7 @@ void render(int startY, int endY, int width, int samples, RayTracer::ShapeList& 
         Math::Vector3D col(0, 0, 0);
         for (int s = 0; s < samples; s++) {
             float u = float(x + drand48()) / float(width);
-            float v = float(y + drand48()) / float(500);
+            float v = float(y + drand48()) / float(1080);
             Math::Ray3D ray = camera.getRay(u, v);
             Math::Vector3D p = ray.pointOnRay(2.0);
             col += color(ray, &scene, 0);
@@ -153,7 +155,7 @@ void render(int startY, int endY, int width, int samples, RayTracer::ShapeList& 
         unsigned char g = (unsigned char) (255.99 * col.y);
         unsigned char b = (unsigned char) (255.99 * col.z);
         mtx.lock();
-        sdl.drawPoint(x, 500-y, r, g, b);
+        sdl.drawPoint(x, 1080-y, r, g, b);
         mtx.unlock();
     }
     threadId++;
@@ -163,8 +165,8 @@ int main()
 {
     Sdl sdl;
     sdl.initWindow();
-    int width = 1000;
-    int height = 500;
+    int width = 2160;
+    int height = 1080;
     int samples = 30;
     std::cout << "P3" << std::endl;
     std::cout  << width << "  " << height << std::endl;
