@@ -12,7 +12,9 @@ SRC		= main.cpp								\
 				Math/Ray3D.cpp							\
 				Math/Vector3D.cpp						\
 				Raytracer/Camera.cpp					\
-				Shapes/Material.cpp						\
+				Materials/Glass.cpp						\
+				Materials/Metal.cpp						\
+				Materials/Matte.cpp						\
 				Shapes/ShapeList.cpp					\
 				Shapes/Sphere.cpp						\
 
