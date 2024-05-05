@@ -131,3 +131,24 @@ void App::ClusterManagement::createPPMFile(std::string filename)
         file << node.second << std::endl;
     }
 }
+
+void App::ClusterManagement::initSDL()
+{
+    _sdl.initWindow();
+    for (auto &node : _config) {
+        int r = std::stoi(node.second.substr(0, node.second.find(" ")));
+        int g = std::stoi(node.second.substr(node.second.find(" ") + 1, node.second.rfind(" ")));
+        int b = std::stoi(node.second.substr(node.second.rfind(" ") + 1));
+        _sdl.drawPoint(node.first.first,  _windowHeight-node.first.second, r, g, b);
+    }
+}
+
+void App::ClusterManagement::printSDL()
+{
+    while (_sdl.isRunning())
+    {
+        _sdl.startRendering();
+        _sdl.stopRendering();
+    }
+    _sdl.closeWindow();
+}

@@ -14,6 +14,7 @@
 #include <mutex>
 #include <map>
 
+#include "Graphical/Sdl2.hpp"
 #include "Raytracer/Camera.hpp"
 #include "Shapes/ShapeList.hpp"
 
@@ -132,6 +133,8 @@ namespace App {
              */
             void sortConfig();
 
+            void initSDL();
+            void printSDL();
             /**
              * @brief Mutex for thread safety.
              */
@@ -153,6 +156,8 @@ namespace App {
              * @brief The number of threads, window width, window height, and sample.
              * In volatile mode to prevent compiler optimization.
              */
+
+            Sdl _sdl;
             volatile unsigned int _nbThreads;
             volatile unsigned int _windowWidth;
             volatile unsigned int _windowHeight;
