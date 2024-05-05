@@ -8,13 +8,44 @@
 
 #include "Camera.hpp"
 
-RayTracer::Camera::Camera()
+/*
+    ^   y
+    |
+    |
+    |  / viewUp (vector)
+    | /
+    |/
+    |--------------> x
+   /|
+  / |
+ /  |
+/   v   z (into the screen)
+
+
+  Camera (viewFrom)
+|------------------|  <- view plane at distance d from camera
+|                  |
+|                  |
+|    viewAt -> X   |
+|                  |
+|                  |
+|------------------|
+*/
+
+RayTracer::Camera::Camera(Math::Vector3D viewFrom, Math::Vector3D viewAt, Math::Vector3D viewUp, double verticalFieldOfView, double aspect)
 {
-    _origin = Math::Vector3D(0, 0, 0);
-    lowerLeftCorner = Math::Vector3D(-2, -1, -1);
-    _horizontal = Math::Vector3D(4, 0, 0);
-    _vertical = Math::Vector3D(0, 2, 0);
-    _fov = 90;
+    double theta = verticalFieldOfView * M_PI / 180;
+    double halfHeight = tan(theta / 2);
+    double halfWidth = aspect * halfHeight;
+
+    Math::Vector3D w = (viewFrom - viewAt).getUnitVector();
+    Math::Vector3D u = viewUp.cross(w).getUnitVector();
+    Math::Vector3D v = w.cross(u);
+
+    _origin = viewFrom;
+    lowerLeftCorner = viewFrom - u * halfWidth - v * halfHeight - w;
+    _horizontal = u * 2 * halfWidth;
+    _vertical = v * 2 * halfHeight;
 }
 
 Math::Ray3D RayTracer::Camera::getRay(double u, double v) const {

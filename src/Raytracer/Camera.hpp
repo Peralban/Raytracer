@@ -8,6 +8,7 @@
 #pragma once
 
 #include "Math/Ray3D.hpp"
+#include <cmath>
 
 namespace RayTracer {
     // Forward declaration of Ray3D class
@@ -22,11 +23,18 @@ namespace RayTracer {
     class Camera {
         public:
             /**
-             * @brief Default constructor for the Camera class.
+             * @brief Constructor for the Camera class.
              *
-             * Initializes a new instance of the Camera class.
+             * Initializes a new instance of the Camera class with a given view configuration.
+             * ^ y
+             *
+             * @param viewFrom The position of the camera.
+             * @param viewAt The point the camera is looking at, the look-at point.
+             * @param viewUp The up vector of the camera
+             * @param verticalFieldOfView The vertical field of view of the camera.
+             * @param aspect The aspect ratio of the camera.
              */
-            Camera();
+            Camera(Math::Vector3D viewFrom, Math::Vector3D viewAt, Math::Vector3D viewUp, double verticalFieldOfView, double aspect);
 
             /**
              * @brief Default destructor for the Camera class.
@@ -46,7 +54,6 @@ namespace RayTracer {
             Math::Vector3D lowerLeftCorner; ///< The lower left corner of the camera's view.
             Math::Vector3D _horizontal; ///< The horizontal vector of the camera's view.
             Math::Vector3D _vertical; ///< The vertical vector of the camera's view.
-            double _fov; ///< The field of view of the camera.
 
         protected:
         private:
