@@ -211,6 +211,14 @@ namespace Math {
              * @return A unit vector in the same direction as the current vector.
              */
             Vector3D getUnitVector() const noexcept;
+
+            /**
+             * @brief Outputs the vector to a given output stream.
+             *
+             * This is a virtual function that can be overridden by derived classes to customize the output format.
+             *
+             * @param os The output stream to output the vector to.
+             */
             Vector3D getUnitVector();
 
 
