@@ -145,6 +145,13 @@ namespace Math {
         }
     }
 
+    Vector3D Vector3D::cross(const Vector3D &other) const noexcept
+    {
+        return Vector3D(y * other.z - z * other.y,
+                        z * other.x - x * other.z,
+                        x * other.y - y * other.x);
+    }
+
     void Vector3D::output(std::ostream &os) const noexcept
     {
         os << "Vector3D(" << x << ", " << y << ", " << z << ")";

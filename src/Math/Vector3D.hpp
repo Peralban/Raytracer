@@ -217,14 +217,22 @@ namespace Math {
              *
              * This is a virtual function that can be overridden by derived classes to customize the output format.
              *
-             * @param os The output stream to output the vector to.
+             * @param not used
              */
             Vector3D getUnitVector();
 
+            /**
+             * @brief Outputs the vector to a given output stream.
+             *
+             * This is a virtual function that can be overridden by derived classes to customize the output format.
+             *
+             * @param other the vector to cross with
+             */
+            Vector3D cross(const Vector3D &other) const noexcept;
 
-        double x; ///< The x-coordinate of the vector.
-        double y; ///< The y-coordinate of the vector.
-        double z; ///< The z-coordinate of the vector.
+            double x; ///< The x-coordinate of the vector.
+            double y; ///< The y-coordinate of the vector.
+            double z; ///< The z-coordinate of the vector.
 
         /**
          * @brief Outputs the vector to a given output stream.
