@@ -11,8 +11,8 @@ Sdl::Sdl()
 {
     _screenSize.x = 0;
     _screenSize.y = 0;
-    _screenSize.w = 1440;
-    _screenSize.h = 720;
+    _screenSize.w = 2160;
+    _screenSize.h = 1080;
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "0");
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
         std::cerr << "SDL_Init Error: " << SDL_GetError() << std::endl;
