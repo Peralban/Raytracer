@@ -2,12 +2,13 @@
 ** EPITECH PROJECT, 2024
 ** Raytracer
 ** File description:
-** IShape
+** Metal material
 */
 
-#include "Material.hpp"
+#include "Metal.hpp"
 
-Math::Vector3D randomInUnitSphere()
+
+static Math::Vector3D randomInUnitSphere()
 {
     Math::Vector3D p;
     do {
@@ -16,22 +17,8 @@ Math::Vector3D randomInUnitSphere()
     return p;
 }
 
-RayTracer::Matte::Matte(const Math::Vector3D &albedo)
-    : _albedo(albedo)
-{
-}
-
-bool RayTracer::Matte::scatter(const Math::Ray3D &ray, const hits &hit, Math::Vector3D &attenuation, Math::Ray3D &scattered) const
-{
-    (void)ray;
-    Math::Vector3D reflectedRay = hit.point + hit.normal + randomInUnitSphere();
-    scattered = Math::Ray3D(hit.point, reflectedRay-hit.point);
-    attenuation = _albedo;
-    return true;
-}
-
 RayTracer::Metal::Metal(const Math::Vector3D &a, float f)
-    : _albedo(a)
+        : _albedo(a)
 {
     if (f < 1)
         _fuzziness = f;
