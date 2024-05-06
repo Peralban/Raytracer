@@ -13,7 +13,9 @@
 namespace Math {
     Vector3D::Vector3D() : x(0), y(0), z(0) {}
 
-    Vector3D::Vector3D(double a, double b, double c) : x(a), y(b), z(c) {}
+    Vector3D::Vector3D(double r, double g, double b) : x(r), y(g), z(b) {}
+
+    Vector3D::Vector3D(int r, int g, int b) : x(r), y(g), z(b) {}
 
     double Vector3D::sqLength() const noexcept {
         return x * x + y * y + z * z;
@@ -113,16 +115,41 @@ namespace Math {
         z /= len;
     }
 
+    Vector3D Vector3D::getUnitVector() const noexcept
+    {
+        double len = length();
+        return Vector3D(x / len, y / len, z / len);
+    }
+
     Vector3D Vector3D::getUnitVector()
     {
         double len = length();
         return Vector3D(x / len, y / len, z / len);
-
     }
 
     Vector3D reflect(const Vector3D &v, const Vector3D &n)
     {
         return v - n * 2 * v.dot(n);
+    }
+
+    bool refract(const Vector3D &v, const Vector3D &n, double niOverNt, Vector3D &refracted)
+    {
+        Vector3D uv = v.getUnitVector();
+        double dotProduct = uv.dot(n);
+        double discriminant = 1.0 - niOverNt * niOverNt * (1 - dotProduct * dotProduct);
+        if (discriminant > 0) {
+            refracted = (uv - n * dotProduct) * niOverNt - n * std::sqrt(discriminant);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    Vector3D Vector3D::cross(const Vector3D &other) const noexcept
+    {
+        return Vector3D(y * other.z - z * other.y,
+                        z * other.x - x * other.z,
+                        x * other.y - y * other.x);
     }
 
     void Vector3D::output(std::ostream &os) const noexcept

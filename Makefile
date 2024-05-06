@@ -7,15 +7,18 @@
 
 #-------------- Main Variables --------------#
 
-SRC			=	main.cpp								\
-				DataRetriever/Parsing.cpp				\
+SRC		= main.cpp								\
 				Graphical/Sdl2.cpp						\
+				DataRetriever/Parsing.cpp				\
 				Math/Ray3D.cpp							\
 				Math/Vector3D.cpp						\
 				Raytracer/Camera.cpp					\
-				Shapes/Material.cpp						\
+				Materials/Glass.cpp						\
+				Materials/Metal.cpp						\
+				Materials/Matte.cpp						\
 				Shapes/ShapeList.cpp					\
 				Shapes/Sphere.cpp						\
+				Shapes/Cone.cpp							\
 				Core/ClusterManagement.cpp				\
 
 TRUE_SRC 	= 	$(patsubst %,src/%, $(SRC))

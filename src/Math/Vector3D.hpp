@@ -24,7 +24,17 @@ namespace Math {
              * @param y The y-component of the vector.
              * @param z The z-component of the vector.
              */
-            Vector3D(double x, double y, double z);
+            Vector3D(double r, double g, double b);
+
+            /**
+             * @brief Default destructor for the Vector3D class.
+             *
+             * @param r The x-component of the vector.
+             * @param g The y-component of the vector.
+             * @param b The z-component of the vector.
+             */
+            Vector3D(int r, int g, int b);
+
 
             /**
              * @brief Default destructor for the Vector3D class.
@@ -210,12 +220,29 @@ namespace Math {
              *
              * @return A unit vector in the same direction as the current vector.
              */
+            Vector3D getUnitVector() const noexcept;
+
+            /**
+             * @brief Outputs the vector to a given output stream.
+             *
+             * This is a virtual function that can be overridden by derived classes to customize the output format.
+             *
+             * @param not used
+             */
             Vector3D getUnitVector();
 
+            /**
+             * @brief Outputs the vector to a given output stream.
+             *
+             * This is a virtual function that can be overridden by derived classes to customize the output format.
+             *
+             * @param other the vector to cross with
+             */
+            Vector3D cross(const Vector3D &other) const noexcept;
 
-        double x; ///< The x-coordinate of the vector.
-        double y; ///< The y-coordinate of the vector.
-        double z; ///< The z-coordinate of the vector.
+            double x; ///< The x-coordinate of the vector.
+            double y; ///< The y-coordinate of the vector.
+            double z; ///< The z-coordinate of the vector.
 
         /**
          * @brief Outputs the vector to a given output stream.
@@ -240,6 +267,20 @@ namespace Math {
      * @return The reflected vector.
      */
     Vector3D reflect(const Vector3D &v, const Vector3D &n);
+
+    /**
+     *  @brief Refracts a vector through a surface with a given normal.
+     *
+     *  This function calculates the refraction of a vector uv through a surface with a normal vector n.
+     *  The function is not a member of the Vector3D class.
+     *
+     * @param uv incidence ray direction
+     * @param n normal surface vector
+     * @param niOverNt  the ratio of the refractive indices of the two media
+     * @param refracted the refracted ray direction
+     * @return true if the refraction is possible, false otherwise
+     */
+    bool refract(const Vector3D &uv, const Vector3D &n, double niOverNt, Vector3D &refracted);
 }
 
 /**

@@ -59,8 +59,8 @@ namespace RayTracer {
              */
             bool hit(const Math::Ray3D &ray, float tmin, float tmax, hits &hit) const override;
 
-            Math::Vector3D _center; ///< The center of the sphere.
-            float _radius; ///< The radius of the sphere.
-            IMaterial *_material; ///< The material of the sphere.
+            Math::Vector3D center; ///< The center of the sphere.
+            float radius; ///< The radius of the sphere.
+            IMaterial *material; ///< The material of the sphere.
     };
 }

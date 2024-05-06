@@ -7,8 +7,8 @@
 
 #include "ShapeList.hpp"
 
-RayTracer::ShapeList::ShapeList(std::vector<std::shared_ptr<IShape>> shapes)
-    : _shapes(std::move(shapes))
+RayTracer::ShapeList::ShapeList(std::vector<std::shared_ptr<IShape>> shapesValue)
+    : shapes(std::move(shapesValue))
 {
 }
 
@@ -18,7 +18,7 @@ bool RayTracer::ShapeList::hit(const Math::Ray3D &ray, float tmin, float tmax, h
     bool hitAnything = false;
     float closestSoFar = tmax;
 
-    for (const auto &shape : _shapes) {
+    for (const auto &shape : shapes) {
         if (shape->hit(ray, tmin, closestSoFar, temp)) {
             hitAnything = true;
             closestSoFar = temp.t;
