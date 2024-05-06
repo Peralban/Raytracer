@@ -14,27 +14,27 @@
 #include "Shapes/Material.hpp"
 
 #include <algorithm>
-#include <iostream>
 #include <fstream>
 
 App::Cluster::Cluster(unsigned int startY, unsigned int endY, int cluster_id)
-    : id(cluster_id)
+    : id(cluster_id), _axesY(startY, endY)
 {
-    _axesY = std::make_pair(startY, endY);
 }
 
 
 /*----------------------------------------------*/
 
 App::ClusterManagement::ClusterManagement(int width, int height)
+    :   _nbThreads(std::thread::hardware_concurrency()),
+        _windowWidth(width),
+        _windowHeight(height),
+        _sample(30),
+        _clusters(),
+        _config()
 {
     int clusterStartY = 0;
-    _sample = 30;
-    _nbThreads = std::thread::hardware_concurrency();
-    _windowWidth = width;
-    _windowHeight = height;
-    _config = std::vector<std::pair<std::pair<unsigned int, unsigned int>, std::string>>();
     int cluster_id = 0;
+
     for (unsigned int i = 0; i < _nbThreads; i++) {
         int clusterEndY = height / _nbThreads * (i + 1);
         _clusters.push_back(std::make_shared<Cluster>(clusterStartY, clusterEndY, cluster_id));
@@ -54,12 +54,10 @@ App::ClusterManagement::~ClusterManagement()
 static Math::Vector3D color(const Math::Ray3D &ray, RayTracer::IShape *scene, int depth)
 {
     RayTracer::hits  hit;
-    if (scene->hit(ray, 0.001, 10000.0, hit))
-    {
+    if (scene->hit(ray, 0.001, 10000.0, hit)) {
         Math::Ray3D scattered;
         Math::Vector3D attenuation;
-        if (depth < 50 && hit.material->scatter(ray, hit, attenuation, scattered))
-        {
+        if (depth < 50 && hit.material->scatter(ray, hit, attenuation, scattered)) {
             return attenuation * color(scattered, scene, depth + 1);
         } else {
             return Math::Vector3D(0, 0, 0);
@@ -145,8 +143,7 @@ void App::ClusterManagement::initSDL()
 
 void App::ClusterManagement::printSDL()
 {
-    while (_sdl.isRunning())
-    {
+    while (_sdl.isRunning()) {
         _sdl.startRendering();
         _sdl.stopRendering();
     }
