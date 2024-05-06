@@ -8,7 +8,6 @@
 #pragma once
 
 #include "Math/Ray3D.hpp"
-#include <cmath>
 
 namespace RayTracer {
     // Forward declaration of Ray3D class

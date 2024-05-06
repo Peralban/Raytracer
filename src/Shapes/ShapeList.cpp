@@ -7,8 +7,6 @@
 
 #include "ShapeList.hpp"
 
-#include <utility>
-
 RayTracer::ShapeList::ShapeList(std::vector<std::shared_ptr<IShape>> shapes)
     : _shapes(std::move(shapes))
 {

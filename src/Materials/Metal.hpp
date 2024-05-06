@@ -7,6 +7,10 @@
 
 #pragma once
 
+<<<<<<<< HEAD:src/Materials/Metal.hpp
+========
+#include <optional>
+>>>>>>>> refs/heads/8-base-of-the-raytracer-program:src/Shapes/Material.hpp
 #include "Interfaces/IMaterial.hpp"
 
 namespace RayTracer {
