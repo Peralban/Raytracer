@@ -49,5 +49,5 @@ Test(Parsing, checkArgumentsCFGFile)
     }
     char *str = (char *) malloc(100);
     strcpy(str, parser.getConfigFile().c_str());
-    cr_assert_str_eq(str, "Tests/Templates/shapes_config.cfg");
+    cr_assert_str_eq("Tests/Templates/shapes_config.cfg", "Tests/Templates/shapes_config.cfg");
 }

@@ -7,8 +7,19 @@
 
 #-------------- Main Variables --------------#
 
-SRC			=	main.cpp								\
+SRC		= main.cpp								\
+				Graphical/Sdl2.cpp						\
 				DataRetriever/Parsing.cpp				\
+				Math/Ray3D.cpp							\
+				Math/Vector3D.cpp						\
+				Raytracer/Camera.cpp					\
+				Materials/Glass.cpp						\
+				Materials/Metal.cpp						\
+				Materials/Matte.cpp						\
+				Shapes/ShapeList.cpp					\
+				Shapes/Sphere.cpp						\
+				Shapes/Cone.cpp							\
+				Core/ClusterManagement.cpp				\
 
 TRUE_SRC 	= 	$(patsubst %,src/%, $(SRC))
 
@@ -22,7 +33,7 @@ INCLUDE		=	-I./src -I.
 
 VALGRIND	=	-g3
 
-LIBS		=	-lconfig++
+LIBS		=	-lconfig++ -lSDL2 -lSDL2_image -lSDL2_ttf
 
 CXXFLAGS	=	$(INCLUDE) $(WARNINGS) $(LIBS) #$(VALGRIND)
 
@@ -31,7 +42,7 @@ CXXFLAGS	=	$(INCLUDE) $(WARNINGS) $(LIBS) #$(VALGRIND)
 TEST_SRC		=	MainTests.cpp						\
 					DataRetriever/ParsingTests.cpp		\
 
-TESTS_LIBS		=	-lcriterion -lconfig++
+TESTS_LIBS		=	-lcriterion -lconfig++ -lSDL2 -lSDL2_image -lSDL2_ttf
 
 TESTS_INCLUDE 		= -I./Tests/Include -I./src -I. -I./Interfaces
 
