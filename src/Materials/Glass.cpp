@@ -16,7 +16,7 @@ RayTracer::Glass::Glass(float refractionIndexValue, Math::Vector3D albedoValue)
 float RayTracer::Glass::schlick(double cosine, float refractionIndexValue) const
 {
     float r0 = (1 - refractionIndexValue) / (1 + refractionIndexValue);
-    r0 = r0 * r0;
+    r0 *= r0;
     return r0 + (1 - r0) * pow((1 - cosine), 5);
 }
 

@@ -22,9 +22,8 @@ RayTracer::Matte::Matte(const Math::Vector3D &albedoValue)
 {
 }
 
-bool RayTracer::Matte::scatter(const Math::Ray3D &ray, const hits &hit, Math::Vector3D &attenuation, Math::Ray3D &scattered) const
+bool RayTracer::Matte::scatter([[maybe_unused]] const Math::Ray3D &ray, const hits &hit, Math::Vector3D &attenuation, Math::Ray3D &scattered) const
 {
-    (void)ray;
     Math::Vector3D reflectedRay = hit.point + hit.normal + randomInUnitSphere();
     scattered = Math::Ray3D(hit.point, reflectedRay-hit.point);
     attenuation = albedo;
