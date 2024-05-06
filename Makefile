@@ -39,7 +39,7 @@ CXXFLAGS	=	$(INCLUDE) $(WARNINGS) $(LIBS) #$(VALGRIND)
 TEST_SRC		=	MainTests.cpp						\
 					DataRetriever/ParsingTests.cpp		\
 
-TESTS_LIBS		=	-lcriterion -lconfig++
+TESTS_LIBS		=	-lcriterion -lconfig++ -lSDL2 -lSDL2_image -lSDL2_ttf
 
 TESTS_INCLUDE 		= -I./Tests/Include -I./src -I. -I./Interfaces
 
