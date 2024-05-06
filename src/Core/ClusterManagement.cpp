@@ -6,12 +6,7 @@
 */
 
 #include "ClusterManagement.hpp"
-#include "Graphical/Sdl2.hpp"
-#include "Math/Vector3D.hpp"
-#include "Math/Ray3D.hpp"
-#include "Raytracer/Camera.hpp"
-#include "Shapes/ShapeList.hpp"
-#include "Shapes/Material.hpp"
+#include "Interfaces/IMaterial.hpp"
 
 #include <algorithm>
 #include <fstream>
@@ -28,7 +23,7 @@ App::ClusterManagement::ClusterManagement(int width, int height)
     :   _nbThreads(std::thread::hardware_concurrency()),
         _windowWidth(width),
         _windowHeight(height),
-        _sample(30),
+        _sample(15),
         _clusters(),
         _config()
 {
