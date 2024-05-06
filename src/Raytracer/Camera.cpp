@@ -38,7 +38,7 @@ Math::Vector3D randomInUnitDisk()
 {
     Math::Vector3D p;
     do {
-        p = Math::Vector3D(drand48(), drand48(), 0) * 2.0 - Math::Vector3D(1, 1, 0);
+        p = Math::Vector3D(drand48(), drand48(), 0.0) * 2.0 - Math::Vector3D(1, 1, 0);
     } while (p.dot(p) >= 1.0);
     return p;
 }
