@@ -17,8 +17,8 @@ static Math::Vector3D randomInUnitSphere()
     return p;
 }
 
-RayTracer::Matte::Matte(const Math::Vector3D &albedo)
-        : _albedo(albedo)
+RayTracer::Matte::Matte(const Math::Vector3D &albedoValue)
+        : albedo(albedoValue)
 {
 }
 
@@ -27,6 +27,6 @@ bool RayTracer::Matte::scatter(const Math::Ray3D &ray, const hits &hit, Math::Ve
     (void)ray;
     Math::Vector3D reflectedRay = hit.point + hit.normal + randomInUnitSphere();
     scattered = Math::Ray3D(hit.point, reflectedRay-hit.point);
-    attenuation = _albedo;
+    attenuation = albedo;
     return true;
 }

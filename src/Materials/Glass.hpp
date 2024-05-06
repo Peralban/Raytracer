@@ -60,7 +60,7 @@ namespace RayTracer {
         bool scatter(const Math::Ray3D &ray, const hits &hit, Math::Vector3D &attenuation,
                      Math::Ray3D &scattered) const override;
 
-        float _refractionIndex; ///< The refractive index of the material. It is a value that determines how much light is bent when it enters the material.
-        Math::Vector3D _albedo; ///< The albedo of the material. Albedo is the proportion of the light that is reflected by the surface.
+        float refractionIndex; ///< The refractive index of the material. It is a value that determines how much light is bent when it enters the material.
+        Math::Vector3D albedo; ///< The albedo of the material. Albedo is the proportion of the light that is reflected by the surface.
     };
 }

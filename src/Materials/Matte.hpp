@@ -46,6 +46,6 @@ namespace RayTracer {
         bool scatter(const Math::Ray3D &ray, const hits &hit, Math::Vector3D &attenuation,
                      Math::Ray3D &scattered) const override;
 
-        Math::Vector3D _albedo; ///< The albedo of the material. Albedo is the proportion of the light that is reflected by the surface.
+        Math::Vector3D albedo; ///< The albedo of the material. Albedo is the proportion of the light that is reflected by the surface.
     };
 }

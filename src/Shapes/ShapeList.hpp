@@ -55,6 +55,6 @@ namespace RayTracer {
              */
             bool hit(const Math::Ray3D &ray, float tmin, float tmax, hits &hit) const override;
 
-            std::vector<std::shared_ptr<IShape>> _shapes; ///< The list of shapes contained in the ShapeList.
+            std::vector<std::shared_ptr<IShape>> shapes; ///< The list of shapes contained in the ShapeList.
     };
 }

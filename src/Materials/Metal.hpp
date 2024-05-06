@@ -48,7 +48,7 @@ namespace RayTracer {
         bool scatter(const Math::Ray3D &ray, const hits &hit, Math::Vector3D &attenuation,
                      Math::Ray3D &scattered) const override;
 
-        Math::Vector3D _albedo; ///< The albedo of the material.
+        Math::Vector3D albedo; ///< The albedo of the material.
         float _fuzziness; ///< The fuzziness of the material. It is a value between 0 and 1, 0 being a perfect mirror and 1 being a diffuse surface.
     };
 }
