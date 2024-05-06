@@ -9,8 +9,8 @@
 #include <cmath>
 #include <utility>
 
-RayTracer::Sphere::Sphere(const Math::Vector3D &center, float radius, IMaterial *material)
-    : center(center), radius(radius), material(material)
+RayTracer::Sphere::Sphere(const Math::Vector3D &centerValue, float radiusValue, IMaterial *materialValue)
+    : center(centerValue), radius(radiusValue), material(materialValue)
 {}
 
 bool RayTracer::Sphere::hit(const Math::Ray3D &ray, float tmin, float tmax, hits &hit) const

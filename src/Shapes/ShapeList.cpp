@@ -7,8 +7,8 @@
 
 #include "ShapeList.hpp"
 
-RayTracer::ShapeList::ShapeList(std::vector<std::shared_ptr<IShape>> shapes)
-    : shapes(std::move(shapes))
+RayTracer::ShapeList::ShapeList(std::vector<std::shared_ptr<IShape>> shapesValue)
+    : shapes(std::move(shapesValue))
 {
 }
 
