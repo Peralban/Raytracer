@@ -17,6 +17,7 @@ SRC		= main.cpp								\
 				Materials/Matte.cpp						\
 				Shapes/ShapeList.cpp					\
 				Shapes/Sphere.cpp						\
+				Shapes/Cone.cpp							\
 
 TRUE_SRC 	= 	$(patsubst %,src/%, $(SRC))
 
