@@ -32,22 +32,36 @@
 |------------------|
 */
 
-RayTracer::Camera::Camera(Math::Vector3D viewFrom, Math::Vector3D viewAt, Math::Vector3D viewUp, double verticalFieldOfView, double aspect)
+
+Math::Vector3D randomInUnitDisk()
+{
+    Math::Vector3D p;
+    do {
+        p = Math::Vector3D(drand48(), drand48(), 0) * 2.0 - Math::Vector3D(1, 1, 0);
+    } while (p.dot(p) >= 1.0);
+    return p;
+}
+
+RayTracer::Camera::Camera(Math::Vector3D viewFrom, Math::Vector3D viewAt, Math::Vector3D viewUp, double verticalFieldOfView, double aspect, double aperture, double focusDistance)
 {
     double theta = verticalFieldOfView * M_PI / 180;
     double halfHeight = tan(theta / 2);
     double halfWidth = aspect * halfHeight;
 
-    Math::Vector3D w = (viewFrom - viewAt).getUnitVector();
-    Math::Vector3D u = viewUp.cross(w).getUnitVector();
-    Math::Vector3D v = w.cross(u);
-
     _origin = viewFrom;
-    lowerLeftCorner = viewFrom - u * halfWidth - v * halfHeight - w;
-    _horizontal = u * 2 * halfWidth;
-    _vertical = v * 2 * halfHeight;
+    _w = (viewFrom - viewAt).getUnitVector();
+    _u = viewUp.cross(_w).getUnitVector();
+    _v = _w.cross(_u);
+
+    lowerLeftCorner = _origin - (_u * halfWidth * focusDistance) - (_v * halfHeight * focusDistance) - (_w * focusDistance);
+    _horizontal = _u * 2 * halfWidth * focusDistance;
+    _vertical = _v * 2 * halfHeight * focusDistance;
+
+    _lensRadius = aperture / 2;
 }
 
-Math::Ray3D RayTracer::Camera::getRay(double u, double v) const {
-    return Math::Ray3D(_origin, lowerLeftCorner + _horizontal * u + _vertical * v - _origin);
+Math::Ray3D RayTracer::Camera::getRay(double s, double t) const {
+    Math::Vector3D rd = randomInUnitDisk() * _lensRadius;
+    Math::Vector3D offset = (_u * rd.x )+ (_v * rd.y);
+    return Math::Ray3D(_origin + offset, lowerLeftCorner + (_horizontal * s) + (_vertical * t) - _origin - offset);
 }

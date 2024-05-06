@@ -34,7 +34,7 @@ namespace RayTracer {
              * @param verticalFieldOfView The vertical field of view of the camera.
              * @param aspect The aspect ratio of the camera.
              */
-            Camera(Math::Vector3D viewFrom, Math::Vector3D viewAt, Math::Vector3D viewUp, double verticalFieldOfView, double aspect);
+            Camera(Math::Vector3D viewFrom, Math::Vector3D viewAt, Math::Vector3D viewUp, double verticalFieldOfView, double aspect, double aperture, double focusDistance);
 
             /**
              * @brief Default destructor for the Camera class.
@@ -48,12 +48,17 @@ namespace RayTracer {
              * @param v The vertical component of the ray's direction.
              * @return A Ray3D object representing the ray.
              */
-            Math::Ray3D getRay(double u, double v) const;
+            Math::Ray3D getRay(double s, double t) const;
 
             Math::Vector3D _origin; ///< The origin point of the camera in the 3D space.
             Math::Vector3D lowerLeftCorner; ///< The lower left corner of the camera's view.
             Math::Vector3D _horizontal; ///< The horizontal vector of the camera's view.
             Math::Vector3D _vertical; ///< The vertical vector of the camera's view.
+            Math::Vector3D _u; // The u basis vector of the camera
+            Math::Vector3D _v; // The v basis vector of the camera
+            Math::Vector3D _w; // The w basis vector of the camera
+            double _lensRadius;
+
 
         protected:
         private:
