@@ -12,6 +12,7 @@
 #include "Materials/Glass.hpp"
 #include <thread>
 #include <vector>
+#include <iostream>
 
 Math::Vector3D color (const Math::Ray3D &ray, RayTracer::IShape *scene, int depth)
 {
