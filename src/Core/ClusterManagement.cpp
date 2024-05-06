@@ -16,8 +16,8 @@
 #include <algorithm>
 #include <fstream>
 
-App::Cluster::Cluster(unsigned int startY, unsigned int endY, int cluster_id)
-    : id(cluster_id), _axesY(startY, endY)
+App::Cluster::Cluster(unsigned int startY, unsigned int endY)
+    : _axesY(startY, endY)
 {
 }
 
@@ -33,13 +33,15 @@ App::ClusterManagement::ClusterManagement(int width, int height)
         _config()
 {
     int clusterStartY = 0;
-    int cluster_id = 0;
+    int clusterEndY = 0;
 
     for (unsigned int i = 0; i < _nbThreads; i++) {
-        int clusterEndY = height / _nbThreads * (i + 1);
-        _clusters.push_back(std::make_shared<Cluster>(clusterStartY, clusterEndY, cluster_id));
+        if (i == _nbThreads - 1)
+            clusterEndY = height;
+        else
+            clusterEndY = height / _nbThreads * (i + 1);
+        _clusters.push_back(std::make_shared<Cluster>(clusterStartY, clusterEndY));
         clusterStartY = clusterEndY;
-        cluster_id++;
     }
 }
 

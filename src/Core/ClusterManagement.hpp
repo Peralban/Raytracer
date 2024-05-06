@@ -31,7 +31,7 @@ namespace App {
              * @param endY The ending Y-coordinate for this cluster.
              * @param id The unique identifier for this cluster.
              */
-            Cluster(unsigned int startY, unsigned int endY, int id);
+            Cluster(unsigned int startY, unsigned int endY);
             ~Cluster() = default;
 
             // Getters
@@ -46,13 +46,7 @@ namespace App {
              */
             std::thread thread;
 
-            /**
-             * @brief Get the unique identifier for this cluster.
-             * @return The unique identifier as an integer.
-             */
-            int getId() const { return id; }
         private:
-            int id;
             std::pair<unsigned int, unsigned int> _axesY;
     };
 
