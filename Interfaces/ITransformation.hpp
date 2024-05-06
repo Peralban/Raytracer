@@ -9,7 +9,7 @@
     #define ITRANSFORMATION_HPP_
 
     #include <optional>
-    #include "Point3D.hpp"
+    #include "Math/Point3D.hpp"
 
 namespace RayTracer {
     class ITransformation {

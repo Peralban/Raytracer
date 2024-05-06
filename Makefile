@@ -1,89 +1,104 @@
 ##
 ## EPITECH PROJECT, 2024
-## Makefile
+## Raytracer
 ## File description:
-## Arcade Makefile
+## Makefile
 ##
 
-#Program Name
-NAME 		 	= raytracer
+#-------------- Main Variables --------------#
 
-#Sources
-SRC_CORE      	= Sdl2.cpp \
-								main.cpp \
-								Vector3D.cpp \
-								Ray3D.cpp \
-								Sphere.cpp \
-								ShapeList.cpp \
-								Camera.cpp \
-								Material.cpp \
+SRC			=	main.cpp								\
+				DataRetriever/Parsing.cpp				\
+				Graphical/Sdl2.cpp						\
+				Math/Ray3D.cpp							\
+				Math/Vector3D.cpp						\
+				Raytracer/Camera.cpp					\
+				Shapes/Material.cpp						\
+				Shapes/ShapeList.cpp					\
+				Shapes/Sphere.cpp						\
+				Core/ClusterManagement.cpp				\
 
+TRUE_SRC 	= 	$(patsubst %,src/%, $(SRC))
 
-#Objects
-OBJ_CORE		= $(SRC_CORE:.cpp=.o)
+OBJ			=	$(TRUE_SRC:.cpp=.o)
 
-#GCDA & GCNO
-GCDA_CORE		= $(SRC_CORE:.cpp=.gcda)
+NAME		=	raytracer
 
-#flags
-CXXFLAGS		= -g -fno-gnu-unique -Wall -Wextra -Werror -std=c++20
-CXXFLAGS 		+= -fprofile-arcs
-SFML_FLAGS		= -lsfml-graphics -lsfml-window -lsfml-system
-SDL_FLAGS		= -lSDL2 -lSDL2_image -lSDL2_ttf
-NCURSES_FLAGS	= -lncurses
-INC				= -I.
+WARNINGS	=	-Wall -Wextra -Wshadow
 
-#Compiler
-CC				= g++
-LINKER			= g++
+INCLUDE		=	-I./src -I.
 
-#Colors
-GREEN 			= /bin/echo -e "\x1b[32m $1\x1b[0m"
-YELLOW 			= /bin/echo -e "\x1b[33m $1\x1b[0m"
+VALGRIND	=	-g3
 
-#Rules
-all: core
+LIBS		=	-lconfig++ -lSDL2 -lSDL2_image -lSDL2_ttf
 
-#-----------------Games Rules--------------------
+CXXFLAGS	=	$(INCLUDE) $(WARNINGS) $(LIBS) #$(VALGRIND)
 
-core: $(NAME)
+#-------------- Tests Variables --------------#
 
-%.o: 	%.cpp
-	@$(CC) $(INC) $(CXXFLAGS) $(SDL_FLAGS) -c -o $@ $< && \
-	$(call YELLOW,"🆗 $<") || \
-	$(call YELLOW,"❌ $<")
+TEST_SRC		=	MainTests.cpp						\
+					DataRetriever/ParsingTests.cpp		\
 
-$(NAME) : $(OBJ_CORE)
-	@$(LINKER) -o $(NAME) $(OBJ_CORE) $(CXXFLAGS) $(SDL_FLAGS) && \
-	$(call YELLOW,"✅ $@") || \
-	$(call YELLOW,"❌ $@")
+TESTS_LIBS		=	-lcriterion -lconfig++ -lSDL2 -lSDL2_image -lSDL2_ttf
 
+TESTS_INCLUDE 		= -I./Tests/Include -I./src -I. -I./Interfaces
+
+TESTS_COMPILATION_FLAGS	=	--coverage
+
+TEST_TRUE_SRC	=	$(patsubst %,Tests/src/%, $(TEST_SRC))	\
+					$(filter-out src/main.cpp, $(TRUE_SRC))
+
+TESTS_FLAGS		=	$(TESTS_INCLUDE) $(WARNINGS) $(TESTS_LIBS) $(TESTS_COMPILATION_FLAGS)
+
+#-------------- Phony & Silent Rules --------------#
+
+.PHONY: all clean fclean re tests_run tests_compile tests_launch
+
+.SILENT: clean fclean re tests_launch tests_run
+
+#-------------- Rules --------------#
+
+all:	$(NAME)
+
+$(NAME):	$(OBJ)
+	g++ -o $(NAME) $(OBJ) $(CXXFLAGS)
+	@if [ -f $(NAME) ]; then \
+		printf "\033[1;32mCompilation completed ✅\033[0m\n"; \
+	else \
+		printf "\033[1;31mCompilation failed ❌\033[0m\n"; \
+	fi
 
 clean:
-	@rm -f $(OBJ_CORE)
-	@$(call GREEN,"✅ [$@] done !")
+	rm -f $(OBJ)
+	printf "\033[1;35mObject files removed ✅\033[0m\n"
 
-fclean: clean
-	@rm -f $(NAME)
-	@$(call GREEN,"✅ [$@] done !")
-
-tests_fclean:
-	rm -f $(OBJ_TEST)
+fclean:	clean
 	rm -f $(NAME)
-	rm -f unit_tests
-	rm -f $(GCDA_FILES)
-	rm -f $(GCNO_FILES)
+	rm -f unit_tests*
+	rm -f *.gc*
+	rm -f vgcore*
+	rm -f *.so
+	printf "\033[1;35mFiles removed ✅\033[0m\n"
 
-re: fclean all
+re:	fclean all
+	printf "\033[1;35mRecompiled ✅\033[0m\n"
 
-obj: $(OBJ_CORE) $(OBJ_PACMAN) $(OBJ_SNAKE) $(OBJ_NCURSES) $(OBJ_SFML) $(OBJ_SDL)
+#-------------- Tests --------------#
 
-test_obj: $(OBJ_TEST)
+tests_compile: fclean
+	g++ -o unit_tests $(TEST_TRUE_SRC) $(TESTS_FLAGS)
+	@if [ -f unit_tests ]; then \
+		printf "\033[1;32mTests compiled ✅\033[0m\n"; \
+	else \
+		printf "\033[1;31mTests compilation failed ❌\033[0m\n"; \
+	fi
 
-tests_run: fclean
-	$(MAKE) obj CXXFLAGS+=--coverage -lcriterion
-	$(MAKE) test_obj CXXFLAGS+=-lcriterion
-	g++ -o unit_tests $(OBJ_TEST) $(CXXFLAGS) -lcriterion --coverage
+tests_launch:
 	./unit_tests
+	printf "\033[1;35mTests launched ✅\033[0m\n"
 	gcovr --exclude tests/
-	gcovr -b --exclude tests/
+	gcovr --exclude tests/ --branches
+	printf "\033[1;35mCoverage generated ✅\033[0m\n"
+
+tests_run: tests_compile tests_launch
+	printf "\033[1;32mTests runned ✅\033[0m\n"
