@@ -24,7 +24,7 @@ namespace Math {
              * @param y The y-component of the vector.
              * @param z The z-component of the vector.
              */
-            Vector3D(double x, double y, double z);
+            Vector3D(double r, double g, double b);
 
             /**
              * @brief Default destructor for the Vector3D class.
