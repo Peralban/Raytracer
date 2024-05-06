@@ -163,21 +163,54 @@ void render(int startY, int endY, int width, int samples, RayTracer::ShapeList& 
     threadId++;
 }
 
+RayTracer::ShapeList *randomScene() {
+    RayTracer::ShapeList scene;
+    scene._shapes.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(0, -1000, 0), 1000, new RayTracer::Matte(Math::Vector3D(0.5, 0.5, 0.5))));
+    for (int a = -11; a < 11; a++) {
+        for (int b = -11; b < 11; b++) {
+            float chooseMat = drand48();
+            Math::Vector3D center(a + 0.9 * drand48(), 0.2, b + 0.9 * drand48());
+            if ((center - Math::Vector3D(4, 0.2, 0)).length() > 0.9) {
+                if (chooseMat < 0.8) {
+                    scene._shapes.push_back(std::make_shared<RayTracer::Sphere>(center, 0.2, new RayTracer::Matte(Math::Vector3D(drand48() * drand48(), drand48() * drand48(), drand48() * drand48()))));
+                } else if (chooseMat < 0.95) {
+                    scene._shapes.push_back(std::make_shared<RayTracer::Sphere>(center, 0.2, new RayTracer::Metal(Math::Vector3D(0.5 * (1 + drand48()), 0.5 * (1 + drand48()), 0.5 * (1 + drand48())), 0.5 * drand48())));
+                } else {
+                    scene._shapes.push_back(std::make_shared<RayTracer::Sphere>(center, 0.2, new RayTracer::Glass(1.5, Math::Vector3D(1, 1, 1))));
+                }
+            }
+        }
+    }
+    scene._shapes.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(0, 1, 0), 0.5, new RayTracer::Glass(1.5, Math::Vector3D(1, 1, 1))));
+    scene._shapes.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(-4, 1, 0), 0.5, new RayTracer::Matte(Math::Vector3D(0.4, 0.2, 0.1))));
+    scene._shapes.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(4, 1, 0), 0.5, new RayTracer::Metal(Math::Vector3D(0.7, 0.6, 0.5), 0.0)));
+    return new RayTracer::ShapeList(scene);
+}
+
 int main()
 {
     Sdl sdl;
     sdl.initWindow();
     int width = 2160;
     int height = 1080;
-    int samples = 15;
+    int samples = 1;
     std::cout << "P3" << std::endl;
     std::cout  << width << "  " << height << std::endl;
     std::cout << "255" << std::endl;
+    RayTracer::ShapeList scene = *randomScene();
+    /*
     RayTracer::ShapeList scene;
-    scene._shapes.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(0, 0, -1), 0.5, new RayTracer::Glass(1.630, Math::Vector3D(1, 1, 1))));
-    scene._shapes.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(0, -100.5, -1), 100, new RayTracer::Matte(Math::Vector3D(0.8, 0.8, 0.0))));
-    scene._shapes.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(00, 0.2, -2.5), 0.5, new RayTracer::Matte(Math::Vector3D(0.8, 0.6, 0.2))));
-    RayTracer::Camera camera;
+    scene._shapes.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(0, 0, -1), 0.2, new RayTracer::Glass(1.630, Math::Vector3D(1, 1, 1))));
+    scene._shapes.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(0, -100.5, -1), 100, new RayTracer::Matte(Math::Vector3D(0.3, 0.3, 0.3))));
+    scene._shapes.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(0.7, 0, -1), 0.3, new RayTracer::Metal(Math::Vector3D(0.8, 0.6, 0.2), 0.1)));
+    scene._shapes.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(-0.7, 0, -1), 0.3, new RayTracer::Metal(Math::Vector3D(0.6, 0.3, 0.5), 1.0)));
+    */
+    Math::Vector3D lookFrom(3, 3, 2);
+    Math::Vector3D lookAt(0, 0, -1);
+    float distToFocus = (lookFrom - lookAt).length();
+    float aperture = 0.3;
+
+    RayTracer::Camera camera(lookFrom, lookAt, Math::Vector3D(0, 1, 0), 40, float(width) / float(height), aperture, distToFocus);
 
     int numThreads = std::thread::hardware_concurrency();
     std::vector<std::future<void>> futures(numThreads);
