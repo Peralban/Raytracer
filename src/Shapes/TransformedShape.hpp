@@ -9,8 +9,8 @@
     #define TRANSFORMEDSHAPE_HPP_
 
     #include <memory>
-    #include "IShape.hpp"
-    #include "ITransformation.hpp"
+    #include "Interfaces/IShape.hpp"
+    #include "Interfaces/ITransformation.hpp"
 
 namespace RayTracer {
     /// @brief Class used to apply any transformation to any shape
