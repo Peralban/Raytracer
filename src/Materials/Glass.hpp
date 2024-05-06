@@ -63,5 +63,4 @@ namespace RayTracer {
         float _refractionIndex; ///< The refractive index of the material. It is a value that determines how much light is bent when it enters the material.
         Math::Vector3D _albedo; ///< The albedo of the material. Albedo is the proportion of the light that is reflected by the surface.
     };
-
 }

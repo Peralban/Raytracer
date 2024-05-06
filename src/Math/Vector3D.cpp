@@ -117,14 +117,12 @@ namespace Math {
     {
         double len = length();
         return Vector3D(x / len, y / len, z / len);
-
     }
 
     Vector3D Vector3D::getUnitVector()
     {
         double len = length();
         return Vector3D(x / len, y / len, z / len);
-
     }
 
     Vector3D reflect(const Vector3D &v, const Vector3D &n)
