@@ -15,6 +15,8 @@ namespace Math {
 
     Vector3D::Vector3D(double r, double g, double b) : x(r), y(g), z(b) {}
 
+    Vector3D::Vector3D(int r, int g, int b) : x(r), y(g), z(b) {}
+
     double Vector3D::sqLength() const noexcept {
         return x * x + y * y + z * z;
     }

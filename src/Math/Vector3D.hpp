@@ -28,6 +28,16 @@ namespace Math {
 
             /**
              * @brief Default destructor for the Vector3D class.
+             *
+             * @param r The x-component of the vector.
+             * @param g The y-component of the vector.
+             * @param b The z-component of the vector.
+             */
+            Vector3D(int r, int g, int b);
+
+
+            /**
+             * @brief Default destructor for the Vector3D class.
              */
             ~Vector3D() = default;
 
