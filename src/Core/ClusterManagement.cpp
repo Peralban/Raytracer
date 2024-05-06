@@ -16,7 +16,6 @@ App::Cluster::Cluster(unsigned int startY, unsigned int endY)
 {
 }
 
-
 /*----------------------------------------------*/
 
 App::ClusterManagement::ClusterManagement(int width, int height)
