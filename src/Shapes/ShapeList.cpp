@@ -27,3 +27,5 @@ bool RayTracer::ShapeList::hit(const Math::Ray3D &ray, float tmin, float tmax, h
     }
     return hitAnything;
 }
+
+RayTracer::ShapeList::~ShapeList() {}
