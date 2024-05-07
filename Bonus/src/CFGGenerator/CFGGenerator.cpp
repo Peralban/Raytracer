@@ -9,7 +9,6 @@
 #include <functional>
 #include <type_traits>
 
-// Version pour les non-tableaux
 template<typename T>
 typename std::enable_if<!std::is_array<T>::value, void>::type
 checkCin(T& value, std::string message, std::function<bool(T)> bool_condition) {
@@ -20,7 +19,6 @@ checkCin(T& value, std::string message, std::function<bool(T)> bool_condition) {
     }
 }
 
-// Version pour les tableaux
 template<typename T, std::size_t N>
 void checkCin(T (&value)[N], std::string message, std::function<bool(T)> bool_condition, Bonus::ARRAY_TYPES type) {
     for (std::size_t i = 0; i < N; i++) {
