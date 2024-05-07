@@ -12,6 +12,7 @@ SRC		= main.cpp								\
 				DataRetriever/Parsing.cpp				\
 				Math/Ray3D.cpp							\
 				Math/Vector3D.cpp						\
+				Math/Point3D.cpp						\
 				Raytracer/Camera.cpp					\
 				Materials/Glass.cpp						\
 				Materials/Metal.cpp						\
