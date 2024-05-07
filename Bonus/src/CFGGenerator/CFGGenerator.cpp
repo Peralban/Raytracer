@@ -61,14 +61,14 @@ void Bonus::CFGGenerator::GetInfo()
 void Bonus::CFGGenerator::askShape()
 {
     std::string type;
-    bool enable_transformation;
+    bool enable_transformation = false;
     int nb_transformations;
     int position[ALL_INDEXES];
     int size[ALL_INDEXES];
     std::string path;
     std::string material_type;
     int color[ALL_INDEXES];
-    bool enable_texture;
+    bool enable_texture = false;
     std::vector<ParsingTransformation> transformations;
     std::cout << "Enter the type of the shape: ";
     std::cin >> type;
@@ -82,15 +82,20 @@ void Bonus::CFGGenerator::askShape()
     std::cout << "Enable texture? (1 for yes, 0 for no): ";
     std::cin >> enable_texture;
     checkCin<bool>(enable_texture, "Invalid input, please enter a valid input (1 for yes, 0 for no): ", []([[maybe_unused]]bool ex) { return ex == 0 || ex == 1; });
-    std::cout << "Enter the path to the texture of the shape: ";
-    std::cin >> path;
-    checkCin<std::string>(path, "Invalid path, please enter a valid path: ", []([[maybe_unused]]std::string ex) { return std::filesystem::exists(ex); });
+    if (enable_texture) {
+        std::cout << "Enter the path to the texture of the shape: ";
+        std::cin >> path;
+        checkCin<std::string>(path, "Invalid path, please enter a valid path: ", []([[maybe_unused]]std::string ex) { return std::filesystem::exists(ex); });
+    } else {
+        path = "none";
+    }
     std::cout << "Enable transformations? (1 for yes, 0 for no): ";
     std::cin >> enable_transformation;
     checkCin<bool>(enable_transformation, "Invalid input, please enter a valid input (1 for yes, 0 for no): ", []([[maybe_unused]]bool ex) { return ex == 0 || ex == 1; });
     if (enable_transformation) {
         std::cout << "Enter the number of transformations: ";
         std::cin >> nb_transformations;
+        checkCin<int>(nb_transformations, "Invalid number of transformations, please enter a valid number of transformations: ", []([[maybe_unused]]int ex) { return ex > 0; });
         for (int i = 0; i < nb_transformations; i++)
             transformations.push_back(askTransformation());
     }
@@ -174,7 +179,7 @@ void Bonus::CFGGenerator::askLight()
 void Bonus::CFGGenerator::askBackground()
 {
     int color[ALL_INDEXES];
-    bool enable_background;
+    bool enable_background = false;
     std::string path;
     std::cout << "Enter the color of the background: ";
     std::cin >> color[R] >> color[G] >> color[B];
@@ -182,9 +187,13 @@ void Bonus::CFGGenerator::askBackground()
     std::cout << "Enable background? (1 for yes, 0 for no): ";
     std::cin >> enable_background;
     checkCin<bool>(enable_background, "Invalid input, please enter a valid input (1 for yes, 0 for no): ", []([[maybe_unused]]bool ex) { return ex == 0 || ex == 1; });
-    std::cout << "Enter the path of the background: ";
-    std::cin >> path;
-    checkCin<std::string>(path, "Invalid path, please enter a valid path: ", []([[maybe_unused]]std::string ex) { return std::filesystem::exists(ex); });
+    if (enable_background) {
+        std::cout << "Enter the path of the background: ";
+        std::cin >> path;
+        checkCin<std::string>(path, "Invalid path, please enter a valid path: ", []([[maybe_unused]]std::string ex) { return std::filesystem::exists(ex); });
+    } else {
+        path = "none";
+    }
     ParsingBackground new_background(color[R], color[G], color[B], path);
     _background = new_background;
 }
@@ -193,9 +202,9 @@ void Bonus::CFGGenerator::askPrecision()
 {
     int samples;
     int number_of_bounces;
-    bool enable_shadows;
-    bool enable_reflections;
-    bool enable_refractions;
+    bool enable_shadows = true;
+    bool enable_reflections = true;
+    bool enable_refractions = true;
     std::cout << "Enter the number of samples: ";
     std::cin >> samples;
     checkCin<int>(samples, "Invalid number of samples, please enter a valid number of samples: ", []([[maybe_unused]]int ex) { return ex > 0; });
