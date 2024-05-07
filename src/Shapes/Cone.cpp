@@ -41,3 +41,5 @@ bool RayTracer::Cone::hit(const Math::Ray3D &ray, float tmin, float tmax, hits &
     }
     return false;
 }
+
+RayTracer::Cone::~Cone() {}
