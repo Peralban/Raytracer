@@ -17,6 +17,7 @@ namespace Math {
         public:
             Point3D();
             Point3D(double x, double y, double z);
+            Point3D(const Vector3D &v);
             ~Point3D() = default;
 
             double x;
