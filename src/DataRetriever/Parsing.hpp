@@ -35,7 +35,7 @@ namespace App {
          * @param color The color of the material as a Vector3D.
          */
         ParsingMaterial(std::string type, Math::Vector3D color)
-            : _type(type), _color(color) {}
+                : _type(type), _color(color) {}
 
         /**
          * @brief Getter for the type of the material.
@@ -53,7 +53,9 @@ namespace App {
          * @brief Outputs the material data to the provided ostream.
          * @param os The ostream to output to.
          */
-        void output(std::ostream &os) const noexcept;
+        void output(std::ostream &os) const
+
+        noexcept;
 
     private:
         std::string _type; ///< The type of the material.
@@ -72,7 +74,7 @@ namespace App {
          * @param position The position of the transformation as a Vector3D.
          */
         ParsingTransformation(std::string type, Math::Vector3D position)
-            : _type(type), _position(position) {}
+                : _type(type), _position(position) {}
 
         /**
          * @brief Getter for the type of the transformation.
@@ -90,7 +92,9 @@ namespace App {
          * @brief Outputs the transformation data to the provided ostream.
          * @param os The ostream to output to.
          */
-        void output(std::ostream &os) const noexcept;
+        void output(std::ostream &os) const
+
+        noexcept;
 
     private:
         std::string _type; ///< The type of the transformation.
@@ -113,15 +117,15 @@ namespace App {
          * @param transformations The transformations of the shape as a vector of ParsingTransformation.
          */
         ParsingShape(std::string type, Math::Vector3D position, Math::Vector3D size, std::string path,
-                     ParsingMaterial material, std::vector<ParsingTransformation> transformations)
+                     ParsingMaterial material, std::vector <ParsingTransformation> transformations)
                 : _type(type), _position(position), _size(size), _path(path),
-                _material(material), _transformations(transformations) {}
+                  _material(material), _transformations(transformations) {}
 
         /**
          * @brief Getter for the transformations of the shape.
          * @return The transformations of the shape as a vector of ParsingTransformation.
          */
-        std::vector<ParsingTransformation> getTransformations() { return _transformations; }
+        std::vector <ParsingTransformation> getTransformations() { return _transformations; }
 
         /**
          * @brief Getter for the material of the shape.
@@ -157,7 +161,9 @@ namespace App {
          * @brief Outputs the shape data to the provided ostream.
          * @param os The ostream to output to.
          */
-        void output(std::ostream &os) const noexcept;
+        void output(std::ostream &os) const
+
+        noexcept;
 
     private:
         std::string _type; ///< The type of the shape.
@@ -165,7 +171,7 @@ namespace App {
         Math::Vector3D _size; ///< The size of the shape.
         std::string _path; ///< The path to the shape file.
         ParsingMaterial _material; ///< The material of the shape.
-        std::vector<ParsingTransformation> _transformations; ///< The transformations of the shape.
+        std::vector <ParsingTransformation> _transformations; ///< The transformations of the shape.
     };
 
     /**
@@ -183,9 +189,9 @@ namespace App {
          * @param type The type of the light.
          */
         ParsingLight(Math::Vector3D position, Math::Vector3D color, float intensity,
-        Math::Vector3D direction, std::string type)
-            : _position(position), _color(color), _intensity(intensity), _direction(direction),
-            _type(type) {}
+                     Math::Vector3D direction, std::string type)
+                : _position(position), _color(color), _intensity(intensity), _direction(direction),
+                  _type(type) {}
 
         /**
          * @brief Getter for the position of the light.
@@ -221,7 +227,9 @@ namespace App {
          * @brief Outputs the light data to the provided ostream.
          * @param os The ostream to output to.
          */
-        void output(std::ostream &os) const noexcept;
+        void output(std::ostream &os) const
+
+        noexcept;
 
     private:
         Math::Vector3D _position; ///< The position of the light.
@@ -255,9 +263,10 @@ namespace App {
          * @param resolutionHeight The height of the resolution of the camera.
          */
         ParsingCamera(Math::Vector3D view_from, Math::Vector3D view_at, Math::Vector3D view_up, Math::Vector3D rotation,
-        float fov, float aperture, float focus_dist, int resolutionWidth, int resolutionHeight)
-            : _view_from(view_from), _view_at(view_at), _view_up(view_up), _rotation(rotation) ,_fov(fov), _aperture(aperture),
-            _focus_dist(focus_dist), _resolution(resolutionWidth, resolutionHeight) {}
+                      float fov, float aperture, float focus_dist, int resolutionWidth, int resolutionHeight)
+                : _view_from(view_from), _view_at(view_at), _view_up(view_up), _rotation(rotation), _fov(fov),
+                  _aperture(aperture),
+                  _focus_dist(focus_dist), _resolution(resolutionWidth, resolutionHeight) {}
 
         /**
          * @brief Getter for the view from position of the camera.
@@ -311,7 +320,9 @@ namespace App {
          * @brief Outputs the camera data to the provided ostream.
          * @param os The ostream to output to.
          */
-        void output(std::ostream &os) const noexcept;
+        void output(std::ostream &os) const
+
+        noexcept;
 
     private:
         Math::Vector3D _view_from; ///< The view from position of the camera.
@@ -341,7 +352,7 @@ namespace App {
          * @param path The path to the background file.
          */
         ParsingBackground(Math::Vector3D color, std::string path)
-            : _color(color), _path(path) {}
+                : _color(color), _path(path) {}
 
         /**
          * @brief Getter for the color of the background.
@@ -359,7 +370,9 @@ namespace App {
          * @brief Outputs the background data to the provided ostream.
          * @param os The ostream to output to.
          */
-        void output(std::ostream &os) const noexcept;
+        void output(std::ostream &os) const
+
+        noexcept;
 
     private:
         Math::Vector3D _color; ///< The color of the background.
@@ -386,9 +399,9 @@ namespace App {
          * @param enable_refractions Boolean to enable or disable refractions.
          */
         ParsingPrecision(int samples, int number_of_bounces, bool enable_shadows,
-        bool enable_reflections, bool enable_refractions)
-            : _samples(samples), _number_of_bounces(number_of_bounces), _enable_shadows(enable_shadows),
-            _enable_reflections(enable_reflections), _enable_refractions(enable_refractions) {}
+                         bool enable_reflections, bool enable_refractions)
+                : _samples(samples), _number_of_bounces(number_of_bounces), _enable_shadows(enable_shadows),
+                  _enable_reflections(enable_reflections), _enable_refractions(enable_refractions) {}
 
         /**
          * @brief Getter for the number of samples.
@@ -424,7 +437,9 @@ namespace App {
          * @brief Outputs the precision settings data to the provided ostream.
          * @param os The ostream to output to.
          */
-        void output(std::ostream &os) const noexcept;
+        void output(std::ostream &os) const
+
+        noexcept;
 
     private:
         int _samples; ///< The number of samples for the precision.
@@ -432,7 +447,7 @@ namespace App {
         bool _enable_shadows; ///< Boolean to enable or disable shadows.
         bool _enable_reflections; ///< Boolean to enable or disable reflections.
         bool _enable_refractions; ///< Boolean to enable or disable refractions.
-};
+    };
 
     /**
      * @class Parsing
@@ -510,6 +525,7 @@ namespace App {
          * @brief Default constructor for the Parsing class.
          */
         Parsing() = default;
+
         /**
          * @brief Default destructor for the Parsing class.
          */
@@ -538,19 +554,19 @@ namespace App {
         * @brief Get the shapes parsed from the configuration file.
         * @return A vector of ParsingShape objects.
         */
-        std::vector<ParsingShape> getShapes() { return _shapes; }
+        std::vector <ParsingShape> getShapes() { return _shapes; }
 
         /**
          * @brief Get the lights parsed from the configuration file.
          * @return A vector of ParsingLight objects.
          */
-        std::vector<ParsingLight> getLights() { return _lights; }
+        std::vector <ParsingLight> getLights() { return _lights; }
 
         /**
          * @brief Get the object files parsed from the configuration file.
          * @return A vector of strings representing the paths to the object files.
          */
-        std::vector<std::string> getObjFiles() { return _obj_files; }
+        std::vector <std::string> getObjFiles() { return _obj_files; }
 
         /**
          * @brief Get the camera parsed from the configuration file.
@@ -610,18 +626,20 @@ namespace App {
          * @brief Output the parsed data to the provided ostream.
          * @param os The ostream to output to.
          */
-        void output(std::ostream &os) const noexcept;
+        void output(std::ostream &os) const
+
+        noexcept;
 
     private:
         std::string _configFile; ///< The path to the configuration file.
-        std::vector<ParsingShape> _shapes; ///< The shapes parsed from the configuration file.
-        std::vector<ParsingLight> _lights; ///< The lights parsed from the configuration file.
-        std::vector<std::string> _obj_files; ///< The object files parsed from the configuration file.
+        std::vector <ParsingShape> _shapes; ///< The shapes parsed from the configuration file.
+        std::vector <ParsingLight> _lights; ///< The lights parsed from the configuration file.
+        std::vector <std::string> _obj_files; ///< The object files parsed from the configuration file.
         ParsingCamera _camera; ///< The camera parsed from the configuration file.
         ParsingBackground _background; ///< The background parsed from the configuration file.
         ParsingPrecision _precision; ///< The precision settings parsed from the configuration file.
-};
-
+    };
+}
 // Overloaded output operators for various classes
 std::ostream &operator<<(std::ostream &os, const App::ParsingTransformation &transformation);
 std::ostream &operator<<(std::ostream &os, const App::ParsingShape &shape);
