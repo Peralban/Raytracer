@@ -22,7 +22,27 @@ checkCin(T& value, std::string message, std::function<bool(T)> bool_condition) {
 template<typename T, std::size_t N>
 void checkCin(T (&value)[N], std::string message, std::function<bool(T)> bool_condition, Bonus::ARRAY_TYPES type) {
     for (std::size_t i = 0; i < N; i++) {
-        std::string new_message = message + (type == Bonus::C ? (i == 0 ? "R: " : i == 1 ? "G: " : "B: ") : type == Bonus::A ? (i == 0 ? "X: " : i == 1 ? "Y: " : "Z: ") : i == 0 ? "Width: " : i == 1 ? "Height: " : "");
+        std::string new_message = message;
+        if (type == Bonus::RE) {
+            if (i == 0)
+                new_message += "Width: ";
+            else
+                new_message += "Height: ";
+        } else if (type == Bonus::C) {
+            if (i == 0)
+                new_message += "R: ";
+            else if (i == 1)
+                new_message += "G: ";
+            else
+                new_message += "B: ";
+        } else {
+            if (i == 0)
+                new_message += "X: ";
+            else if (i == 1)
+                new_message += "Y: ";
+            else
+                new_message += "Z: ";
+        }
         checkCin<T>(value[i], message, bool_condition);
     }
 }
@@ -141,20 +161,15 @@ void Bonus::CFGGenerator::askLight()
     float intensity;
     int rotation[ALL_INDEXES];
     std::string type;
-    std::cout << "Enter the position of the light: ";
-    std::cin >> position[X] >> position[Y] >> position[Z];
+    std::cout << "Enter the position of the light (first the X and enter, then the Y and enter, then the Z and enter): ";
     checkCin<int, ALL_INDEXES>(position, "Invalid position, please enter a valid position for the position ", []([[maybe_unused]]int ex) {return true;}, A);
-    std::cout << "Enter the color of the light: ";
-    std::cin >> color[R] >> color[G] >> color[B];
+    std::cout << "Enter the color of the light (first the R and enter, then the G and enter, then the B and enter): ";
     checkCin<int, ALL_INDEXES>(color, "Invalid color, please enter a valid color for the color ", []([[maybe_unused]]int ex) { return ex >= 0 && ex <= 255; }, C);
-    std::cout << "Enter the intensity of the light: ";
-    std::cin >> intensity;
+    std::cout << "Enter the intensity of the light (float between 0 and 1): ";
     checkCin<float>(intensity, "Invalid intensity, please enter a valid intensity (between 0 and 1): ", []([[maybe_unused]]float ex) { return ex >= 0 && ex <= 1; });
-    std::cout << "Enter the rotation of the light: ";
-    std::cin >> rotation[X] >> rotation[Y] >> rotation[Z];
+    std::cout << "Enter the rotation of the light (first the X and enter, then the Y and enter, then the Z and enter): ";
     checkCin<int, ALL_INDEXES>(rotation, "Invalid rotation, please enter a valid rotation for the rotation ", []([[maybe_unused]]int ex) { return true; }, A);
     std::cout << "Enter the type of the light: ";
-    std::cin >> type;
     checkCin<std::string>(type, "Invalid type of light, please enter a valid type (point, directional or spot): ", []([[maybe_unused]]std::string ex) { return ex == "point" || ex == "directional" || ex == "spot"; });
     ParsingLight new_light(position[X], position[Y], position[Z], color[R], color[G], color[B], intensity, rotation[X], rotation[Y], rotation[Z], type);
     _lights.push_back(new_light);
