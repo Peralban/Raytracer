@@ -32,7 +32,7 @@ namespace RayTracer {
 
             /// @brief Overridden function describing how
             ///     to undo this translation
-            /// @param p A point in space to untransformation
+            /// @param p A point in space to untransform
             /// @return The untransformed space
             virtual std::optional<Math::Point3D>
             untransformCoordinates(const Math::Point3D &p) override final;
