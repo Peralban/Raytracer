@@ -28,7 +28,13 @@ namespace RayTracer {
             );
             ~TransformedShape() = default;
 
-            std::optional<Ray> hits(const Ray &ray) override;
+            bool hit(
+                const Math::Ray3D &ray,
+                float tmin,
+                float tmax,
+                struct hits &hit
+            ) const override;
+
 
         protected:
 

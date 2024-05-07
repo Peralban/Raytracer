@@ -16,17 +16,22 @@ RayTracer::TransformedShape::TransformedShape(
 {
 }
 
-std::optional<Math::Ray> RayTracer::TransformedShape::hits(const Math::Ray &ray) override
+bool RayTracer::TransformedShape::hit(
+    const Math::Ray3D &ray,
+    float tmin,
+    float tmax,
+    hits &hit
+) const
 {
-    std::optional<Math::Ray> transformed_ray = ray.untransformed(*_tr.get());
+    std::optional<Math::Ray3D> transformed_ray = ray.untransformed(*_tr.get());
 
     if (!transformed_ray) {
-        return std::optional<Math::Ray>();
+        return std::optional<Math::Ray3D>();
     }
-    std::optional<Math::Ray> hit = _shape->hits(transformed_ray.value());
+    std::optional<Math::Ray3D> hit = _shape->hit(transformed_ray.value());
 
     if (!hit) {
-        return std::optional<Math::Ray>();
+        return std::optional<Math::Ray3D>();
     }
     return std::optional(hit.value().transform(*_tr.get()));
 }
