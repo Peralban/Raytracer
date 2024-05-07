@@ -22,6 +22,7 @@ SRC		= main.cpp								\
 				Shapes/Cone.cpp							\
 				Core/ClusterManagement.cpp				\
 				Transformations/Translation.cpp			\
+				Transformations/Rotation.cpp			\
 
 TRUE_SRC 	= 	$(patsubst %,src/%, $(SRC))
 
