@@ -40,8 +40,8 @@ CXXFLAGS	=	$(INCLUDE) $(WARNINGS) $(LIBS) #$(VALGRIND)
 
 #-------------- Tests Variables --------------#
 
-TEST_SRC		=	MainTests.cpp						\
-					DataRetriever/ParsingTests.cpp		\
+TEST_SRC		=	MainTests.cpp							\
+					DataRetriever/ParsingTests.cpp			\
 
 TESTS_LIBS		=	-lcriterion -lconfig++ -lSDL2 -lSDL2_image -lSDL2_ttf
 
@@ -53,6 +53,19 @@ TEST_TRUE_SRC	=	$(patsubst %,Tests/src/%, $(TEST_SRC))	\
 					$(filter-out src/main.cpp, $(TRUE_SRC))
 
 TESTS_FLAGS		=	$(TESTS_INCLUDE) $(WARNINGS) $(TESTS_LIBS) $(TESTS_COMPILATION_FLAGS)
+
+#-------------- Bonus --------------#
+
+BONUS_SRC	=	CFGGenerator/main.cpp						\
+				CFGGenerator/CFGGenerator.cpp				\
+
+BONUS_TRUE_SRC	=	$(patsubst %,Bonus/src/%, $(BONUS_SRC))
+
+BONUS_OBJ	=	$(BONUS_TRUE_SRC:.cpp=.o)
+
+BONUS_NAME	=	CFG_Generator
+
+BONUS_LIBS	=	-lconfig++
 
 #-------------- Phony & Silent Rules --------------#
 
@@ -106,3 +119,32 @@ tests_launch:
 
 tests_run: tests_compile tests_launch
 	printf "\033[1;32mTests runned ✅\033[0m\n"
+
+#-------------- Bonus --------------#
+
+bonus_compile:
+	g++ -o $(BONUS_NAME) $(BONUS_TRUE_SRC) $(CXXFLAGS)
+	@if [ -f $(BONUS_NAME) ]; then \
+		printf "\033[1;32mBonus compiled ✅\033[0m\n"; \
+	else \
+		printf "\033[1;31mBonus compilation failed ❌\033[0m\n"; \
+	fi
+
+bonus_run: bonus_compile
+	./$(BONUS_NAME)
+	printf "\033[1;35mBonus runned ✅\033[0m\n"
+
+bonus_clean:
+	rm -f $(BONUS_OBJ)
+	printf "\033[1;35mBonus object files removed ✅\033[0m\n"
+
+bonus_fclean: bonus_clean
+	rm -f $(BONUS_NAME)
+	printf "\033[1;35mBonus files removed ✅\033[0m\n"
+
+bonus_re: bonus_fclean bonus_compile
+
+#-------------- All Project --------------#
+
+all_clean: fclean bonus_fclean
+	printf "\033[1;35mAll object files removed ✅\033[0m\n"

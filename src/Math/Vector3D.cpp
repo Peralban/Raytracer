@@ -157,3 +157,9 @@ namespace Math {
         os << "Vector3D(" << x << ", " << y << ", " << z << ")";
     }
 }
+
+std::ostream &operator<<(std::ostream &os, const Math::Vector3D &v)
+{
+    v.output(os);
+    return os;
+}
