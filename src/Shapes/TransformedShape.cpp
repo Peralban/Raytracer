@@ -26,12 +26,15 @@ bool RayTracer::TransformedShape::hit(
     std::optional<Math::Ray3D> transformed_ray = ray.untransformed(*_tr.get());
 
     if (!transformed_ray) {
-        return std::optional<Math::Ray3D>();
+        return false;
     }
-    std::optional<Math::Ray3D> hit = _shape->hit(transformed_ray.value());
+    bool call_hit = _shape->hit(*transformed_ray, tmin, tmax, hit);
 
-    if (!hit) {
-        return std::optional<Math::Ray3D>();
+    if (!call_hit) {
+        return false;
     }
-    return std::optional(hit.value().transform(*_tr.get()));
+    Math::Point3D normal_tip = hit.point + hit.normal;
+    hit.point = _tr->transformCoordinates(hit.normal);
+    hit.normal = hit.point - _tr->transformCoordinates(normal_tip);
+    return true;
 }
