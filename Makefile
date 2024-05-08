@@ -7,7 +7,7 @@
 
 #-------------- Main Variables --------------#
 
-SRC		= main.cpp								\
+SRC		= 		main.cpp								\
 				Graphical/Sdl2.cpp						\
 				DataRetriever/Parsing.cpp				\
 				Math/Ray3D.cpp							\
@@ -22,6 +22,7 @@ SRC		= main.cpp								\
 				Shapes/Cone.cpp							\
 				Shapes/TransformedShape.cpp				\
 				Core/ClusterManagement.cpp				\
+				Shapes/Plane.cpp						\
 
 TRUE_SRC 	= 	$(patsubst %,src/%, $(SRC))
 
