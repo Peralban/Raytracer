@@ -24,6 +24,13 @@ Math::Point3D::Point3D(double ix, double iy, double iz)
 {
 }
 
+Math::Point3D::Point3D(const Math::Vector3D &v)
+:   x(v.x),
+    y(v.y),
+    z(v.z)
+{
+}
+
 Math::Point3D Math::Point3D::operator+(const Math::Vector3D &v) const noexcept
 {
     return {
