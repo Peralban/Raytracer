@@ -15,6 +15,7 @@
 #include "Shapes/TransformedShape.hpp"
 #include "Transformations/Translation.hpp"
 #include "Transformations/Rotation.hpp"
+#include "Transformations/Scale.hpp"
 
 int main()
 {
@@ -38,7 +39,19 @@ int main()
             )
         )
     );
-    std::shared_ptr<RayTracer::Camera> camera = std::make_shared<RayTracer::Camera>(Math::Vector3D(5, 40, -10), Math::Vector3D(5, 0, 5), Math::Vector3D(0, 1, 0), 90, double(width) / double(height), 0, 10.0);
+    scene->shapes.push_back(
+        std::make_shared<RayTracer::TransformedShape>(
+            std::make_unique<RayTracer::Sphere>(
+                Math::Vector3D(10, 0, 10),
+                2.,
+                new RayTracer::Metal(Math::Vector3D(0.1, 1., 0.2), 0.1)
+            ),
+            std::make_unique<RayTracer::Scale>(
+                Math::Vector3D(2, 2, 2)
+            )
+        )
+    );
+    std::shared_ptr<RayTracer::Camera> camera = std::make_shared<RayTracer::Camera>(Math::Vector3D(5, 20, -10), Math::Vector3D(5, 0, 5), Math::Vector3D(0, 1, 0), 90, double(width) / double(height), 0, 10.0);
     App::ClusterManagement clusterManagement(width, height);
     clusterManagement.executeRendering(scene, camera);
     clusterManagement.sortConfig();

@@ -24,6 +24,7 @@ SRC		= main.cpp								\
 				Core/ClusterManagement.cpp				\
 				Transformations/Translation.cpp			\
 				Transformations/Rotation.cpp			\
+				Transformations/Scale.cpp				\
 
 TRUE_SRC 	= 	$(patsubst %,src/%, $(SRC))
 
