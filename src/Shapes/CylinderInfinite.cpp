@@ -10,8 +10,8 @@
 #include <utility>
 
 
-RayTracer::CylinderInfinite::CylinderInfinite(const Math::Vector3D &centerValue, double radiusValue,  IMaterial *materialValue)
-    : center(centerValue), radius(radiusValue), material(materialValue)
+RayTracer::CylinderInfinite::CylinderInfinite(const Math::Vector3D &centerValue, double radiusValue,  std::shared_ptr<IMaterial> materialValue)
+    : center(centerValue), radius(radiusValue), material(std::move(materialValue))
 {}
 
 bool RayTracer::CylinderInfinite::hit(const Math::Ray3D &ray, double tmin, double tmax, RayTracer::hits &hit) const {
