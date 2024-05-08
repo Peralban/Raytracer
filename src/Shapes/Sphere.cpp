@@ -43,5 +43,3 @@ bool RayTracer::Sphere::hit(const Math::Ray3D &ray, float tmin, float tmax, hits
     }
     return false;
 }
-
-RayTracer::Sphere::~Sphere() {}
