@@ -5,8 +5,16 @@
 ** Factory
 */
 
+/**
+ * @file Factory.cpp
+ * @brief Retrieve parsing data in order to create objects correctly.
+ * @see Factory.hpp
+ */
+
 #include "Factory.hpp"
 #include <algorithm>
+#include "Materials/Matte.hpp"
+#include "Materials/Metal.hpp"
 
 Core::SceneFactory::SceneFactory() {}
 
@@ -98,6 +106,16 @@ std::shared_ptr<RayTracer::IShape> Core::SceneFactory::makeSphere(App::ParsingSh
     Math::Vector3D size = sphere.getSize();
     float radius = size.x;
     RayTracer::IMaterial *material = nullptr;
+    std::string type = sphere.getMaterial().getType();
+
+    if (type == "matte") {
+        material = new RayTracer::Matte(Math::Vector3D(0.8, 0.8, 0.0));
+    }
+    if (type == "metal") {
+        material = new RayTracer::Metal(Math::Vector3D(0.8, 0.3, 0.3), 0.3);
+    }
+    if (material == nullptr)
+        throw std::runtime_error("Invalid material type");
 
     return std::make_shared<RayTracer::Sphere>(center, radius, material);
 }
