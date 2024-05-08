@@ -13,7 +13,7 @@ RayTracer::Cone::Cone(const Math::Vector3D &center, float radius, float height, 
 {}
 
 
-bool RayTracer::Cone::hit(const Math::Ray3D &ray, float tmin, float tmax, hits &hit) const
+bool RayTracer::Cone::hit(const Math::Ray3D &ray, double tmin, double tmax, hits &hit) const
 {
     Math::Vector3D oc = ray.getOrigin() - _center;
     float a = pow(ray.getDirection().x, 2) + pow(ray.getDirection().y, 2) - pow(ray.getDirection().z, 2) / pow(_height, 2);

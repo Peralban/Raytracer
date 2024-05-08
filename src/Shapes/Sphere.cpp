@@ -13,7 +13,7 @@ RayTracer::Sphere::Sphere(const Math::Vector3D &centerValue, float radiusValue, 
     : center(centerValue), radius(radiusValue), material(materialValue)
 {}
 
-bool RayTracer::Sphere::hit(const Math::Ray3D &ray, float tmin, float tmax, hits &hit) const
+bool RayTracer::Sphere::hit(const Math::Ray3D &ray, double tmin, double tmax, hits &hit) const
 {
     Math::Vector3D oc = ray.getOrigin() - center;
     float a = ray.getDirection().dot(ray.getDirection());
