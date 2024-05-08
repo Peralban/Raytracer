@@ -7,10 +7,10 @@
 
 #include "Factory.hpp"
 
-SceneFactory::SceneFactory() {}
+Core::SceneFactory::SceneFactory() {}
 
 template<typename Args>
-std::unique_ptr<RayTracer::IShape> SceneFactory::createPrimitive(PrimitiveType type, Args args)
+std::unique_ptr<RayTracer::IShape> Core::SceneFactory::createPrimitive(PrimitiveType type, Args args)
 {
     switch (type) {
         case PrimitiveType::SPHERE:
@@ -34,30 +34,31 @@ std::unique_ptr<RayTracer::IShape> SceneFactory::createPrimitive(PrimitiveType t
     }
 }
 
-std::shared_ptr<RayTracer::Camera> SceneFactory::createCamera()
+std::shared_ptr<RayTracer::Camera> Core::SceneFactory::createCamera(ParsingCamera camera)
 {
-    Math::Vector3D viewFrom(0, 0, 0);
-    Math::Vector3D viewAt(0, 0, -1);
-    Math::Vector3D viewUp(0, 1, 0);
-    double verticalFieldOfView = 90.0;
-    double aspect = 16.0 / 9.0;
-    double aperture = 0.1;
-    double focusDistance = 10.0;
+    Math::Vector3D viewFrom = camera.getViewFrom();
+    Math::Vector3D viewAt = camera.getViewAt();
+    Math::Vector3D viewUp = camera.getViewUp();
+    double fov = static_cast<double>(camera.getFov());
+    std::pair<int, int> res = camera.getResolution();
+    double resolution = static_cast<double>(res.first) / res.second;
+    double aperture = static_cast<double>(camera.getAperture());
+    double focusDist = static_cast<double>(camera.getFocusDist());
 
-    return std::make_unique<RayTracer::Camera>(viewFrom, viewAt, viewUp, verticalFieldOfView, aspect, aperture, focusDistance);
+    return std::make_shared<RayTracer::Camera>(viewFrom, viewAt, viewUp, fov, resolution, aperture, focusDist);
 }
 
-std::unique_ptr<RayTracer::Background> SceneFactory::createBackground()
+std::unique_ptr<RayTracer::Background> Core::SceneFactory::createBackground()
 {
     return std::make_unique<RayTracer::Background>();
 }
 
-std::unique_ptr<RayTracer::Light> SceneFactory::createLight()
+std::unique_ptr<RayTracer::Light> Core::SceneFactory::createLight()
 {
     return std::make_unique<RayTracer::Light>();
 }
 
-std::unique_ptr<RayTracer::IShape> SceneFactory::makeSphere(ParsingSphere &sphere)
+std::unique_ptr<RayTracer::IShape> Core::SceneFactory::makeSphere(ParsingSphere &sphere)
 {
     Math::Vector3D center(0, 0, 0);
     float radius = 1.0f;
@@ -66,12 +67,12 @@ std::unique_ptr<RayTracer::IShape> SceneFactory::makeSphere(ParsingSphere &spher
     return std::make_unique<RayTracer::Sphere>(center, radius, material);
 }
 
-std::unique_ptr<RayTracer::IShape> SceneFactory::makePlane(ParsingPlane &plane)
+std::unique_ptr<RayTracer::IShape> Core::SceneFactory::makePlane(ParsingPlane &plane)
 {
     return std::make_unique<RayTracer::Plane>();
 }
 
-std::unique_ptr<RayTracer::IShape> SceneFactory::makeCone(ParsingCone &cone)
+std::unique_ptr<RayTracer::IShape> Core::SceneFactory::makeCone(ParsingCone &cone)
 {
     Math::Vector3D center(0, 0, 0);
     float radius = 1.0f;
@@ -81,23 +82,23 @@ std::unique_ptr<RayTracer::IShape> SceneFactory::makeCone(ParsingCone &cone)
     return std::make_unique<RayTracer::Cone>(center, radius, height, material);
 }
 
-std::unique_ptr<RayTracer::IShape> SceneFactory::makeCube(ParsingCube &cube)
+std::unique_ptr<RayTracer::IShape> Core::SceneFactory::makeCube(ParsingCube &cube)
 {
     return std::make_unique<RayTracer::Cube>();
 }
-std::unique_ptr<RayTracer::IShape> SceneFactory::makeCylinder(ParsingCylinder &cylinder)
+std::unique_ptr<RayTracer::IShape> Core::SceneFactory::makeCylinder(ParsingCylinder &cylinder)
 {
     return std::make_unique<RayTracer::Cylinder>();
 }
-std::unique_ptr<RayTracer::IShape> SceneFactory::makeTorus(ParsingTorus &torus)
+std::unique_ptr<RayTracer::IShape> Core::SceneFactory::makeTorus(ParsingTorus &torus)
 {
     return std::make_unique<RayTracer::Torus>();
 }
-std::unique_ptr<RayTracer::IShape> SceneFactory::makePrism(ParsingPrism &prism)
+std::unique_ptr<RayTracer::IShape> Core::SceneFactory::makePrism(ParsingPrism &prism)
 {
     return std::make_unique<RayTracer::Prism>();
 }
-std::unique_ptr<RayTracer::IShape> SceneFactory::makeObj(ParsingObj &obj)
+std::unique_ptr<RayTracer::IShape> Core::SceneFactory::makeObj(ParsingObj &obj)
 {
     return std::make_unique<RayTracer::Obj>();
 }
