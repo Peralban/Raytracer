@@ -9,28 +9,30 @@
 
 Core::SceneFactory::SceneFactory() {}
 
-template<typename Args>
-std::unique_ptr<RayTracer::IShape> Core::SceneFactory::createPrimitive(PrimitiveType type, Args args)
+std::shared_ptr<RayTracer::IShape> Core::SceneFactory::createPrimitive(ParsingShape args)
 {
-    switch (type) {
-        case PrimitiveType::SPHERE:
-            return makeSphere(std::forward<Shape>(args));
-        case PrimitiveType::PLANE:
-            return makePlane(std::forward<Args>(args));
-        case PrimitiveType::CONE:
-            return makeCone(std::forward<Args>(args));
-        case PrimitiveType::CUBE:
-            return makeCube(std::forward<Args>(args));
-        case PrimitiveType::CYLINDER:
-            return makeCylinder(std::forward<Args>(args));
-        case PrimitiveType::TORUS:
-            return makeTorus(std::forward<Args>(args));
-        case PrimitiveType::PRISM:
-            return makePrism(std::forward<Args>(args));
-        case PrimitiveType::OBJ:
-            return makeObj(std::forward<Args>(args));
-        default:
-            throw std::runtime_error("Invalid primitive type");
+    using CreateFunc = std::shared_ptr<RayTracer::IShape> (Core::SceneFactory::*)(ParsingShape&);
+
+    static const std::unordered_map<std::string, CreateFunc> functionMap = {
+        {"sphere", &Core::SceneFactory::makeSphere},
+        {"cone", &Core::SceneFactory::makeCone},
+        {"cube", &Core::SceneFactory::makeCube},
+        {"cylinder", &Core::SceneFactory::makeCylinder},
+        {"torus", &Core::SceneFactory::makeTorus},
+        {"prism", &Core::SceneFactory::makePrism},
+        {"plane", &Core::SceneFactory::makePlane},
+    };
+
+    std::string shapeType = args.getType();
+    std::transform(shapeType.begin(), shapeType.end(), shapeType.begin(), [](unsigned char c) {
+        return std::tolower(c);
+    });
+    auto iter = functionMap.find(shapeType);
+
+    if (iter != functionMap.end()) {
+        return (this->*(iter->second))(args);
+    } else {
+        throw std::runtime_error("Invalid primitive type");
     }
 }
 
@@ -48,57 +50,125 @@ std::shared_ptr<RayTracer::Camera> Core::SceneFactory::createCamera(ParsingCamer
     return std::make_shared<RayTracer::Camera>(viewFrom, viewAt, viewUp, fov, resolution, aperture, focusDist);
 }
 
-std::unique_ptr<RayTracer::Background> Core::SceneFactory::createBackground()
+std::shared_ptr<RayTracer::IShape> Core::SceneFactory::createBackground(ParsingBackground &background)
 {
-    return std::make_unique<RayTracer::Background>();
+    Math::Vector3D color = background.getColor();
+    std::string texture = background.getPath();
+
+    (void)color;
+    (void)texture;
+    return std::make_shared<RayTracer::Background>();
 }
 
-std::unique_ptr<RayTracer::Light> Core::SceneFactory::createLight()
+std::shared_ptr<RayTracer::IShape> Core::SceneFactory::createLight(ParsingLight &light)
 {
-    return std::make_unique<RayTracer::Light>();
+
+    Math::Vector3D pos = light.getPosition();
+    Math::Vector3D color = light.getColor();
+    float intensity = light.getIntensity();
+    Math::Vector3D direction =  light.getDirection();
+    std::string type = light.getType()
+
+    (void)pos;
+    (void)color;
+    (void)intensity;
+    (void)direction;
+    (void)type;
+    return std::make_shared<RayTracer::Light>();
 }
 
-std::unique_ptr<RayTracer::IShape> Core::SceneFactory::makeSphere(ParsingSphere &sphere)
+std::shared_ptr<RayTracer::IShape> Core::SceneFactory::makeSphere(ParsingShape &sphere)
 {
-    Math::Vector3D center(0, 0, 0);
-    float radius = 1.0f;
+    Math::Vector3D center = sphere.getPosition();
+    Math::Vector3D size = sphere.getSize();
+    float radius = size.x;
     RayTracer::IMaterial *material = nullptr;
 
-    return std::make_unique<RayTracer::Sphere>(center, radius, material);
+    return std::make_shared<RayTracer::Sphere>(center, radius, material);
 }
 
-std::unique_ptr<RayTracer::IShape> Core::SceneFactory::makePlane(ParsingPlane &plane)
+std::shared_ptr<RayTracer::IShape> Core::SceneFactory::makeObj(ParsingShape &obj)
 {
-    return std::make_unique<RayTracer::Plane>();
-}
-
-std::unique_ptr<RayTracer::IShape> Core::SceneFactory::makeCone(ParsingCone &cone)
-{
-    Math::Vector3D center(0, 0, 0);
-    float radius = 1.0f;
-    float height = 1.0f;
+    Math::Vector3D center = obj.getPosition();
+    Math::Vector3D size = obj.getSize();
+    float radius = size.x;
     RayTracer::IMaterial *material = nullptr;
 
-    return std::make_unique<RayTracer::Cone>(center, radius, height, material);
+    (void)center;
+    (void)radius;
+    (void)material;
+    return std::make_shared<RayTracer::Obj>();
 }
 
-std::unique_ptr<RayTracer::IShape> Core::SceneFactory::makeCube(ParsingCube &cube)
+std::shared_ptr<RayTracer::IShape> Core::SceneFactory::makePlane(ParsingShape &plane)
 {
-    return std::make_unique<RayTracer::Cube>();
+    Math::Vector3D center = plane.getPosition();
+    Math::Vector3D size = plane.getSize();
+    float radius = size.x;
+    RayTracer::IMaterial *material = nullptr;
+
+    (void)center;
+    (void)radius;
+    (void)material;
+    return std::make_shared<RayTracer::Plane>();
 }
-std::unique_ptr<RayTracer::IShape> Core::SceneFactory::makeCylinder(ParsingCylinder &cylinder)
+
+std::shared_ptr<RayTracer::IShape> Core::SceneFactory::makeCone(ParsingShape &cone)
 {
-    return std::make_unique<RayTracer::Cylinder>();
+    Math::Vector3D center = cone.getPosition();
+    Math::Vector3D size = cone.getSize();
+    float radius = size.x;
+    float height = size.y;
+    RayTracer::IMaterial *material = nullptr;
+
+    return std::make_shared<RayTracer::Cone>(center, radius, height, material);
 }
-std::unique_ptr<RayTracer::IShape> Core::SceneFactory::makeTorus(ParsingTorus &torus)
+
+std::shared_ptr<RayTracer::IShape> Core::SceneFactory::makeCube(ParsingShape &cube)
 {
-    return std::make_unique<RayTracer::Torus>();
+    Math::Vector3D center = cube.getPosition();
+    Math::Vector3D size = cube.getSize();
+    float radius = size.x;
+    RayTracer::IMaterial *material = nullptr;
+
+    (void)center;
+    (void)radius;
+    (void)material;
+    return std::make_shared<RayTracer::Cube>();
 }
-std::unique_ptr<RayTracer::IShape> Core::SceneFactory::makePrism(ParsingPrism &prism)
+std::shared_ptr<RayTracer::IShape> Core::SceneFactory::makeCylinder(ParsingShape &cylinder)
 {
-    return std::make_unique<RayTracer::Prism>();
+    Math::Vector3D center = cylinder.getPosition();
+    Math::Vector3D size = cylinder.getSize();
+    float radius = size.x;
+    RayTracer::IMaterial *material = nullptr;
+
+    (void)center;
+    (void)radius;
+    (void)material;
+    return std::make_shared<RayTracer::Cylinder>();
 }
-std::unique_ptr<RayTracer::IShape> Core::SceneFactory::makeObj(ParsingObj &obj)
+std::shared_ptr<RayTracer::IShape> Core::SceneFactory::makeTorus(ParsingShape &torus)
 {
-    return std::make_unique<RayTracer::Obj>();
+    Math::Vector3D center = torus.getPosition();
+    Math::Vector3D size = torus.getSize();
+    float radius = size.x;
+    RayTracer::IMaterial *material = nullptr;
+
+    (void)center;
+    (void)radius;
+    (void)material;
+    return std::make_shared<RayTracer::Torus>();
+}
+std::shared_ptr<RayTracer::IShape> Core::SceneFactory::makePrism(ParsingShape &prism)
+{
+    Math::Vector3D center = prism.getPosition();
+    Math::Vector3D size = prism.getSize();
+    float radius = size.x;
+    RayTracer::IMaterial *material = nullptr;
+
+    (void)center;
+    (void)radius;
+    (void)material;
+    return std::make_shared<RayTracer::Prism>();
 }
