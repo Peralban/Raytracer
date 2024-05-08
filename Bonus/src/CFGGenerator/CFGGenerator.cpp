@@ -90,8 +90,8 @@ void Bonus::CFGGenerator::askShape()
     int color[ALL_INDEXES];
     bool enable_texture = false;
     std::vector<ParsingTransformation> transformations;
-    std::cout << "Enter the type of the shape: ";
-    checkCin<std::string>(type, "Invalid type, please enter a valid type: ", []([[maybe_unused]]std::string ex) { return ex == "sphere" || ex == "cube" || ex == "cylinder" || ex == "cone"; });
+    std::cout << "Enter the type of the shape (sphere, cube, cylinder, cone, plane): ";
+    checkCin<std::string>(type, "Invalid type, please enter a valid type: ", []([[maybe_unused]]std::string ex) { return ex == "sphere" || ex == "cube" || ex == "cylinder" || ex == "cone" || ex == "plane"; });
     std::cout << "Enter the position of the shape (first the X and enter, then the Y and enter, then the Z and enter):";
     checkCin<int, ALL_INDEXES>(position, "Invalid position, please enter a valid position for the position ", []([[maybe_unused]]int ex) { return true; }, A);
     std::cout << "Enter the size of the shape (first the X and enter, then the Y and enter, then the Z and enter):";
@@ -113,7 +113,7 @@ void Bonus::CFGGenerator::askShape()
         for (int i = 0; i < nb_transformations; i++)
             transformations.push_back(askTransformation());
     }
-    std::cout << "Enter the type of the material: ";
+    std::cout << "Enter the type of the material (matte, metal, glass): ";
     checkCin<std::string>(material_type, "Invalid type, please enter a valid type: ", []([[maybe_unused]]std::string ex) { return ex == "matte" || ex == "metal" || ex == "glass"; });
     std::cout << "Enter the color of the material (first the R and enter, then the G and enter, then the B and enter):";
     checkCin<int, ALL_INDEXES>(color, "Invalid color, please enter a valid color for the color ", []([[maybe_unused]]int ex) { return ex >= 0 && ex <= 255; }, C);
@@ -169,12 +169,12 @@ void Bonus::CFGGenerator::askLight()
     checkCin<float>(intensity, "Invalid intensity, please enter a valid intensity (between 0 and 1): ", []([[maybe_unused]]float ex) { return ex >= 0 && ex <= 1; });
     std::cout << "Enter the rotation of the light (first the X and enter, then the Y and enter, then the Z and enter): ";
     checkCin<int, ALL_INDEXES>(rotation, "Invalid rotation, please enter a valid rotation for the rotation ", []([[maybe_unused]]int ex) { return true; }, A);
-    std::cout << "Enter the type of the light: ";
+    std::cout << "Enter the type of the light (point, directional, spot): ";
     checkCin<std::string>(type, "Invalid type of light, please enter a valid type (point, directional or spot): ", []([[maybe_unused]]std::string ex) { return ex == "point" || ex == "directional" || ex == "spot"; });
     ParsingLight new_light(position[X], position[Y], position[Z], color[R], color[G], color[B], intensity, rotation[X], rotation[Y], rotation[Z], type);
     _lights.push_back(new_light);
 }
-//none
+
 void Bonus::CFGGenerator::askBackground()
 {
     int color[ALL_INDEXES];
