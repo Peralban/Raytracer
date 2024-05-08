@@ -6,8 +6,14 @@
 */
 
 #pragma once
+
+#include <optional>
+#include "Interfaces/ITransformation.hpp"
 #include "Vector3D.hpp"
 
+namespace Raytracer {
+    class ITransformation;
+}
 namespace Math {
     class Vector3D;
 
@@ -64,6 +70,22 @@ namespace Math {
              * @return The point on the ray at distance t from the origin.
              */
             Vector3D pointOnRay(double t) const;
+
+            /**
+             *  @brief Applies a transformation on a Ray
+             *
+             * @param tr The transformation to apply
+             * @return In a copy, the transformed Ray
+            */
+            Ray3D transformed(RayTracer::ITransformation &tr) const noexcept;
+
+            /**
+             *  @brief Undoes a transformation on a Ray
+             *
+             * @param tr The transformation to unapply
+             * @return In a copy, the untransformed Ray if successful
+            */
+            std::optional<Ray3D> untransformed(RayTracer::ITransformation &tr) const noexcept;
 
             Vector3D _origin; ///< The origin point of the ray.
             Vector3D _direction; ///< The direction vector of the ray.
