@@ -29,6 +29,7 @@ SRC		= main.cpp								\
 				Shapes/Prism.cpp						\
 				Shapes/Torus.cpp						\
 				Shapes/Cone.cpp							\
+				Core/Core.cpp							\
 				Core/ClusterManagement.cpp				\
 
 TRUE_SRC 	= 	$(patsubst %,src/%, $(SRC))
