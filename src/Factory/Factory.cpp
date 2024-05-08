@@ -6,6 +6,7 @@
 */
 
 #include "Factory.hpp"
+#include <algorithm>
 
 Core::SceneFactory::SceneFactory() {}
 
