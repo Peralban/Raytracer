@@ -21,7 +21,6 @@
 #include "Raytracer/Background.hpp"
 #include "Raytracer/Light.hpp"
 #include "Raytracer/Camera.hpp"
-#include "Scene/Shape/Shape.hpp"
 #include "IMaterial.hpp"
 #include "DataRetriever/Parsing.hpp"
 
@@ -31,19 +30,6 @@
 namespace Core {
     class SceneFactory {
     public:
-        /**
-         * @brief Enumeration defining the types of primitive shapes.
-         */
-        enum class PrimitiveType {
-            SPHERE,
-            PLANE,
-            CONE,
-            CUBE,
-            CYLINDER,
-            TORUS,
-            PRISM,
-            OBJ
-        };
 
         /**
          * @brief Default constructor.
@@ -62,8 +48,7 @@ namespace Core {
          * @param arg - Arguments for creating the shape.
          * @return std::unique_ptr<RayTracer::IShape> - Pointer to the created shape.
          */
-        template<typename Args>
-        static std::unique_ptr<RayTracer::IShape> createPrimitive(PrimitiveType type, Args arg);
+        std::shared_ptr<IShape> createPrimitive(ParsingShape args);
 
         /**
          * @brief Creates a camera.
@@ -75,68 +60,68 @@ namespace Core {
          * @brief Creates a background.
          * @return std::unique_ptr<RayTracer::Background> - Pointer to the created background.
          */
-        static std::unique_ptr<RayTracer::Background> createBackground();
+        static std::unique_ptr<RayTracer::Background> createBackground(ParsingBackground &background);
 
         /**
          * @brief Creates a light.
          * @return std::unique_ptr<RayTracer::Light> - Pointer to the created light.
          */
-        static std::unique_ptr<RayTracer::Light> createLight();
+        static std::unique_ptr<RayTracer::Light> createLight(ParsingLight &light);
 
         /**
          * @brief Creates a sphere shape.
          * @param sphere - Parsing data for creating the sphere.
          * @return std::unique_ptr<RayTracer::IShape> - Pointer to the created sphere shape.
          */
-        std::unique_ptr<RayTracer::IShape> makeSphere(ParsingSphere &sphere);
+        std::unique_ptr<RayTracer::IShape> makeSphere(ParsingShape &sphere);
 
         /**
          * @brief Creates a plane shape.
          * @param plane - Parsing data for creating the plane.
          * @return std::unique_ptr<RayTracer::IShape> - Pointer to the created plane shape.
          */
-        std::unique_ptr<RayTracer::IShape> makePlane(ParsingPlane &plane);
+        std::unique_ptr<RayTracer::IShape> makePlane(ParsingShape &plane);
 
         /**
          * @brief Creates a cone shape.
          * @param cone - Parsing data for creating the cone.
          * @return std::unique_ptr<RayTracer::IShape> - Pointer to the created cone shape.
          */
-        std::unique_ptr<RayTracer::IShape> makeCone(ParsingCone &cone);
+        std::unique_ptr<RayTracer::IShape> makeCone(ParsingShape &cone);
 
         /**
          * @brief Creates a cube shape.
          * @param cube - Parsing data for creating the cube.
          * @return std::unique_ptr<RayTracer::IShape> - Pointer to the created cube shape.
          */
-        std::unique_ptr<RayTracer::IShape> makeCube(ParsingCube &cube);
+        std::unique_ptr<RayTracer::IShape> makeCube(ParsingShape &cube);
 
         /**
          * @brief Creates a cylinder shape.
          * @param cylinder - Parsing data for creating the cylinder.
          * @return std::unique_ptr<RayTracer::IShape> - Pointer to the created cylinder shape.
          */
-        std::unique_ptr<RayTracer::IShape> makeCylinder(ParsingCylinder &cylinder);
+        std::unique_ptr<RayTracer::IShape> makeCylinder(ParsingShape &cylinder);
 
         /**
          * @brief Creates a torus shape.
          * @param torus - Parsing data for creating the torus.
          * @return std::unique_ptr<RayTracer::IShape> - Pointer to the created torus shape.
          */
-        std::unique_ptr<RayTracer::IShape> makeTorus(ParsingTorus &torus);
+        std::unique_ptr<RayTracer::IShape> makeTorus(ParsingShape &torus);
 
         /**
          * @brief Creates a prism shape.
          * @param prism - Parsing data for creating the prism.
          * @return std::unique_ptr<RayTracer::IShape> - Pointer to the created prism shape.
          */
-        std::unique_ptr<RayTracer::IShape> makePrism(ParsingPrism &prism);
+        std::unique_ptr<RayTracer::IShape> makePrism(ParsingShape &prism);
 
         /**
          * @brief Creates an OBJ shape.
          * @param obj - Parsing data for creating the OBJ.
          * @return std::unique_ptr<RayTracer::IShape> - Pointer to the created OBJ shape.
          */
-        std::unique_ptr<RayTracer::IShape> makeObj(ParsingObj &obj);
+        std::unique_ptr<RayTracer::IShape> makeObj(ParsingShape &obj);
     };
 }
