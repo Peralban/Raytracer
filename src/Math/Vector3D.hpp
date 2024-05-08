@@ -25,6 +25,7 @@ namespace Math {
              * @param z The z-component of the vector.
              */
             Vector3D(double r, double g, double b);
+            Vector3D(const Point3D &p);
 
             /**
              * @brief Default destructor for the Vector3D class.

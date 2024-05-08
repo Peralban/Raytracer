@@ -17,6 +17,8 @@ namespace Math {
 
     Vector3D::Vector3D(int r, int g, int b) : x(r), y(g), z(b) {}
 
+    Vector3D::Vector3D(const Point3D &p) : x(p.x), y(p.y), z(p.z) {}
+
     double Vector3D::sqLength() const noexcept {
         return x * x + y * y + z * z;
     }
