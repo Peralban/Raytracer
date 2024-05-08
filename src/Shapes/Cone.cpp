@@ -8,8 +8,8 @@
 #include "Cone.hpp"
 
 
-RayTracer::Cone::Cone(const Math::Vector3D &center, float radius, float height, IMaterial *material)
-    : _center(center), _radius(radius), _material(material), _height(height)
+RayTracer::Cone::Cone(const Math::Vector3D &center, float radius, float height, std::shared_ptr<IMaterial> material)
+    : _center(center), _radius(radius), _height(height), _material(std::move(material))
 {}
 
 
