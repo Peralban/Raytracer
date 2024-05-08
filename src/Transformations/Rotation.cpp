@@ -9,7 +9,7 @@
 #include <cmath>
 
 RayTracer::Rotation::Rotation()
-:   _angles({0, 0, 0})
+:   _angles(0, 0, 0)
 {
 }
 
@@ -20,13 +20,23 @@ RayTracer::Rotation::Rotation(const Math::Vector3D &angles)
 
 Math::Point3D RayTracer::Rotation::transformCoordinates(const Math::Point3D &p)
 {
-    return p + _angles;
+    Math::Point3D pCopy(p);
+
+    __apply_one_2d_rotation(_angles.x, pCopy.z, pCopy.y);
+    __apply_one_2d_rotation(_angles.y, pCopy.z, pCopy.x);
+    __apply_one_2d_rotation(_angles.z, pCopy.y, pCopy.x);
+    return pCopy;
 }
 
 std::optional<Math::Point3D>
 RayTracer::Rotation::untransformCoordinates(const Math::Point3D &p)
 {
-    return p - _angles;
+    Math::Point3D pCopy(p);
+
+    __apply_one_2d_rotation(-_angles.x, pCopy.z, pCopy.y);
+    __apply_one_2d_rotation(-_angles.y, pCopy.z, pCopy.x);
+    __apply_one_2d_rotation(-_angles.z, pCopy.y, pCopy.x);
+    return pCopy;
 }
 
 constexpr inline void RayTracer::Rotation::__apply_one_2d_rotation(

@@ -34,11 +34,13 @@ namespace Math {
 
     Ray3D Ray3D::transformed(RayTracer::ITransformation &tr) const noexcept
     {
-        Point3D ray_tip = Point3D{_origin.x, _origin.y, _origin.z} + _direction;
+        Point3D ray_tip = _origin + _direction;
+        Point3D transformed_origin = tr.transformCoordinates(_origin);
+        Point3D transformed_tip = tr.transformCoordinates(ray_tip);
 
         return Ray3D(
-            tr.transformCoordinates(_origin),
-            tr.transformCoordinates(ray_tip)
+            transformed_origin,
+            transformed_tip - transformed_origin
         );
     }
 
@@ -51,7 +53,7 @@ namespace Math {
         std::optional<Point3D> transformed_tip = tr.untransformCoordinates(ray_tip);
 
         if (transformed_orig && transformed_tip) {
-            return Ray3D(*transformed_orig, *transformed_tip);
+            return Ray3D(*transformed_orig, *transformed_tip - *transformed_orig);
         } else {
             return std::optional<Ray3D>();
         }
