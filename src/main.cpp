@@ -12,6 +12,7 @@
 #include "Shapes/Sphere.hpp"
 #include "Materials/Matte.hpp"
 #include "Materials/Metal.hpp"
+#include "Factory/Factory.hpp"
 
 int main()
 {
