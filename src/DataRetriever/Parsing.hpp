@@ -584,7 +584,7 @@ namespace App {
          * @brief Get the background from the configuration file.
          * @return A ParsingCamera object.
          */
-        ParsingPrecision getBackground() { return _background; }
+        ParsingBackground getBackground() { return _background; }
 
         /**
          * @brief Parse the configuration file.
