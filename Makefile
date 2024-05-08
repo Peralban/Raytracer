@@ -22,6 +22,7 @@ SRC		= main.cpp								\
 				Shapes/Cone.cpp							\
 				Shapes/CylinderInfinite.cpp				\
 				Shapes/CylinderLimited.cpp				\
+				Shapes/TransformedShape.cpp				\
 				Core/ClusterManagement.cpp				\
 				Transformations/Translation.cpp			\
 				Transformations/Rotation.cpp			\
