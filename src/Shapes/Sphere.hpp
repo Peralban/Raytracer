@@ -39,7 +39,7 @@ namespace RayTracer {
              * @param radius The radius of the sphere.
              * @param material The material of the sphere.
              */
-            Sphere(const Math::Vector3D  &center, float radius, IMaterial *material);
+            Sphere(const Math::Vector3D  &center, float radius, std::shared_ptr<IMaterial> material);
 
             /**
              * @brief Default destructor for the Sphere class.
@@ -61,6 +61,6 @@ namespace RayTracer {
 
             Math::Vector3D center; ///< The center of the sphere.
             float radius; ///< The radius of the sphere.
-            IMaterial *material; ///< The material of the sphere.
+            std::shared_ptr<IMaterial> material; ///< The material of the sphere.
     };
 }

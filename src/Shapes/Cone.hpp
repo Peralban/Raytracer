@@ -17,7 +17,7 @@ namespace RayTracer {
         public:
             Cone() = default;
 
-            Cone(const Math::Vector3D &center, float radius, float height, IMaterial *material);
+            Cone(const Math::Vector3D &center, float radius, float height, std::shared_ptr<IMaterial> material);
 
             ~Cone() = default;
 
@@ -27,7 +27,7 @@ namespace RayTracer {
             Math::Vector3D _center;
             float _radius;
             float _height;
-            IMaterial *_material;
+            std::shared_ptr<IMaterial> _material;
 
     };
 }

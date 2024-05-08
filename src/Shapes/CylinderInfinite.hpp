@@ -45,7 +45,7 @@ namespace RayTracer {
          * @param radius The radius of the cylinder.
          * @param material The material of the cylinder.
          */
-        CylinderInfinite(const Math::Vector3D &center, double radius, IMaterial *material);
+        CylinderInfinite(const Math::Vector3D &center, double radius, std::shared_ptr<IMaterial> material);
 
         /**
          * @brief Determines if a ray hits the cylinder.
@@ -62,6 +62,6 @@ namespace RayTracer {
 
         Math::Vector3D center; ///< The center of the cylinder.
         double radius; ///< The radius of the cylinder.
-        IMaterial *material; ///< The material of the cylinder.
+        std::shared_ptr<IMaterial> material; ///< The material of the cylinder.
     };
 }

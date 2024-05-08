@@ -46,7 +46,7 @@ namespace RayTracer {
          * @param height The height of the cylinder.
          * @param material The material of the cylinder.
          */
-        CylinderLimited(const Math::Vector3D &center, double radius, double height, IMaterial *material);
+        CylinderLimited(const Math::Vector3D &center, double radius, double height, std::shared_ptr<IMaterial> material);
 
         /**
          * @brief Determines if a ray hits the cylinder.
@@ -64,6 +64,6 @@ namespace RayTracer {
         Math::Vector3D center; ///< The center of the cylinder.
         double radius; ///< The radius of the cylinder.
         double height; ///< The height of the cylinder.
-        IMaterial *material; ///< The material of the cylinder.
+        std::shared_ptr<IMaterial> material; ///< The material of the cylinder.
     };
 }

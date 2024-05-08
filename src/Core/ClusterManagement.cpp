@@ -57,7 +57,7 @@ static Math::Vector3D color(const Math::Ray3D &ray, RayTracer::IShape *scene, in
         if (depth < 50 && hit.material->scatter(ray, hit, attenuation, scattered)) {
             return attenuation * color(scattered, scene, depth + 1);
         } else {
-            return Math::Vector3D(0, 0, 0);
+            return {0, 0, 0};
         }
     } else {
         Math::Vector3D unitDirection = ray.getDirection().getUnitVector();
