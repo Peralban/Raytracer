@@ -20,7 +20,11 @@ SRC		= main.cpp								\
 				Shapes/ShapeList.cpp					\
 				Shapes/Sphere.cpp						\
 				Shapes/Cone.cpp							\
+				Shapes/CylinderInfinite.cpp				\
+				Shapes/CylinderLimited.cpp				\
 				Core/ClusterManagement.cpp				\
+				Transformations/Translation.cpp			\
+				Transformations/Rotation.cpp			\
 
 TRUE_SRC 	= 	$(patsubst %,src/%, $(SRC))
 

@@ -21,7 +21,7 @@ namespace RayTracer {
 
             ~Cone() = default;
 
-            bool hit(const Math::Ray3D &ray, float tmin, float tmax, hits &hit) const override;
+            bool hit(const Math::Ray3D &ray, double tmin, double tmax, hits &hit) const override;
 
         private:
             Math::Vector3D _center;
