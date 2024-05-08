@@ -575,6 +575,18 @@ namespace App {
         ParsingCamera getCamera() { return _camera; }
 
         /**
+         * @brief Get the precision parsed from the configuration file.
+         * @return A ParsingCamera object.
+         */
+        ParsingPrecision getPrecision() { return _precision; }
+
+        /**
+         * @brief Get the background from the configuration file.
+         * @return A ParsingCamera object.
+         */
+        ParsingPrecision getBackground() { return _background; }
+
+        /**
          * @brief Parse the configuration file.
          * This function should be called after the configuration file path has been set.
          */
