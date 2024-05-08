@@ -15,8 +15,6 @@
 namespace RayTracer {
     class Prism : public IShape {
         public:
-            Prism() = default;
-
             Prism();
 
             ~Prism() = default;

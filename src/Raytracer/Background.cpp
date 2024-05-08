@@ -5,12 +5,6 @@
 ** Background
 */
 
-#pragma once
-
 #include "Background.hpp"
 
-
 RayTracer::Background::Background() {}
-
-RayTracer::Background::~Background() {}
-

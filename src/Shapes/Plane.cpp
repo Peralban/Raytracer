@@ -13,7 +13,9 @@ RayTracer::Plane::Plane() {}
 
 bool RayTracer::Plane::hit(const Math::Ray3D &ray, float tmin, float tmax, hits &hit) const
 {
+    (void)ray;
+    (void)tmin;
+    (void)tmax;
+    (void)hit;
     return false;
 }
-
-RayTracer::Plane::~Plane() {}

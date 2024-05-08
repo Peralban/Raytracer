@@ -14,8 +14,6 @@
 namespace RayTracer {
     class Cylinder : public IShape {
         public:
-            Cylinder() = default;
-
             Cylinder();
 
             ~Cylinder() = default;

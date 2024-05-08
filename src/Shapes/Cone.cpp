@@ -9,9 +9,9 @@
 
 
 RayTracer::Cone::Cone(const Math::Vector3D &center, float radius, float height, IMaterial *material)
-    : _center(center), _radius(radius), _material(material), _height(height)
-{}
-
+    : _center(center), _radius(radius), _height(height), _material(material)
+{
+}
 
 bool RayTracer::Cone::hit(const Math::Ray3D &ray, float tmin, float tmax, hits &hit) const
 {
@@ -41,5 +41,3 @@ bool RayTracer::Cone::hit(const Math::Ray3D &ray, float tmin, float tmax, hits &
     }
     return false;
 }
-
-RayTracer::Cone::~Cone() {}

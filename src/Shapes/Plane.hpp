@@ -15,8 +15,6 @@
 namespace RayTracer {
     class Plane : public IShape {
         public:
-            Plane() = default;
-
             Plane();
 
             ~Plane() = default;

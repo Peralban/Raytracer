@@ -13,7 +13,9 @@ RayTracer::Obj::Obj() {}
 
 bool RayTracer::Obj::hit(const Math::Ray3D &ray, float tmin, float tmax, hits &hit) const
 {
+    (void)ray;
+    (void)tmin;
+    (void)tmax;
+    (void)hit;
     return false;
 }
-
-RayTracer::Obj::~Obj() {}

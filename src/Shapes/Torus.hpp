@@ -15,8 +15,6 @@
 namespace RayTracer {
     class Torus : public IShape {
         public:
-            Torus() = default;
-
             Torus();
 
             ~Torus() = default;

@@ -15,8 +15,6 @@
 namespace RayTracer {
     class Obj : public IShape {
         public:
-            Obj() = default;
-
             Obj();
 
             ~Obj() = default;

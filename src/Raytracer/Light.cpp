@@ -5,12 +5,6 @@
 ** Light
 */
 
-#pragma once
-
 #include "Light.hpp"
 
-
 RayTracer::Light::Light() {}
-
-RayTracer::Light::~Light() {}
-

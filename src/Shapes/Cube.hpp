@@ -15,8 +15,6 @@
 namespace RayTracer {
     class Cube : public IShape {
         public:
-            Cube() = default;
-
             Cube();
 
             ~Cube() = default;
