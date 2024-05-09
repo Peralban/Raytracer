@@ -143,15 +143,10 @@ std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeObj(App::ParsingSh
 
 std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makePlane(App::ParsingShape &plane)
 {
-    Math::Vector3D center = plane.getPosition();
-    Math::Vector3D size = plane.getSize();
-    float radius = size.x;
-    RayTracer::IMaterial *material = nullptr;
+    Math::Vector3D pos = plane.getPosition();
+    Math::Vector3D norm = plane.getSize();
 
-    (void)center;
-    (void)radius;
-    (void)material;
-    return std::make_shared<RayTracer::Plane>();
+    return std::make_shared<RayTracer::Plane>(pos, norm, makeMaterial(plane.getMaterial()));
 }
 
 std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeCone(App::ParsingShape &cone)
@@ -182,7 +177,6 @@ std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeCylinder(App::Pars
     Math::Vector3D center = cylinder.getPosition();
     Math::Vector3D size = cylinder.getSize();
     float radius = size.x;
-    RayTracer::IMaterial *material = nullptr;
 
     (void)center;
     (void)radius;
