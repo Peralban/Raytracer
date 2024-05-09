@@ -37,6 +37,7 @@ namespace Core {
 
     void Engine::parseConfigFile() {
         _parser.parseConfigFile();
+        _clusterManagement.setSample(_parser.getPrecision().getSamples());
     }
 
     void Engine::createScene() {
