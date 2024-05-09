@@ -9,7 +9,7 @@
 #include <cmath>
 
 RayTracer::Rotation::Rotation()
-:   _angles(Math::Vector3D(0, 0, 0))./
+:   _angles(Math::Vector3D(0, 0, 0))
 {
 }
 
