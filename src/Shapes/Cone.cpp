@@ -9,7 +9,7 @@
 
 
 RayTracer::Cone::Cone(const Math::Vector3D &center, float radius, float height, std::shared_ptr<IMaterial> material)
-    : _center(center), _radius(radius), _height(height), _material(std::move(material))
+    : _center(center), _radius(radius), _height(height), _material(material)
 {}
 
 

@@ -34,11 +34,20 @@ void App::Parsing::checkArguments(int ac, char **av)
     }
 }
 
-static Math::Vector3D createVector3D(const libconfig::Setting &setting)
+static Math::Vector3D createVector3Di(const libconfig::Setting &setting)
 {
     int a = setting[0];
     int b = setting[1];
     int c = setting[2];
+
+    return Math::Vector3D(a, b, c);
+}
+
+static Math::Vector3D createVector3Df(const libconfig::Setting &setting)
+{
+    float a = setting[0];
+    float b = setting[1];
+    float c = setting[2];
 
     return Math::Vector3D(a, b, c);
 }
@@ -49,26 +58,46 @@ static std::vector<App::ParsingTransformation> parseTransfo(const libconfig::Set
     for (int j = 0; j < transformations.getLength(); j++) {
         const libconfig::Setting &transformation = transformations[j];
         std::string type = transformation["type"];
-        Math::Vector3D pos = createVector3D(transformation["position"]);
+        Math::Vector3D pos = createVector3Di(transformation["position"]);
         App::ParsingTransformation new_transformation(type, pos);
         transformations_vector.push_back(new_transformation);
     }
     return transformations_vector;
 }
 
+static App::ParsingMaterial parseMaterial(const libconfig::Setting &materials)
+{
+    Math::Vector3D color;
+    Math::Vector3D albedo;
+    float fuzz;
+    float ref_idx;
+    std::string type = materials["type"];
+    if (type == "metal") {
+        color = createVector3Di(materials["color"]);
+        fuzz = materials["fuzziness"];
+        return App::ParsingMaterial(type, fuzz, color);
+    } else if (type == "glass") {
+        albedo = createVector3Df(materials["albedo"]);
+        ref_idx = materials["refraction_index"];
+        return App::ParsingMaterial(type, albedo, ref_idx);
+    } else {
+        color = createVector3Di(materials["color"]);
+        return App::ParsingMaterial(type, color);
+    }
+}
+
+
 void App::Parsing::parseShapes(const libconfig::Setting &shapes)
 {
     for (int i = 0; i < shapes.getLength(); i++) {
         const libconfig::Setting &shape = shapes[i];
         std::string type = shape["type"];
-        Math::Vector3D pos = createVector3D(shape["position"]);
-        Math::Vector3D size = createVector3D(shape["size"]);
+        Math::Vector3D pos = createVector3Di(shape["position"]);
+        Math::Vector3D size = createVector3Di(shape["size"]);
         std::string texture_path = shape["texture_path"];
-        const libconfig::Setting &materials = shape["materials"];
-        std::string material_type = materials["type"];
-        Math::Vector3D color = createVector3D(materials["color"]);
         ParsingShape new_shape(type, pos, size, texture_path,
-        ParsingMaterial(material_type, color), parseTransfo(shape["transformations"]));
+parseMaterial(shape["material"]),
+        parseTransfo(shape["transformations"]));
         _shapes.push_back(new_shape);
     }
 }
@@ -77,10 +106,10 @@ void App::Parsing::parseLights(const libconfig::Setting &lights)
 {
     for (int i = 0; i < lights.getLength(); i++) {
         const libconfig::Setting &light = lights[i];
-        Math::Vector3D pos = createVector3D(light["position"]);
-        Math::Vector3D color = createVector3D(light["color"]);
+        Math::Vector3D pos = createVector3Di(light["position"]);
+        Math::Vector3D color = createVector3Di(light["color"]);
         float intensity = light["intensity"];
-        Math::Vector3D direction = createVector3D(light["rotation"]);
+        Math::Vector3D direction = createVector3Di(light["rotation"]);
         std::string type = light["type"];
         ParsingLight new_light(pos, color, intensity, direction, type);
         _lights.push_back(new_light);
@@ -99,7 +128,7 @@ void App::Parsing::parseObjFiles(const libconfig::Setting &obj_files)
 
 void App::Parsing::parseBackground(const libconfig::Setting &Background)
 {
-    Math::Vector3D color = createVector3D(Background["color"]);
+    Math::Vector3D color = createVector3Di(Background["color"]);
     std::string texture_path = Background["texture_path"];
     _background = ParsingBackground(color, texture_path);
 }
@@ -116,10 +145,10 @@ void App::Parsing::parsePrecision(const libconfig::Setting &precision)
 
 void App::Parsing::parseCamera(const libconfig::Setting &camera)
 {
-    Math::Vector3D view_from = createVector3D(camera["view_from"]);
-    Math::Vector3D view_at = createVector3D(camera["view_at"]);
-    Math::Vector3D view_up = createVector3D(camera["view_up"]);
-    Math::Vector3D rotation = createVector3D(camera["rotation"]);
+    Math::Vector3D view_from = createVector3Di(camera["view_from"]);
+    Math::Vector3D view_at = createVector3Di(camera["view_at"]);
+    Math::Vector3D view_up = createVector3Di(camera["view_up"]);
+    Math::Vector3D rotation = createVector3Di(camera["rotation"]);
     float fov = camera["fov"];
     float aperture = camera["aperture"];
     float focus_dist = camera["focus_distance"];
@@ -148,10 +177,24 @@ void App::Parsing::parseConfigFile()
 
 void App::ParsingMaterial::output(std::ostream &os)  const noexcept
 {
-    os << "    {" << std::endl;
-    os << "        Type: " << _type << std::endl;
-    os << "        Color: " << _color << std::endl;
-    os << "    }" << std::endl;
+    if (_type == "metal") {
+        os << "    {" << std::endl;
+        os << "        Type: " << _type << std::endl;
+        os << "        Color: " << _color << std::endl;
+        os << "        Fuzziness: " << _fuzziness << std::endl;
+        os << "    }" << std::endl;
+    } else if (_type == "glass") {
+        os << "    {" << std::endl;
+        os << "        Type: " << _type << std::endl;
+        os << "        Albedo: " << _albedo << std::endl;
+        os << "        Refraction Index: " << _refractive_index << std::endl;
+        os << "    }" << std::endl;
+    } else {
+        os << "    {" << std::endl;
+        os << "        Type: " << _type << std::endl;
+        os << "        Color: " << _color << std::endl;
+        os << "    }" << std::endl;
+    }
 }
 
 std::ostream &operator<<(std::ostream &os, const App::ParsingMaterial &material)
@@ -176,11 +219,12 @@ std::ostream &operator<<(std::ostream &os, const App::ParsingTransformation &tra
 
 void App::ParsingShape::output(std::ostream &os)  const noexcept
 {
+    os << "    Type: " << _type << std::endl;
     os << "    Position: " << _position << std::endl;
     os << "    Size: " << _size << std::endl;
     os << "    Path: " << _path << std::endl;
-    os << "    Material: " << std::endl << _material << std::endl;
     os << "    Transformations: " << std::endl;
+    os << "    Material: " << std::endl << _material;
     for (auto &transformation : _transformations) {
         os << transformation;
     }

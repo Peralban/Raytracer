@@ -121,12 +121,19 @@ namespace App {
              */
             void createPPMFile(std::string filename = "output.ppm");
 
+        // Setter
+            /**
+             * @brief Set the number of samples.
+             */
+            void setSample(int sample) { _sample = sample; }
+
         // Sorter
             /**
              * @brief Sort the configuration based on the pair of unsigned integers in ascending order.
              */
             void sortConfig();
 
+        // SDL
             void initSDL();
             void printSDL();
             /**
