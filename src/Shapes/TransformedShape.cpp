@@ -18,8 +18,8 @@ RayTracer::TransformedShape::TransformedShape(
 
 bool RayTracer::TransformedShape::hit(
     const Math::Ray3D &ray,
-    float tmin,
-    float tmax,
+    double tmin,
+    double tmax,
     hits &hit
 ) const
 {
