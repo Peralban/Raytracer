@@ -14,14 +14,24 @@ SRC		= 		main.cpp								\
 				Math/Vector3D.cpp						\
 				Math/Point3D.cpp						\
 				Raytracer/Camera.cpp					\
+				Raytracer/Background.cpp				\
+				Raytracer/Light.cpp						\
+				Factory/Factory.cpp						\
 				Materials/Glass.cpp						\
 				Materials/Metal.cpp						\
 				Materials/Matte.cpp						\
 				Shapes/ShapeList.cpp					\
 				Shapes/Sphere.cpp						\
+				Shapes/Plane.cpp						\
+				Shapes/Obj.cpp 							\
+				Shapes/Cube.cpp							\
+				Shapes/Cylinder.cpp						\
+				Shapes/Prism.cpp						\
+				Shapes/Torus.cpp						\
 				Shapes/Cone.cpp							\
 				Shapes/CylinderInfinite.cpp				\
 				Shapes/CylinderLimited.cpp				\
+				Core/Core.cpp							\
 				Shapes/TransformedShape.cpp				\
 				Core/ClusterManagement.cpp				\
 				Transformations/Translation.cpp			\

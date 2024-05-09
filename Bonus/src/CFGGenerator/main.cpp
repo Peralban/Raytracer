@@ -9,6 +9,29 @@
 #include <libconfig.h++>
 #include "CFGGenerator.hpp"
 
+static void makeMaterial(libconfig::Setting &shape_material, Bonus::ParsingMaterial material)
+{
+    shape_material.add("type", libconfig::Setting::TypeString) = material.getType();
+    if (material.getType() == "matte") {
+        libconfig::Setting &color = shape_material.add("color", libconfig::Setting::TypeArray);
+        color.add(libconfig::Setting::TypeInt) = material.getR();
+        color.add(libconfig::Setting::TypeInt) = material.getG();
+        color.add(libconfig::Setting::TypeInt) = material.getB();
+    } else if (material.getType() == "metal") {
+        libconfig::Setting &color = shape_material.add("color", libconfig::Setting::TypeArray);
+        color.add(libconfig::Setting::TypeInt) = material.getR();
+        color.add(libconfig::Setting::TypeInt) = material.getG();
+        color.add(libconfig::Setting::TypeInt) = material.getB();
+        shape_material.add("fuzziness", libconfig::Setting::TypeFloat) = material.getFuzz();
+    } else if (material.getType() == "glass") {
+        libconfig::Setting &albedo = shape_material.add("albedo", libconfig::Setting::TypeArray);
+        albedo.add(libconfig::Setting::TypeFloat) = material.getAlbedoR();
+        albedo.add(libconfig::Setting::TypeFloat) = material.getAlbedoG();
+        albedo.add(libconfig::Setting::TypeFloat) = material.getAlbedoB();
+        shape_material.add("refraction_index", libconfig::Setting::TypeFloat) = material.getRefIdx();
+    }
+}
+
 void makeShape(libconfig::Setting &shapes, std::vector<Bonus::ParsingShape> shapesInfo)
 {
     for (auto &shape : shapesInfo) {
@@ -23,12 +46,8 @@ void makeShape(libconfig::Setting &shapes, std::vector<Bonus::ParsingShape> shap
         shape_size.add(libconfig::Setting::TypeInt) = shape.getSizeY();
         shape_size.add(libconfig::Setting::TypeInt) = shape.getSizeZ();
         shapeSetting.add("texture_path", libconfig::Setting::TypeString) = shape.getPath();
-        libconfig::Setting &shape_materials = shapeSetting.add("materials", libconfig::Setting::TypeGroup);
-        shape_materials.add("type", libconfig::Setting::TypeString) = shape.getMaterial().getType();
-        libconfig::Setting &shape_color = shape_materials.add("color", libconfig::Setting::TypeArray);
-        shape_color.add(libconfig::Setting::TypeInt) = shape.getMaterial().getR();
-        shape_color.add(libconfig::Setting::TypeInt) = shape.getMaterial().getG();
-        shape_color.add(libconfig::Setting::TypeInt) = shape.getMaterial().getB();
+        libconfig::Setting &shape_material = shapeSetting.add("material", libconfig::Setting::TypeGroup);
+        makeMaterial(shape_material, shape.getMaterial());
         libconfig::Setting &shape_transformations = shapeSetting.add("transformations", libconfig::Setting::TypeList);
         for (auto &transformation : shape.getTransformations()) {
             libconfig::Setting &transformationSetting = shape_transformations.add(libconfig::Setting::TypeGroup);

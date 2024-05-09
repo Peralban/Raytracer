@@ -33,9 +33,18 @@ namespace App {
          * @brief Constructor for ParsingMaterial.
          * @param type The type of the material.
          * @param color The color of the material as a Vector3D.
+         * @param fuzziness The fuzziness of the material.
+         * @param refractive_index The refractive index of the material.
+         * @param albedo The albedo of the material.
          */
         ParsingMaterial(std::string type, Math::Vector3D color)
-                : _type(type), _color(color) {}
+        : _type(type), _color(color) {}
+
+        ParsingMaterial(std::string type, Math::Vector3D albedo, float refractive_index)
+        : _type(type), _albedo(albedo), _refractive_index(refractive_index) {}
+
+        ParsingMaterial(std::string type, float fuzziness, Math::Vector3D color)
+        : _type(type), _color(color), _fuzziness(fuzziness) {}
 
         /**
          * @brief Getter for the type of the material.
@@ -50,16 +59,35 @@ namespace App {
         Math::Vector3D getColor() { return _color; }
 
         /**
+         * @brief Getter for the fuzziness of the material.
+         * @return The fuzziness of the material.
+         */
+        float getFuzziness() { return _fuzziness; }
+
+        /**
+         * @brief Getter for the albedo of the material.
+         * @return The albedo of the material as a Vector3D.
+         */
+        Math::Vector3D getAlbedo() { return _albedo; }
+
+        /**
+         * @brief Getter for the refractive index of the material.
+         * @return The refractive index of the material.
+         */
+        float getRefractiveIndex() { return _refractive_index; }
+
+        /**
          * @brief Outputs the material data to the provided ostream.
          * @param os The ostream to output to.
          */
-        void output(std::ostream &os) const
-
-        noexcept;
+        void output(std::ostream &os) const noexcept;
 
     private:
         std::string _type; ///< The type of the material.
         Math::Vector3D _color; ///< The color of the material.
+        float _fuzziness; ///< The fuzziness of the material.
+        Math::Vector3D _albedo; ///< The albedo of the material.
+        float _refractive_index; ///< The refractive index of the material.
     };
 
     /**
@@ -573,6 +601,18 @@ namespace App {
          * @return A ParsingCamera object.
          */
         ParsingCamera getCamera() { return _camera; }
+
+        /**
+         * @brief Get the precision parsed from the configuration file.
+         * @return A ParsingCamera object.
+         */
+        ParsingPrecision getPrecision() { return _precision; }
+
+        /**
+         * @brief Get the background from the configuration file.
+         * @return A ParsingCamera object.
+         */
+        ParsingBackground getBackground() { return _background; }
 
         /**
          * @brief Parse the configuration file.

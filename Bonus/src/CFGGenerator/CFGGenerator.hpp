@@ -75,10 +75,12 @@ namespace Bonus {
         ParsingMaterial(std::string type, int r, int g, int b)
                 : _type(type), _r(r), _g(g), _b(b) {}
 
-        /**
-         * @brief Getter for the type.
-         * @return The type of the material.
-         */
+        ParsingMaterial(std::string type, float fuzz, int r, int g, int b)
+                : _type(type), _fuzz(fuzz), _r(r), _g(g), _b(b) {}
+
+        ParsingMaterial(std::string type, float albedo_r, float albedo_g, float albedo_b, float ref_idx)
+                : _type(type), _albedo_r(albedo_r), _albedo_g(albedo_g), _albedo_b(albedo_b), _ref_idx(ref_idx) {}
+
         std::string getType() { return _type; }
 
         /**
@@ -99,11 +101,26 @@ namespace Bonus {
          */
         int getB() { return _b; }
 
+        float getFuzz() { return _fuzz; }
+
+        float getAlbedoR() { return _albedo_r; }
+
+        float getAlbedoG() { return _albedo_g; }
+
+        float getAlbedoB() { return _albedo_b; }
+
+        float getRefIdx() { return _ref_idx; }
+
     private:
-        std::string _type; ///< The type of the material.
-        int _r; ///< The red color value.
-        int _g; ///< The green color value.
-        int _b; ///< The blue color value.
+        std::string _type;
+        float _fuzz;
+        int _r;
+        int _g;
+        int _b;
+        float _albedo_r;
+        float _albedo_g;
+        float _albedo_b;
+        float _ref_idx;
     };
 
     /**
