@@ -7,7 +7,7 @@
 
 #include "Plane.hpp"
 
-bool RayTracer::Plane::hit(const Math::Ray3D &ray, float tmin, float tmax, hits &hit) const
+bool RayTracer::Plane::hit(const Math::Ray3D &ray, double tmin, double tmax, hits &hit) const
 {
     float denom = ray.getDirection().dot(_normal);
 
