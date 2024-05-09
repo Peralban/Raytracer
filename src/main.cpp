@@ -20,8 +20,8 @@
 
 int main()
 {
-    int width = 1080;
-    int height = 840;
+    int width = 2160;
+    int height = 1080;
     std::shared_ptr<RayTracer::ShapeList> scene = std::make_shared<RayTracer::ShapeList>();
     scene->shapes.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(0.0, -100.5, -1.0), 100, std::make_shared<RayTracer::Matte>(Math::Vector3D(0.8, 0.8, 0.0))));
     scene->shapes.push_back(std::make_shared<RayTracer::Sphere>(Math::Vector3D(0.7, -0.3, -0.7), 0.2, std::make_shared<RayTracer::Metal>(Math::Vector3D(0.8, 0.8, 0.8), 0.3)));

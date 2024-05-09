@@ -23,7 +23,7 @@ App::ClusterManagement::ClusterManagement(int width, int height)
     :   _nbThreads(std::thread::hardware_concurrency()),
         _windowWidth(width),
         _windowHeight(height),
-        _sample(10),
+        _sample(150),
         _clusters(),
         _config()
 {
