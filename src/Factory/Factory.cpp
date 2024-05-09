@@ -101,30 +101,31 @@ std::shared_ptr<RayTracer::Light> Factory::SceneFactory::createLight(App::Parsin
     return std::make_shared<RayTracer::Light>();
 }
 
+static std::shared_ptr<RayTracer::IMaterial> makeMaterial(App::ParsingMaterial material)
+{
+    std::string type = material.getType();
+    Math::Vector3D color = material.getColor();
+    Math::Vector3D material_color(color.x / 255, color.y / 255, color.z / 255);
+
+    if (type == "matte") {
+        return std::make_shared<RayTracer::Matte>(material_color);
+    }
+    if (type == "metal") {
+        return std::make_shared<RayTracer::Metal>(material_color, material.getFuzziness());
+    }
+    if (type == "glass") {
+        return std::make_shared<RayTracer::Glass>(material.getRefractiveIndex(), material.getAlbedo());
+    }
+    throw Factory::ErrorMaterial();
+}
+
 std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeSphere(App::ParsingShape &sphere)
 {
     Math::Vector3D center = sphere.getPosition();
     Math::Vector3D size = sphere.getSize();
     float radius = size.x;
-    RayTracer::IMaterial *material = nullptr;
-    std::string type = sphere.getMaterial().getType();
-    Math::Vector3D color = sphere.getMaterial().getColor();
-    Math::Vector3D material_color(color.x / 255, color.y / 255, color.z / 255);
 
-    if (type == "matte") {
-        material = new RayTracer::Matte(material_color);
-    }
-    if (type == "metal") {
-        material = new RayTracer::Metal(material_color, sphere.getMaterial().getFuzziness());
-    }
-    if (type == "glass") {
-        material = new RayTracer::Glass(sphere.getMaterial().getRefractiveIndex(), sphere.getMaterial().getAlbedo());
-    }
-    if (material == nullptr) {
-        throw Factory::ErrorMaterial();
-    }
-
-    return std::make_shared<RayTracer::Sphere>(center, radius, material);
+    return std::make_shared<RayTracer::Sphere>(center, radius, makeMaterial(sphere.getMaterial()));
 }
 
 std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeObj(App::ParsingShape &obj)
@@ -159,9 +160,8 @@ std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeCone(App::ParsingS
     Math::Vector3D size = cone.getSize();
     float radius = size.x;
     float height = size.y;
-    RayTracer::IMaterial *material = nullptr;
 
-    return std::make_shared<RayTracer::Cone>(center, radius, height, material);
+    return std::make_shared<RayTracer::Cone>(center, radius, height, makeMaterial(cone.getMaterial()));
 }
 
 std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeCube(App::ParsingShape &cube)
