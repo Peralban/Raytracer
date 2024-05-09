@@ -28,7 +28,7 @@
 /**
  * @brief Factory class for creating shshared_ptrapes, cameras, lights, and backgrounds for a ray tracer scene.
  */
-namespace Core {
+namespace Factory {
     class SceneFactory {
     public:
 
@@ -124,5 +124,23 @@ namespace Core {
          * @return std::shared_ptr<RayTracer::IShape> - Pointer to the created OBJ shape.
          */
         std::shared_ptr<RayTracer::IShape> makeObj(App::ParsingShape &obj);
+    };
+
+    class ErrorMaterial : public AError {
+    public:
+        /**
+         * @brief Display an error message.
+         * @param message The error message to display. Defaults to "Error invalid Material".
+         */
+        ErrorMaterial() : AError("Error invalid Material") {}
+    };
+
+    class ErrorFactory : public AError {
+    public:
+        /**
+         * @brief Display an error message.
+         * @param message The error message to display. Defaults to "Error creation of the factory".
+         */
+        ErrorFactory() : AError("Error creation of the factory") {}
     };
 }

@@ -16,9 +16,9 @@
 #include "Materials/Matte.hpp"
 #include "Materials/Metal.hpp"
 
-Core::SceneFactory::SceneFactory() {}
+Factory::SceneFactory::SceneFactory() {}
 
-std::shared_ptr<RayTracer::IShape> Core::SceneFactory::createPrimitive(App::ParsingShape args)
+std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::createPrimitive(App::ParsingShape args)
 {
     using CreateFunc = std::function<std::shared_ptr<RayTracer::IShape>(App::ParsingShape&)>;
 
@@ -56,10 +56,10 @@ std::shared_ptr<RayTracer::IShape> Core::SceneFactory::createPrimitive(App::Pars
         }
     }
 
-    throw std::runtime_error("Invalid primitive type");
+    throw Factory::ErrorFactory();
 }
 
-std::shared_ptr<RayTracer::Camera> Core::SceneFactory::createCamera(App::ParsingCamera camera)
+std::shared_ptr<RayTracer::Camera> Factory::SceneFactory::createCamera(App::ParsingCamera camera)
 {
     Math::Vector3D viewFrom = camera.getViewFrom();
     Math::Vector3D viewAt = camera.getViewAt();
@@ -73,7 +73,7 @@ std::shared_ptr<RayTracer::Camera> Core::SceneFactory::createCamera(App::Parsing
     return std::make_shared<RayTracer::Camera>(viewFrom, viewAt, viewUp, fov, resolution, aperture, focusDist);
 }
 
-std::shared_ptr<RayTracer::Background> Core::SceneFactory::createBackground(App::ParsingBackground &background)
+std::shared_ptr<RayTracer::Background> Factory::SceneFactory::createBackground(App::ParsingBackground &background)
 {
     Math::Vector3D color = background.getColor();
     std::string texture = background.getPath();
@@ -83,7 +83,7 @@ std::shared_ptr<RayTracer::Background> Core::SceneFactory::createBackground(App:
     return std::make_shared<RayTracer::Background>();
 }
 
-std::shared_ptr<RayTracer::Light> Core::SceneFactory::createLight(App::ParsingLight &light)
+std::shared_ptr<RayTracer::Light> Factory::SceneFactory::createLight(App::ParsingLight &light)
 {
 
     Math::Vector3D position = light.getPosition();
@@ -100,7 +100,7 @@ std::shared_ptr<RayTracer::Light> Core::SceneFactory::createLight(App::ParsingLi
     return std::make_shared<RayTracer::Light>();
 }
 
-std::shared_ptr<RayTracer::IShape> Core::SceneFactory::makeSphere(App::ParsingShape &sphere)
+std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeSphere(App::ParsingShape &sphere)
 {
     Math::Vector3D center = sphere.getPosition();
     Math::Vector3D size = sphere.getSize();
@@ -114,13 +114,14 @@ std::shared_ptr<RayTracer::IShape> Core::SceneFactory::makeSphere(App::ParsingSh
     if (type == "metal") {
         material = new RayTracer::Metal(Math::Vector3D(0.8, 0.3, 0.3), 0.3);
     }
-    if (material == nullptr)
-        throw std::runtime_error("Invalid material type");
+    if (material == nullptr) {
+        throw Factory::ErrorMaterial();
+    }
 
     return std::make_shared<RayTracer::Sphere>(center, radius, material);
 }
 
-std::shared_ptr<RayTracer::IShape> Core::SceneFactory::makeObj(App::ParsingShape &obj)
+std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeObj(App::ParsingShape &obj)
 {
     Math::Vector3D center = obj.getPosition();
     Math::Vector3D size = obj.getSize();
@@ -133,7 +134,7 @@ std::shared_ptr<RayTracer::IShape> Core::SceneFactory::makeObj(App::ParsingShape
     return std::make_shared<RayTracer::Obj>();
 }
 
-std::shared_ptr<RayTracer::IShape> Core::SceneFactory::makePlane(App::ParsingShape &plane)
+std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makePlane(App::ParsingShape &plane)
 {
     Math::Vector3D center = plane.getPosition();
     Math::Vector3D size = plane.getSize();
@@ -146,7 +147,7 @@ std::shared_ptr<RayTracer::IShape> Core::SceneFactory::makePlane(App::ParsingSha
     return std::make_shared<RayTracer::Plane>();
 }
 
-std::shared_ptr<RayTracer::IShape> Core::SceneFactory::makeCone(App::ParsingShape &cone)
+std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeCone(App::ParsingShape &cone)
 {
     Math::Vector3D center = cone.getPosition();
     Math::Vector3D size = cone.getSize();
@@ -157,7 +158,7 @@ std::shared_ptr<RayTracer::IShape> Core::SceneFactory::makeCone(App::ParsingShap
     return std::make_shared<RayTracer::Cone>(center, radius, height, material);
 }
 
-std::shared_ptr<RayTracer::IShape> Core::SceneFactory::makeCube(App::ParsingShape &cube)
+std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeCube(App::ParsingShape &cube)
 {
     Math::Vector3D center = cube.getPosition();
     Math::Vector3D size = cube.getSize();
@@ -170,7 +171,7 @@ std::shared_ptr<RayTracer::IShape> Core::SceneFactory::makeCube(App::ParsingShap
     return std::make_shared<RayTracer::Cube>();
 }
 
-std::shared_ptr<RayTracer::IShape> Core::SceneFactory::makeCylinder(App::ParsingShape &cylinder)
+std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeCylinder(App::ParsingShape &cylinder)
 {
     Math::Vector3D center = cylinder.getPosition();
     Math::Vector3D size = cylinder.getSize();
@@ -183,7 +184,7 @@ std::shared_ptr<RayTracer::IShape> Core::SceneFactory::makeCylinder(App::Parsing
     return std::make_shared<RayTracer::Cylinder>();
 }
 
-std::shared_ptr<RayTracer::IShape> Core::SceneFactory::makeTorus(App::ParsingShape &torus)
+std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeTorus(App::ParsingShape &torus)
 {
     Math::Vector3D center = torus.getPosition();
     Math::Vector3D size = torus.getSize();
@@ -196,7 +197,7 @@ std::shared_ptr<RayTracer::IShape> Core::SceneFactory::makeTorus(App::ParsingSha
     return std::make_shared<RayTracer::Torus>();
 }
 
-std::shared_ptr<RayTracer::IShape> Core::SceneFactory::makePrism(App::ParsingShape &prism)
+std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makePrism(App::ParsingShape &prism)
 {
     Math::Vector3D center = prism.getPosition();
     Math::Vector3D size = prism.getSize();
