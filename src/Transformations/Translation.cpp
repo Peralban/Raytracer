@@ -8,7 +8,7 @@
 #include "Translation.hpp"
 
 RayTracer::Translation::Translation()
-:   _displacement(0, 0, 0)
+:   _displacement(Math::Vector3D(0, 0, 0))
 {
 }
 

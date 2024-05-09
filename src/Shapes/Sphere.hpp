@@ -39,7 +39,7 @@ namespace RayTracer {
              * @param radius The radius of the sphere.
              * @param material The material of the sphere.
              */
-            Sphere(const Math::Vector3D  &center, float radius, IMaterial *material);
+            Sphere(const Math::Vector3D  &center, float radius, std::shared_ptr<IMaterial> material);
 
             /**
              * @brief Default destructor for the Sphere class.
@@ -57,10 +57,10 @@ namespace RayTracer {
              * @param hit The hits struct to fill with information about the hit.
              * @return A boolean indicating whether the ray hit the sphere.
              */
-            bool hit(const Math::Ray3D &ray, float tmin, float tmax, hits &hit) const override;
+            bool hit(const Math::Ray3D &ray, double tmin, double tmax, hits &hit) const override;
 
             Math::Vector3D center; ///< The center of the sphere.
             float radius; ///< The radius of the sphere.
-            IMaterial *material; ///< The material of the sphere.
+            std::shared_ptr<IMaterial> material; ///< The material of the sphere.
     };
 }
