@@ -38,7 +38,6 @@ SRC		= 		main.cpp								\
 				Transformations/Rotation.cpp			\
 				Transformations/Scale.cpp				\
 				Transformations/Shear.cpp				\
-				Shapes/Plane.cpp						\
 
 TRUE_SRC 	= 	$(patsubst %,src/%, $(SRC))
 

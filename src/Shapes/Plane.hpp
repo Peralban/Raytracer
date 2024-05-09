@@ -30,4 +30,3 @@ namespace RayTracer {
         std::shared_ptr<IMaterial> _material;
     };
 }
-
