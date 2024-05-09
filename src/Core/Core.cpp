@@ -20,7 +20,7 @@ namespace Core {
             _parser.checkArguments(argc, argv);
             initialize();
         } catch (const std::exception &e) {
-            std::cerr << "Error: " << e.what() << std::endl;
+            std::cerr << e.what() << std::endl;
         }
     }
 
@@ -42,8 +42,13 @@ namespace Core {
     void Engine::createScene() {
         _scene = std::make_shared<RayTracer::ShapeList>();
         for (const auto& shapeData : _parser.getShapes()) {
-            auto shape = _factory.createPrimitive(shapeData);
-            _scene->shapes.push_back(shape);
+            try {
+                auto shape = _factory.createPrimitive(shapeData);
+                _scene->shapes.push_back(shape);
+            } catch (const std::exception &e) {
+                std::cerr << e.what() << std::endl;
+                exit(84);
+            }
         }
     }
 
