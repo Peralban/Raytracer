@@ -24,7 +24,7 @@ namespace RayTracer {
         float t; ///< The parameter t from the ray equation that represents the hit point.
         Math:: Vector3D point; ///< The point in 3D space where the ray hit the shape.
         Math::Vector3D normal; ///< The normal vector at the hit point.
-        IMaterial *material; ///< The material of the shape that was hit.
+        std::shared_ptr<IMaterial> material; ///< The material of the shape that was hit.
     };
 
     /**
@@ -59,6 +59,6 @@ namespace RayTracer {
              * @param hit The hits struct to fill with information about the hit.
              * @return A boolean indicating whether the ray hit the shape.
              */
-            virtual bool hit(const Math::Ray3D &ray, float tmin, float tmax, hits &hit) const = 0;
+            virtual bool hit(const Math::Ray3D &ray, double tmin, double tmax, hits &hit) const = 0;
     };
 }

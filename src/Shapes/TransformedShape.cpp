@@ -18,8 +18,8 @@ RayTracer::TransformedShape::TransformedShape(
 
 bool RayTracer::TransformedShape::hit(
     const Math::Ray3D &ray,
-    float tmin,
-    float tmax,
+    double tmin,
+    double tmax,
     hits &hit
 ) const
 {
@@ -34,7 +34,7 @@ bool RayTracer::TransformedShape::hit(
         return false;
     }
     Math::Point3D normal_tip = hit.point + hit.normal;
-    hit.point = _tr->transformCoordinates(hit.normal);
-    hit.normal = hit.point - _tr->transformCoordinates(normal_tip);
+    hit.point = _tr->transformCoordinates(hit.point);
+    hit.normal = _tr->transformCoordinates(normal_tip) - hit.point;
     return true;
 }

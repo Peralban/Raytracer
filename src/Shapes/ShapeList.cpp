@@ -12,7 +12,7 @@ RayTracer::ShapeList::ShapeList(std::vector<std::shared_ptr<IShape>> shapesValue
 {
 }
 
-bool RayTracer::ShapeList::hit(const Math::Ray3D &ray, float tmin, float tmax, hits &hit) const
+bool RayTracer::ShapeList::hit(const Math::Ray3D &ray, double tmin, double tmax, hits &hit) const
 {
     hits temp;
     bool hitAnything = false;

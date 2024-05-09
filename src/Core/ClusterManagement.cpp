@@ -7,6 +7,7 @@
 
 #include "ClusterManagement.hpp"
 #include "Interfaces/IMaterial.hpp"
+#include <time.h>
 
 #include <algorithm>
 #include <fstream>
@@ -55,11 +56,11 @@ static Math::Vector3D color(const Math::Ray3D &ray, RayTracer::IShape *scene, in
         if (depth < 50 && hit.material->scatter(ray, hit, attenuation, scattered)) {
             return attenuation * color(scattered, scene, depth + 1);
         } else {
-            return Math::Vector3D(0, 0, 0);
+            return {0, 0, 0};
         }
     } else {
         Math::Vector3D unitDirection = ray.getDirection().getUnitVector();
-        float t = 0.5 * (unitDirection.y + 1.0);
+        double t = 0.5 * (unitDirection.y + 1.0);
         return Math::Vector3D(1.0, 1.0, 1.0) * (1.0 - t) + Math::Vector3D(0.5, 0.7, 1.0) * t;
     }
 }
@@ -93,7 +94,15 @@ void App::ClusterManagement::render(std::pair<unsigned int, unsigned int> _axesY
 
 void App::ClusterManagement::executeRendering(std::shared_ptr<RayTracer::ShapeList> scene, std::shared_ptr<RayTracer::Camera> camera)
 {
+    float previousClock = clock();
+    int prevousWidth = 0;
     for (unsigned int i = 0; i < _windowWidth ; i++) {
+        if (previousClock +  1000 < clock()) {
+            std::cout << "Rendering status " << (float)i / (float)_windowWidth * 100 << "%    ";
+            std::cout << "  Time remaining: " << (clock() - previousClock) / (i - prevousWidth) * (_windowWidth - i) / CLOCKS_PER_SEC << "s  \r";
+            prevousWidth = i;
+            previousClock = clock();
+        }
         for (size_t j = 0; j < _clusters.size(); ++j) {
             auto cluster = _clusters[j];
             cluster->thread = std::thread(&App::ClusterManagement::render, this, cluster->getAxesY(), _windowWidth, _windowHeight, _sample, scene, camera, i);

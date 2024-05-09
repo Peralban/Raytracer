@@ -28,16 +28,10 @@ namespace RayTracer {
             );
             ~TransformedShape() = default;
 
-            bool hit(
-                const Math::Ray3D &ray,
-                float tmin,
-                float tmax,
-                struct hits &hit
-            ) const override;
+            bool hit(const Math::Ray3D &ray, double tmin, double tmax, struct hits &hit) const override;
 
 
         protected:
-
             std::unique_ptr<IShape> _shape;
             std::unique_ptr<ITransformation> _tr;
         private:
