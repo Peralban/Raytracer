@@ -12,7 +12,7 @@ RayTracer::Cylinder::Cylinder()
 
 }
 
-bool RayTracer::Cylinder::hit(const Math::Ray3D &ray, float tmin, float tmax, hits &hit) const
+bool RayTracer::Cylinder::hit(const Math::Ray3D &ray, double tmin, double tmax, hits &hit) const
 {
     (void)ray;
     (void)tmin;

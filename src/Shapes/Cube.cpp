@@ -11,7 +11,7 @@
 RayTracer::Cube::Cube() {}
 
 
-bool RayTracer::Cube::hit(const Math::Ray3D &ray, float tmin, float tmax, hits &hit) const
+bool RayTracer::Cube::hit(const Math::Ray3D &ray, double tmin, double tmax, hits &hit) const
 {
     (void)ray;
     (void)tmin;

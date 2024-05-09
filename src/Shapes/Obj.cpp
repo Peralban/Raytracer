@@ -11,7 +11,7 @@
 RayTracer::Obj::Obj() {}
 
 
-bool RayTracer::Obj::hit(const Math::Ray3D &ray, float tmin, float tmax, hits &hit) const
+bool RayTracer::Obj::hit(const Math::Ray3D &ray, double tmin, double tmax, hits &hit) const
 {
     (void)ray;
     (void)tmin;

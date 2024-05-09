@@ -18,6 +18,6 @@ namespace RayTracer {
 
             ~Cylinder() = default;
 
-            bool hit(const Math::Ray3D &ray, float tmin, float tmax, hits &hit) const override;
+            bool hit(const Math::Ray3D &ray, double tmin, double tmax, hits &hit) const override;
     };
 }
