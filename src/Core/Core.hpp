@@ -56,7 +56,7 @@ namespace Core {
         void finalize();
 
         App::Parsing _parser;
-        Core::SceneFactory _factory;
+        Factory::SceneFactory _factory;
         std::shared_ptr<RayTracer::ShapeList> _scene;
         std::shared_ptr<RayTracer::Camera> _camera;
         App::ClusterManagement _clusterManagement;
