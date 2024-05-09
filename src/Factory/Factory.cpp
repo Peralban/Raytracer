@@ -15,6 +15,7 @@
 #include <algorithm>
 #include "Materials/Matte.hpp"
 #include "Materials/Metal.hpp"
+#include "Materials/Glass.hpp"
 
 Factory::SceneFactory::SceneFactory() {}
 
@@ -107,12 +108,17 @@ std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeSphere(App::Parsin
     float radius = size.x;
     RayTracer::IMaterial *material = nullptr;
     std::string type = sphere.getMaterial().getType();
+    Math::Vector3D color = sphere.getMaterial().getColor();
+    Math::Vector3D material_color(color.x / 255, color.y / 255, color.z / 255);
 
     if (type == "matte") {
-        material = new RayTracer::Matte(Math::Vector3D(0.8, 0.8, 0.0));
+        material = new RayTracer::Matte(material_color);
     }
     if (type == "metal") {
-        material = new RayTracer::Metal(Math::Vector3D(0.8, 0.3, 0.3), 0.3);
+        material = new RayTracer::Metal(material_color, sphere.getMaterial().getFuzziness());
+    }
+    if (type == "glass") {
+        material = new RayTracer::Glass(sphere.getMaterial().getRefractiveIndex(), sphere.getMaterial().getAlbedo());
     }
     if (material == nullptr) {
         throw Factory::ErrorMaterial();
