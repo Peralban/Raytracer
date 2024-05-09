@@ -180,7 +180,6 @@ std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeCylinder(App::Pars
 
     (void)center;
     (void)radius;
-    (void)material;
     return std::make_shared<RayTracer::Cylinder>();
 }
 
