@@ -13,8 +13,8 @@ int main(int argc, char **argv)
         Core::Engine engine(argc, argv);
         engine.run();
     } catch (const std::exception &e) {
-        std::cerr << "Error: " << e.what() << std::endl;
-        return 1;
+        std::cerr << e.what() << std::endl;
+        return 84;
     }
     return 0;
 }
