@@ -9,11 +9,11 @@
 #include <cmath>
 #include <utility>
 
-RayTracer::Sphere::Sphere(const Math::Vector3D &centerValue, float radiusValue, IMaterial *materialValue)
-    : center(centerValue), radius(radiusValue), material(materialValue)
+RayTracer::Sphere::Sphere(const Math::Vector3D &centerValue, float radiusValue, std::shared_ptr<IMaterial> materialValue)
+    : center(centerValue), radius(radiusValue), material(std::move(materialValue))
 {}
 
-bool RayTracer::Sphere::hit(const Math::Ray3D &ray, float tmin, float tmax, hits &hit) const
+bool RayTracer::Sphere::hit(const Math::Ray3D &ray, double tmin, double tmax, hits &hit) const
 {
     Math::Vector3D oc = ray.getOrigin() - center;
     float a = ray.getDirection().dot(ray.getDirection());

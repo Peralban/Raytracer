@@ -17,17 +17,17 @@ namespace RayTracer {
         public:
             Cone() = default;
 
-            Cone(const Math::Vector3D &center, float radius, float height, IMaterial *material);
+            Cone(const Math::Vector3D &center, float radius, float height, std::shared_ptr<IMaterial> material);
 
             ~Cone() = default;
 
-            bool hit(const Math::Ray3D &ray, float tmin, float tmax, hits &hit) const override;
+            bool hit(const Math::Ray3D &ray, double tmin, double tmax, hits &hit) const override;
 
         private:
             Math::Vector3D _center;
             float _radius;
             float _height;
-            IMaterial *_material;
+            std::shared_ptr<IMaterial> _material;
 
     };
 }

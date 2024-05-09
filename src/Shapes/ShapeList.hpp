@@ -53,7 +53,7 @@ namespace RayTracer {
              * @param hit The hits struct to fill with information about the hit.
              * @return A boolean indicating whether the ray hit any shape in the list.
              */
-            bool hit(const Math::Ray3D &ray, float tmin, float tmax, hits &hit) const override;
+            bool hit(const Math::Ray3D &ray, double tmin, double tmax, hits &hit) const override;
 
             std::vector<std::shared_ptr<IShape>> shapes; ///< The list of shapes contained in the ShapeList.
     };
