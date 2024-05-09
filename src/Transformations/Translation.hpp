@@ -13,7 +13,7 @@
 namespace RayTracer {
     /// @brief Translation transformation class: moves
     /// a shape according to a translation vector
-    class Translation : ITransformation {
+    class Translation : public ITransformation {
         public:
             /// @brief Default constructor: builds translation
             /// transformation with a displacement of {0, 0, 0}

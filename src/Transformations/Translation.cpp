@@ -25,5 +25,5 @@ Math::Point3D RayTracer::Translation::transformCoordinates(const Math::Point3D &
 std::optional<Math::Point3D>
 RayTracer::Translation::untransformCoordinates(const Math::Point3D &p)
 {
-    return p - _displacement;
+    return std::optional<Math::Point3D>(p - _displacement);
 }

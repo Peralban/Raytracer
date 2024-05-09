@@ -13,7 +13,7 @@
 namespace RayTracer {
     /// @brief Rotation transformation class: rotates
     /// a shape according to a rotation vector
-    class Rotation : ITransformation {
+    class Rotation : public ITransformation {
         public:
             /// @brief Default constructor: builds rotation
             /// transformation with angles of {0, 0, 0}
