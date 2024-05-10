@@ -5,6 +5,11 @@
 ** DESCRIPTION
 */
 
+/**
+ * @file CFGGenerator.hpp
+ * @brief Contains the declarations of the classes used in the CFGGenerator.
+ */
+
 #pragma once
 
 #include <iostream>
@@ -15,27 +20,58 @@
 #define RESO_INDEX 2
 
 namespace Bonus {
+    /**
+     * @enum ARRAY_TYPES
+     * @brief Enum for the different types of arrays.
+     */
     enum ARRAY_TYPES {
         C, // COLOR
         A, // AXIS
         RE  // RESOLUTION
     };
+
+    /**
+     * @enum COLORS
+     * @brief Enum for the different colors.
+     */
     enum COLORS {
         R,
         G,
         B
     };
+
+    /**
+     * @enum POSITIONS
+     * @brief Enum for the different positions.
+     */
     enum POSITIONS {
         X,
         Y,
         Z
     };
+
+    /**
+     * @enum RESOLUTION
+     * @brief Enum for the different resolutions.
+     */
     enum RESOLUTION {
         WIDTH,
         HEIGHT
     };
+
+    /**
+     * @class ParsingMaterial
+     * @brief Class for parsing material.
+     */
     class ParsingMaterial {
     public:
+        /**
+         * @brief Constructor for ParsingMaterial.
+         * @param type The type of the material.
+         * @param r The red color value.
+         * @param g The green color value.
+         * @param b The blue color value.
+         */
         ParsingMaterial(std::string type, int r, int g, int b)
                 : _type(type), _r(r), _g(g), _b(b) {}
 
@@ -47,10 +83,22 @@ namespace Bonus {
 
         std::string getType() { return _type; }
 
+        /**
+         * @brief Getter for the red color value.
+         * @return The red color value.
+         */
         int getR() { return _r; }
 
+        /**
+         * @brief Getter for the green color value.
+         * @return The green color value.
+         */
         int getG() { return _g; }
 
+        /**
+         * @brief Getter for the blue color value.
+         * @return The blue color value.
+         */
         int getB() { return _b; }
 
         float getFuzz() { return _fuzz; }
@@ -75,11 +123,19 @@ namespace Bonus {
         float _ref_idx;
     };
 
+    /**
+     * @class ParsingTransformation
+     * @brief Class for parsing transformations.
+     */
     class ParsingTransformation {
     public:
         ParsingTransformation(std::string type, float position_x, float position_y, float position_z)
                 : _type(type), _position_x(position_x), _position_y(position_y), _position_z(position_z) {}
 
+        /**
+         * @brief Getter for the type.
+         * @return The type of the transformation.
+         */
         std::string getType() { return _type; }
 
         float getPositionX() { return _position_x; }
@@ -95,6 +151,10 @@ namespace Bonus {
         float _position_z;
     };
 
+    /**
+     * @class ParsingShape
+     * @brief Class for parsing shapes.
+     */
     class ParsingShape {
     public:
         ParsingShape(std::string type, float position_x, float position_y, float position_z, float size_x, float size_y, float size_z, float radius,
@@ -106,6 +166,10 @@ namespace Bonus {
                 _height(height), _max_radius(max_radius), _min_radius(min_radius), _size(size),
                 _path(path), _material(material), _transformations(transformations) {}
 
+        /**
+         * @brief Getter for the type.
+         * @return The type of the shape.
+         */
         std::string getType() { return _type; }
 
         float getPositionX() { return _position_x; }
@@ -140,8 +204,16 @@ namespace Bonus {
 
         std::string getPath() { return _path; }
 
+        /**
+         * @brief Getter for the material.
+         * @return The material of the shape.
+         */
         ParsingMaterial getMaterial() { return _material; }
 
+        /**
+         * @brief Getter for the transformations.
+         * @return The transformations of the shape.
+         */
         std::vector<ParsingTransformation> getTransformations() { return _transformations; }
 
     private:
@@ -165,6 +237,7 @@ namespace Bonus {
         ParsingMaterial _material;
         std::vector<ParsingTransformation> _transformations;
     };
+} // namespace Bonus
 
     class ParsingLight {
     public:
