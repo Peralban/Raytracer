@@ -86,7 +86,6 @@ static App::ParsingMaterial parseMaterial(const libconfig::Setting &materials)
     }
 }
 
-
 void App::Parsing::parseShapes(const libconfig::Setting &shapes)
 {
     float radius = 0;
