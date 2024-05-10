@@ -125,8 +125,7 @@ static std::shared_ptr<RayTracer::IMaterial> makeMaterial(App::ParsingMaterial m
 std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeSphere(App::ParsingShape &sphere)
 {
     Math::Vector3D center = sphere.getPosition();
-    Math::Vector3D size = sphere.getSize();
-    float radius = size.x;
+    double radius = (double) sphere.getRadius();
 
     return std::make_shared<RayTracer::Sphere>(center, radius, makeMaterial(sphere.getMaterial()));
 }
