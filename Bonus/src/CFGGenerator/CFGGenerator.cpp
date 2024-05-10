@@ -292,9 +292,9 @@ void Bonus::CFGGenerator::askPrecision()
     bool enable_reflections = true;
     bool enable_refractions = true;
     std::cout << "Enter the number of samples (int): ";
-    checkCin<int>(samples, "Invalid number of samples, please enter a valid number of samples: ", []([[maybe_unused]]int ex) { return ex > 0; });
+    checkCin<int>(samples, "Invalid number of samples, please enter a valid number of samples: ", []([[maybe_unused]]int ex) { return ex >= 0; });
     std::cout << "Enter the number of bounces (int): ";
-    checkCin<int>(number_of_bounces, "Invalid number of bounces, please enter a valid number of bounces: ", []([[maybe_unused]]int ex) { return ex > 0; });
+    checkCin<int>(number_of_bounces, "Invalid number of bounces, please enter a valid number of bounces: ", []([[maybe_unused]]int ex) { return ex >= 0; });
     std::cout << "Enable shadows? (1 for yes, 0 for no): ";
     checkCin<bool>(enable_shadows, "Invalid input, please enter a valid input (1 for yes, 0 for no): ", []([[maybe_unused]]bool ex) { return ex == 0 || ex == 1; });
     std::cout << "Enable reflections? (1 for yes, 0 for no): ";
