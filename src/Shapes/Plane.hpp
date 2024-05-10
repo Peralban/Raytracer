@@ -2,8 +2,9 @@
 ** EPITECH PROJECT, 2024
 ** Raytracer
 ** File description:
-** Cylinder
+** Plane
 */
+
 
 #pragma once
 
@@ -12,11 +13,11 @@
 #include "Interfaces/IShape.hpp"
 
 namespace RayTracer {
-    class Cylinder : public IShape {
+    class Plane : public IShape {
         public:
-            Cylinder();
+            Plane();
 
-            ~Cylinder() = default;
+            ~Plane() = default;
 
             bool hit(const Math::Ray3D &ray, double tmin, double tmax, hits &hit) const override;
     };
