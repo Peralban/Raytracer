@@ -155,10 +155,9 @@ std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makePlane(App::Parsing
 std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeCone(App::ParsingShape &cone)
 {
     Math::Vector3D center = cone.getPosition();
-    double radius = (double) cone.getRadius();
-    double height = (double) cone.getHeight();
+    double angle = (double) cone.getAngle();
 
-    return std::make_shared<RayTracer::Cone>(center, radius, makeMaterial(cone.getMaterial()));
+    return std::make_shared<RayTracer::Cone>(center, angle, makeMaterial(cone.getMaterial()));
 }
 
 std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeCube(App::ParsingShape &cube)
