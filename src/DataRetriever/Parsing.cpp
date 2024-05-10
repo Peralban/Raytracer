@@ -58,7 +58,7 @@ static std::vector<App::ParsingTransformation> parseTransfo(const libconfig::Set
     for (int j = 0; j < transformations.getLength(); j++) {
         const libconfig::Setting &transformation = transformations[j];
         std::string type = transformation["type"];
-        Math::Vector3D pos = createVector3Di(transformation["position"]);
+        Math::Vector3D pos = createVector3Df(transformation["position"]);
         App::ParsingTransformation new_transformation(type, pos);
         transformations_vector.push_back(new_transformation);
     }
@@ -89,15 +89,44 @@ static App::ParsingMaterial parseMaterial(const libconfig::Setting &materials)
 
 void App::Parsing::parseShapes(const libconfig::Setting &shapes)
 {
+    float radius = 0;
+    Math::Vector3D normal(0, 0, 0);
+    Math::Vector3D size(0, 0, 0);
+    float angle = 0;
+    float height = 0;
+    float max_radius = 0;
+    float min_radius = 0;
     for (int i = 0; i < shapes.getLength(); i++) {
         const libconfig::Setting &shape = shapes[i];
         std::string type = shape["type"];
-        Math::Vector3D pos = createVector3Di(shape["position"]);
-        Math::Vector3D size = createVector3Di(shape["size"]);
+        Math::Vector3D pos = createVector3Df(shape["position"]);
+        if (type == "sphere") {
+            radius = shape["radius"];
+        } else if (type == "plane") {
+            normal = createVector3Df(shape["normal"]);
+        } else if (type == "cylinder") {
+            radius = shape["radius"];
+        } else if (type == "limited_cylinder") {
+            radius = shape["radius"];
+            height = shape["height"];
+        } else if (type == "cone") {
+            angle = shape["angle"];
+        } else if (type == "limited_cone") {
+            angle = shape["angle"];
+            height = shape["height"];
+        } else if (type == "torus") {
+            max_radius = shape["max_radius"];
+            min_radius = shape["min_radius"];
+        } else if (type == "cube") {
+            size = createVector3Df(shape["size"]);
+        } else if (type == "tangle_cube") {
+            max_radius = shape["max_radius"];
+            min_radius = shape["min_radius"];
+        }
         std::string texture_path = shape["texture_path"];
         ParsingShape new_shape(type, pos, size, texture_path,
-parseMaterial(shape["material"]),
-        parseTransfo(shape["transformations"]));
+            parseMaterial(shape["material"]), parseTransfo(shape["transformations"]),
+            radius, normal, angle, height, max_radius, min_radius);
         _shapes.push_back(new_shape);
     }
 }
@@ -106,10 +135,10 @@ void App::Parsing::parseLights(const libconfig::Setting &lights)
 {
     for (int i = 0; i < lights.getLength(); i++) {
         const libconfig::Setting &light = lights[i];
-        Math::Vector3D pos = createVector3Di(light["position"]);
+        Math::Vector3D pos = createVector3Df(light["position"]);
         Math::Vector3D color = createVector3Di(light["color"]);
         float intensity = light["intensity"];
-        Math::Vector3D direction = createVector3Di(light["rotation"]);
+        Math::Vector3D direction = createVector3Df(light["rotation"]);
         std::string type = light["type"];
         ParsingLight new_light(pos, color, intensity, direction, type);
         _lights.push_back(new_light);
@@ -145,10 +174,10 @@ void App::Parsing::parsePrecision(const libconfig::Setting &precision)
 
 void App::Parsing::parseCamera(const libconfig::Setting &camera)
 {
-    Math::Vector3D view_from = createVector3Di(camera["view_from"]);
-    Math::Vector3D view_at = createVector3Di(camera["view_at"]);
-    Math::Vector3D view_up = createVector3Di(camera["view_up"]);
-    Math::Vector3D rotation = createVector3Di(camera["rotation"]);
+    Math::Vector3D view_from = createVector3Df(camera["view_from"]);
+    Math::Vector3D view_at = createVector3Df(camera["view_at"]);
+    Math::Vector3D view_up = createVector3Df(camera["view_up"]);
+    Math::Vector3D rotation = createVector3Df(camera["rotation"]);
     float fov = camera["fov"];
     float aperture = camera["aperture"];
     float focus_dist = camera["focus_distance"];
