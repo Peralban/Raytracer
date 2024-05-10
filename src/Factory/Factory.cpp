@@ -156,7 +156,7 @@ std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeCone(App::ParsingS
     float radius = size.x;
     float height = size.y;
 
-    return std::make_shared<RayTracer::Cone>(center, radius, height, makeMaterial(cone.getMaterial()));
+    return std::make_shared<RayTracer::Cone>(center, radius, makeMaterial(cone.getMaterial()));
 }
 
 std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeCube(App::ParsingShape &cube)

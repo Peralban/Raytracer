@@ -17,17 +17,19 @@ namespace RayTracer {
         public:
             Cone() = default;
 
-            Cone(const Math::Vector3D &center, float radius, float height, std::shared_ptr<IMaterial> material);
+            Cone(const Math::Vector3D &origin, double angle, std::shared_ptr<IMaterial> material);
 
             ~Cone() = default;
 
             bool hit(const Math::Ray3D &ray, double tmin, double tmax, hits &hit) const override;
 
         private:
-            Math::Vector3D _center;
-            float _radius;
-            float _height;
+            const Math::Vector3D _origin;
+            const double _tan; ///< The tangent of the angle
+            const double _sqtan; ///< The square of the tangent of the angle
             std::shared_ptr<IMaterial> _material;
+
+            Math::Vector3D __getNormalAt(const Math::Point3D &point) const noexcept;
 
     };
 }
