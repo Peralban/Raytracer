@@ -32,19 +32,48 @@ static void makeMaterial(libconfig::Setting &shape_material, Bonus::ParsingMater
     }
 }
 
+static void writeSize(libconfig::Setting &shape_size, Bonus::ParsingShape shape)
+{
+    if (shape.getType() == "sphere") {
+        shape_size.add("radius", libconfig::Setting::TypeFloat) = shape.getRadius();
+    } else if (shape.getType() == "plane") {
+        shape_size.add("normal", libconfig::Setting::TypeArray);
+        shape_size["normal"].add(libconfig::Setting::TypeFloat) = shape.getNormalX();
+        shape_size["normal"].add(libconfig::Setting::TypeFloat) = shape.getNormalY();
+        shape_size["normal"].add(libconfig::Setting::TypeFloat) = shape.getNormalZ();
+    } else if (shape.getType() == "cylinder") {
+        shape_size.add("radius", libconfig::Setting::TypeFloat) = shape.getRadius();
+    } else if (shape.getType() == "limited_cylinder") {
+        shape_size.add("radius", libconfig::Setting::TypeFloat) = shape.getRadius();
+        shape_size.add("height", libconfig::Setting::TypeFloat) = shape.getHeight();
+    } else if (shape.getType() == "cone") {
+        shape_size.add("angle", libconfig::Setting::TypeFloat) = shape.getAngle();
+    } else if (shape.getType() == "limited_cone") {
+        shape_size.add("angle", libconfig::Setting::TypeFloat) = shape.getAngle();
+        shape_size.add("height", libconfig::Setting::TypeFloat) = shape.getHeight();
+    } else if (shape.getType() == "parallelepiped") {
+        shape_size.add("size", libconfig::Setting::TypeArray);
+        shape_size["size"].add(libconfig::Setting::TypeFloat) = shape.getSizeX();
+        shape_size["size"].add(libconfig::Setting::TypeFloat) = shape.getSizeY();
+        shape_size["size"].add(libconfig::Setting::TypeFloat) = shape.getSizeZ();
+    } else if (shape.getType() == "tangle_cube") {
+        shape_size.add("size", libconfig::Setting::TypeFloat) = shape.getSize();
+    } else if (shape.getType() == "torus") {
+        shape_size.add("max_radius", libconfig::Setting::TypeFloat) = shape.getMaxRadius();
+        shape_size.add("min_radius", libconfig::Setting::TypeFloat) = shape.getMinRadius();
+    }
+}
+
 void makeShape(libconfig::Setting &shapes, std::vector<Bonus::ParsingShape> shapesInfo)
 {
     for (auto &shape : shapesInfo) {
         libconfig::Setting &shapeSetting = shapes.add(libconfig::Setting::TypeGroup);
         shapeSetting.add("type", libconfig::Setting::TypeString) = shape.getType();
         libconfig::Setting &shape_position = shapeSetting.add("position", libconfig::Setting::TypeArray);
-        shape_position.add(libconfig::Setting::TypeInt) = shape.getPositionX();
-        shape_position.add(libconfig::Setting::TypeInt) = shape.getPositionY();
-        shape_position.add(libconfig::Setting::TypeInt) = shape.getPositionZ();
-        libconfig::Setting &shape_size = shapeSetting.add("size", libconfig::Setting::TypeArray);
-        shape_size.add(libconfig::Setting::TypeInt) = shape.getSizeX();
-        shape_size.add(libconfig::Setting::TypeInt) = shape.getSizeY();
-        shape_size.add(libconfig::Setting::TypeInt) = shape.getSizeZ();
+        shape_position.add(libconfig::Setting::TypeFloat) = shape.getPositionX();
+        shape_position.add(libconfig::Setting::TypeFloat) = shape.getPositionY();
+        shape_position.add(libconfig::Setting::TypeFloat) = shape.getPositionZ();
+        writeSize(shapeSetting, shape);
         shapeSetting.add("texture_path", libconfig::Setting::TypeString) = shape.getPath();
         libconfig::Setting &shape_material = shapeSetting.add("material", libconfig::Setting::TypeGroup);
         makeMaterial(shape_material, shape.getMaterial());
@@ -53,9 +82,9 @@ void makeShape(libconfig::Setting &shapes, std::vector<Bonus::ParsingShape> shap
             libconfig::Setting &transformationSetting = shape_transformations.add(libconfig::Setting::TypeGroup);
             transformationSetting.add("type", libconfig::Setting::TypeString) = transformation.getType();
             libconfig::Setting &transformation_position = transformationSetting.add("position", libconfig::Setting::TypeArray);
-            transformation_position.add(libconfig::Setting::TypeInt) = transformation.getPositionX();
-            transformation_position.add(libconfig::Setting::TypeInt) = transformation.getPositionY();
-            transformation_position.add(libconfig::Setting::TypeInt) = transformation.getPositionZ();
+            transformation_position.add(libconfig::Setting::TypeFloat) = transformation.getPositionX();
+            transformation_position.add(libconfig::Setting::TypeFloat) = transformation.getPositionY();
+            transformation_position.add(libconfig::Setting::TypeFloat) = transformation.getPositionZ();
         }
     }
 }
@@ -70,21 +99,21 @@ void makeObjPaths(libconfig::Setting &obj_paths, std::vector<std::string> objPat
 void makeCamera(libconfig::Setting &camera, Bonus::ParsingCamera cameraInfo)
 {
     libconfig::Setting &camera_view_from = camera.add("view_from", libconfig::Setting::TypeArray);
-    camera_view_from.add(libconfig::Setting::TypeInt) = cameraInfo.getViewFromX();
-    camera_view_from.add(libconfig::Setting::TypeInt) = cameraInfo.getViewFromY();
-    camera_view_from.add(libconfig::Setting::TypeInt) = cameraInfo.getViewFromZ();
+    camera_view_from.add(libconfig::Setting::TypeFloat) = cameraInfo.getViewFromX();
+    camera_view_from.add(libconfig::Setting::TypeFloat) = cameraInfo.getViewFromY();
+    camera_view_from.add(libconfig::Setting::TypeFloat) = cameraInfo.getViewFromZ();
     libconfig::Setting &camera_view_at = camera.add("view_at", libconfig::Setting::TypeArray);
-    camera_view_at.add(libconfig::Setting::TypeInt) = cameraInfo.getViewAtX();
-    camera_view_at.add(libconfig::Setting::TypeInt) = cameraInfo.getViewAtY();
-    camera_view_at.add(libconfig::Setting::TypeInt) = cameraInfo.getViewAtZ();
+    camera_view_at.add(libconfig::Setting::TypeFloat) = cameraInfo.getViewAtX();
+    camera_view_at.add(libconfig::Setting::TypeFloat) = cameraInfo.getViewAtY();
+    camera_view_at.add(libconfig::Setting::TypeFloat) = cameraInfo.getViewAtZ();
     libconfig::Setting &camera_view_up = camera.add("view_up", libconfig::Setting::TypeArray);
-    camera_view_up.add(libconfig::Setting::TypeInt) = cameraInfo.getViewUpX();
-    camera_view_up.add(libconfig::Setting::TypeInt) = cameraInfo.getViewUpY();
-    camera_view_up.add(libconfig::Setting::TypeInt) = cameraInfo.getViewUpZ();
+    camera_view_up.add(libconfig::Setting::TypeFloat) = cameraInfo.getViewUpX();
+    camera_view_up.add(libconfig::Setting::TypeFloat) = cameraInfo.getViewUpY();
+    camera_view_up.add(libconfig::Setting::TypeFloat) = cameraInfo.getViewUpZ();
     libconfig::Setting &rotation = camera.add("rotation", libconfig::Setting::TypeArray);
-    rotation.add(libconfig::Setting::TypeInt) = cameraInfo.getRotationX();
-    rotation.add(libconfig::Setting::TypeInt) = cameraInfo.getRotationY();
-    rotation.add(libconfig::Setting::TypeInt) = cameraInfo.getRotationZ();
+    rotation.add(libconfig::Setting::TypeFloat) = cameraInfo.getRotationX();
+    rotation.add(libconfig::Setting::TypeFloat) = cameraInfo.getRotationY();
+    rotation.add(libconfig::Setting::TypeFloat) = cameraInfo.getRotationZ();
     camera.add("fov", libconfig::Setting::TypeFloat) = cameraInfo.getFov();
     camera.add("aperture", libconfig::Setting::TypeFloat) = cameraInfo.getAperture();
     camera.add("focus_distance", libconfig::Setting::TypeFloat) = cameraInfo.getFocusDist();
@@ -99,18 +128,18 @@ void makeLight(libconfig::Setting &lights, std::vector<Bonus::ParsingLight> ligh
     for (auto &light : lightsInfo) {
         libconfig::Setting &lightSetting = lights.add(libconfig::Setting::TypeGroup);
         libconfig::Setting &light_position = lightSetting.add("position", libconfig::Setting::TypeArray);
-        light_position.add(libconfig::Setting::TypeInt) = light.getPositionX();
-        light_position.add(libconfig::Setting::TypeInt) = light.getPositionY();
-        light_position.add(libconfig::Setting::TypeInt) = light.getPositionZ();
+        light_position.add(libconfig::Setting::TypeFloat) = light.getPositionX();
+        light_position.add(libconfig::Setting::TypeFloat) = light.getPositionY();
+        light_position.add(libconfig::Setting::TypeFloat) = light.getPositionZ();
         libconfig::Setting &light_color = lightSetting.add("color", libconfig::Setting::TypeArray);
         light_color.add(libconfig::Setting::TypeInt) = light.getColorR();
         light_color.add(libconfig::Setting::TypeInt) = light.getColorG();
         light_color.add(libconfig::Setting::TypeInt) = light.getColorB();
         lightSetting.add("intensity", libconfig::Setting::TypeFloat) = light.getIntensity();
         libconfig::Setting &light_rotation = lightSetting.add("rotation", libconfig::Setting::TypeArray);
-        light_rotation.add(libconfig::Setting::TypeInt) = light.getRotationX();
-        light_rotation.add(libconfig::Setting::TypeInt) = light.getRotationY();
-        light_rotation.add(libconfig::Setting::TypeInt) = light.getRotationZ();
+        light_rotation.add(libconfig::Setting::TypeFloat) = light.getRotationX();
+        light_rotation.add(libconfig::Setting::TypeFloat) = light.getRotationY();
+        light_rotation.add(libconfig::Setting::TypeFloat) = light.getRotationZ();
         lightSetting.add("type", libconfig::Setting::TypeString) = light.getType();
     }
 }
@@ -147,24 +176,29 @@ int main()
     libconfig::Setting &obj_paths = root.add("Obj_paths", libconfig::Setting::TypeList);
     libconfig::Setting &background = root.add("Background", libconfig::Setting::TypeGroup);
     libconfig::Setting &precision = root.add("Precision", libconfig::Setting::TypeGroup);
+    try {
+        // SHAPES
+        makeShape(shapes, cfg_generator.getShapes());
 
-    // SHAPES
-    makeShape(shapes, cfg_generator.getShapes());
+        // OBJ PATHS
+        makeObjPaths(obj_paths, cfg_generator.getObjPaths());
 
-    // OBJ PATHS
-    makeObjPaths(obj_paths, cfg_generator.getObjPaths());
+        // Cameras
+        makeCamera(camera, cfg_generator.getCamera());
 
-    // Cameras
-    makeCamera(camera, cfg_generator.getCamera());
+        // Lights
+        makeLight(lights, cfg_generator.getLights());
 
-    // Lights
-    makeLight(lights, cfg_generator.getLights());
+        // Background
+        makeBackground(background, cfg_generator.getBackground());
 
-    // Background
-    makeBackground(background, cfg_generator.getBackground());
+        // Precision
+        makePrecision(precision, cfg_generator.getPrecision());
+    } catch(const libconfig::ParseException &pex) {
+        std::cerr << "Parse error at " << pex.getFile() << ":" << pex.getLine() << " - " << pex.getError() << std::endl;
+        return(EXIT_FAILURE);
+    }
 
-    // Precision
-    makePrecision(precision, cfg_generator.getPrecision());
 
     // Write out the new configuration
     try
