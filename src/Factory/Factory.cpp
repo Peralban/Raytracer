@@ -36,6 +36,9 @@ std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::createPrimitive(App::P
         {"cylinder", [this](App::ParsingShape& shapeArgs) {
             return makeCylinder(shapeArgs); 
         }},
+        {"limited_cylinder", [this](App::ParsingShape& shapeArgs) {
+            return makeLimitedCylinder(shapeArgs);
+        }},
         {"torus", [this](App::ParsingShape& shapeArgs) {
             return makeTorus(shapeArgs); 
         }},
@@ -122,8 +125,7 @@ static std::shared_ptr<RayTracer::IMaterial> makeMaterial(App::ParsingMaterial m
 std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeSphere(App::ParsingShape &sphere)
 {
     Math::Vector3D center = sphere.getPosition();
-    Math::Vector3D size = sphere.getSize();
-    float radius = size.x;
+    double radius = (double) sphere.getRadius();
 
     return std::make_shared<RayTracer::Sphere>(center, radius, makeMaterial(sphere.getMaterial()));
 }
@@ -143,25 +145,18 @@ std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeObj(App::ParsingSh
 
 std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makePlane(App::ParsingShape &plane)
 {
-    Math::Vector3D center = plane.getPosition();
-    Math::Vector3D size = plane.getSize();
-    float radius = size.x;
-    RayTracer::IMaterial *material = nullptr;
+    Math::Vector3D pos = plane.getPosition();
+    Math::Vector3D norm = plane.getNormal();
 
-    (void)center;
-    (void)radius;
-    (void)material;
-    return std::make_shared<RayTracer::Plane>();
+    return std::make_shared<RayTracer::Plane>(pos, norm, makeMaterial(plane.getMaterial()));
 }
 
 std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeCone(App::ParsingShape &cone)
 {
     Math::Vector3D center = cone.getPosition();
-    Math::Vector3D size = cone.getSize();
-    float radius = size.x;
-    float height = size.y;
+    double angle = (double) cone.getAngle();
 
-    return std::make_shared<RayTracer::Cone>(center, radius, height, makeMaterial(cone.getMaterial()));
+    return std::make_shared<RayTracer::Cone>(center, angle, makeMaterial(cone.getMaterial()));
 }
 
 std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeParallelepiped(App::ParsingShape &parallelepiped)
@@ -180,14 +175,18 @@ std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeParallelepiped(App
 std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeCylinder(App::ParsingShape &cylinder)
 {
     Math::Vector3D center = cylinder.getPosition();
-    Math::Vector3D size = cylinder.getSize();
-    float radius = size.x;
-    RayTracer::IMaterial *material = nullptr;
+    double radius = (double) cylinder.getRadius();
 
-    (void)center;
-    (void)radius;
-    (void)material;
-    return std::make_shared<RayTracer::Cylinder>();
+    return std::make_shared<RayTracer::CylinderInfinite>(center, radius, makeMaterial(cylinder.getMaterial()));
+}
+
+std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeLimitedCylinder(App::ParsingShape &cylinder)
+{
+    Math::Vector3D center = cylinder.getPosition();
+    double radius = (double) cylinder.getRadius();
+    double height = (double) cylinder.getHeight();
+
+    return std::make_shared<RayTracer::CylinderLimited>(center, radius, height, makeMaterial(cylinder.getMaterial()));
 }
 
 std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeTorus(App::ParsingShape &torus)
