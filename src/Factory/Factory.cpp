@@ -36,6 +36,9 @@ std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::createPrimitive(App::P
         {"cylinder", [this](App::ParsingShape& shapeArgs) {
             return makeCylinder(shapeArgs); 
         }},
+        {"limited_cylinder", [this](App::ParsingShape& shapeArgs) {
+            return makeLimitedCylinder(shapeArgs);
+        }},
         {"torus", [this](App::ParsingShape& shapeArgs) {
             return makeTorus(shapeArgs); 
         }},
@@ -144,7 +147,7 @@ std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeObj(App::ParsingSh
 std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makePlane(App::ParsingShape &plane)
 {
     Math::Vector3D pos = plane.getPosition();
-    Math::Vector3D norm = plane.getSize();
+    Math::Vector3D norm = plane.getNormal();
 
     return std::make_shared<RayTracer::Plane>(pos, norm, makeMaterial(plane.getMaterial()));
 }
@@ -152,9 +155,8 @@ std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makePlane(App::Parsing
 std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeCone(App::ParsingShape &cone)
 {
     Math::Vector3D center = cone.getPosition();
-    Math::Vector3D size = cone.getSize();
-    float radius = size.x;
-    float height = size.y;
+    double radius = (double) cone.getRadius();
+    double height = (double) cone.getHeight();
 
     return std::make_shared<RayTracer::Cone>(center, radius, height, makeMaterial(cone.getMaterial()));
 }
@@ -162,25 +164,26 @@ std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeCone(App::ParsingS
 std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeCube(App::ParsingShape &cube)
 {
     Math::Vector3D center = cube.getPosition();
-    Math::Vector3D size = cube.getSize();
-    float radius = size.x;
-    RayTracer::IMaterial *material = nullptr;
 
     (void)center;
-    (void)radius;
-    (void)material;
     return std::make_shared<RayTracer::Cube>();
 }
 
 std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeCylinder(App::ParsingShape &cylinder)
 {
     Math::Vector3D center = cylinder.getPosition();
-    Math::Vector3D size = cylinder.getSize();
-    float radius = size.x;
+    double radius = (double) cylinder.getRadius();
 
-    (void)center;
-    (void)radius;
-    return std::make_shared<RayTracer::Cylinder>();
+    return std::make_shared<RayTracer::CylinderInfinite>(center, radius, makeMaterial(cylinder.getMaterial()));
+}
+
+std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeLimitedCylinder(App::ParsingShape &cylinder)
+{
+    Math::Vector3D center = cylinder.getPosition();
+    double radius = (double) cylinder.getRadius();
+    double height = (double) cylinder.getHeight();
+
+    return std::make_shared<RayTracer::CylinderLimited>(center, radius, height, makeMaterial(cylinder.getMaterial()));
 }
 
 std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeTorus(App::ParsingShape &torus)

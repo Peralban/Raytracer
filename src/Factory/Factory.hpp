@@ -18,7 +18,8 @@
 #include "Shapes/Cube.hpp"
 #include "Shapes/Plane.hpp"
 #include "Shapes/Obj.hpp"
-#include "Shapes/Cylinder.hpp"
+#include "Shapes/CylinderInfinite.hpp"
+#include "Shapes/CylinderLimited.hpp"
 #include "Raytracer/Background.hpp"
 #include "Raytracer/Light.hpp"
 #include "Raytracer/Camera.hpp"
@@ -103,6 +104,13 @@ namespace Factory {
          * @return std::shared_ptr<RayTracer::IShape> - Pointer to the created cylinder shape.
          */
         std::shared_ptr<RayTracer::IShape> makeCylinder(App::ParsingShape &cylinder);
+
+        /**
+         * @brief Creates a limited cylinder shape.
+         * @param limitedCylinder - Parsing data for creating the limited cylinder.
+         * @return std::shared_ptr<RayTracer::IShape> - Pointer to the created limited cylinder shape.
+         */
+        std::shared_ptr<RayTracer::IShape> makeLimitedCylinder(App::ParsingShape &limitedCylinder);
 
         /**
          * @brief Creates a torus shape.
