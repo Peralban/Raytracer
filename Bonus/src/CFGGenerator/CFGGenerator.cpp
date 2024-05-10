@@ -112,17 +112,53 @@ void Bonus::CFGGenerator::askShape()
     std::string type;
     bool enable_transformation = false;
     int nb_transformations;
-    int position[ALL_INDEXES];
-    int size[ALL_INDEXES];
+    float position[ALL_INDEXES];
+    float size[ALL_INDEXES];
     bool enable_texture = false;
+    float radius;
+    float normal[ALL_INDEXES];
+    float height;
+    float angle;
+    float max_radius;
+    float min_radius;
+
     std::string path;
     std::vector<ParsingTransformation> transformations;
-    std::cout << "Enter the type of the shape (sphere, cube, cylinder, cone, plane): ";
-    checkCin<std::string>(type, "Invalid type, please enter a valid type: ", []([[maybe_unused]]std::string ex) { return ex == "sphere" || ex == "cube" || ex == "cylinder" || ex == "cone" || ex == "plane"; });
+    std::cout << "Enter the type of the shape (sphere, tangle_cube, cylinder, cone, plane, limited_cylinder, limited_cone, parallelepiped, torus): ";
+    checkCin<std::string>(type, "Invalid type, please enter a valid type: ", []([[maybe_unused]]std::string ex) { return ex == "sphere" || ex == "tangle_cube" || ex == "cylinder" || ex == "cone" || ex == "plane" || ex == "limited_cylinder" || ex == "limited_cone" || ex == "parallelepiped" || ex == "torus"; });
     std::cout << "Enter the position of the shape (first the X and enter, then the Y and enter, then the Z and enter):";
-    checkCin<int, ALL_INDEXES>(position, "Invalid position, please enter a valid position for the position ", []([[maybe_unused]]int ex) { return true; }, A);
-    std::cout << "Enter the size of the shape (first the X and enter, then the Y and enter, then the Z and enter):";
-    checkCin<int, ALL_INDEXES>(size, "Invalid size, please enter a valid size for the size ", []([[maybe_unused]]int ex) { return ex >= 0; }, A);
+    checkCin<float, ALL_INDEXES>(position, "Invalid position, please enter a valid position for the position ", []([[maybe_unused]]float ex) { return true; }, A);
+    if (type == "sphere") {
+        std::cout << "Enter the radius of the sphere (float): ";
+        checkCin<float>(radius, "Invalid radius, please enter a valid radius: ", []([[maybe_unused]]float ex) { return ex >= 0; });
+    } else if (type == "plane") {
+        std::cout << "Enter the normal of the plane (first the X and enter, then the Y and enter, then the Z and enter (float)): ";
+        checkCin<float, ALL_INDEXES>(normal, "Invalid normal, please enter a valid normal for the normal ", []([[maybe_unused]]float ex) { return true; }, A);
+    } else if (type == "limited_cylinder") {
+        std::cout << "Enter the radius of the limited_cylinder (float): ";
+        checkCin<float>(radius, "Invalid radius, please enter a valid radius: ", []([[maybe_unused]]float ex) { return ex >= 0; });
+        std::cout << "Enter the height of the limited_cylinder (float): ";
+        checkCin<float>(height, "Invalid height, please enter a valid height: ", []([[maybe_unused]]float ex) { return ex >= 0; });
+    } else if (type == "cylinder") {
+        std::cout << "Enter the radius of the cylinder (float): ";
+        checkCin<float>(radius, "Invalid radius, please enter a valid radius: ", []([[maybe_unused]]float ex) { return ex >= 0; });
+    } else if (type == "cone") {
+        std::cout << "Enter the angle of the cone (float): ";
+        checkCin<float>(angle, "Invalid angle, please enter a valid angle: ", []([[maybe_unused]]float ex) { return ex >= 0; });
+    } else if (type == "limited_cone") {
+        std::cout << "Enter the angle of the limited_cone (float): ";
+        checkCin<float>(angle, "Invalid angle, please enter a valid angle: ", []([[maybe_unused]]float ex) { return ex >= 0; });
+        std::cout << "Enter the height of the limited_cone (float): ";
+        checkCin<float>(height, "Invalid height, please enter a valid height: ", []([[maybe_unused]]float ex) { return ex >= 0; });
+    } else if (type == "parallelepiped") {
+        std::cout << "Enter the size of the parallelepiped (first the X and enter, then the Y and enter, then the Z and enter): ";
+        checkCin<float, ALL_INDEXES>(size, "Invalid size, please enter a valid size for the size ", []([[maybe_unused]]float ex) { return ex >= 0; }, A);
+    } else if (type == "torus") {
+        std::cout << "Enter the max radius of the torus (float): ";
+        checkCin<float>(max_radius, "Invalid max radius, please enter a valid max radius: ", []([[maybe_unused]]float ex) { return ex >= 0; });
+        std::cout << "Enter the min radius of the torus (float): ";
+        checkCin<float>(min_radius, "Invalid min radius, please enter a valid min radius: ", []([[maybe_unused]]float ex) { return ex >= 0; });
+    }
     std::cout << "Enable texture? (1 for yes, 0 for no): ";
     checkCin<bool>(enable_texture, "Invalid input, please enter a valid input (1 for yes, 0 for no): ", []([[maybe_unused]]bool ex) { return ex == 0 || ex == 1; });
     if (enable_texture) {
@@ -140,30 +176,59 @@ void Bonus::CFGGenerator::askShape()
         for (int i = 0; i < nb_transformations; i++)
             transformations.push_back(askTransformation());
     }
-
-    ParsingShape new_shape(type, position[X], position[Y], position[Z], size[X], size[Y], size[Z], path,
-    askMaterial(), transformations);
-    _shapes.push_back(new_shape);
+    if (type == "sphere") {
+        ParsingShape new_shape(type, position[X], position[Y], position[Z], 0, 0, 0, radius,
+        0, 0, 0, 0, 0, 0, 0, 0, path, askMaterial(), transformations);
+        _shapes.push_back(new_shape);
+    } else if (type == "plane") {
+        ParsingShape new_shape(type, position[X], position[Y], position[Z], 0, 0, 0, 0,
+        normal[X], normal[Y], normal[Z], 0, 0, 0, 0, 0, path, askMaterial(), transformations);
+        _shapes.push_back(new_shape);
+    } else if (type == "limited_cylinder") {
+        ParsingShape new_shape(type, position[X], position[Y], position[Z], 0, 0, 0, radius,
+        0, 0, 0, 0, height, 0, 0, 0, path, askMaterial(), transformations);
+        _shapes.push_back(new_shape);
+    } else if (type == "cylinder") {
+        ParsingShape new_shape(type, position[X], position[Y], position[Z], 0, 0, 0, radius,
+        0, 0, 0, 0, 0, 0, 0, 0, path, askMaterial(), transformations);
+        _shapes.push_back(new_shape);
+    } else if (type == "cone") {
+        ParsingShape new_shape(type, position[X], position[Y], position[Z], 0, 0, 0, 0,
+        0, 0, 0, angle, 0, 0, 0, 0, path, askMaterial(), transformations);
+        _shapes.push_back(new_shape);
+    } else if (type == "limited_cone") {
+        ParsingShape new_shape(type, position[X], position[Y], position[Z], 0, 0, 0, 0,
+        0, 0, 0, angle, height, 0, 0, 0, path, askMaterial(), transformations);
+        _shapes.push_back(new_shape);
+    } else if (type == "cube") {
+        ParsingShape new_shape(type, position[X], position[Y], position[Z], size[X], size[Y], size[Z], 0,
+        0, 0, 0, 0, 0, 0, 0, 0, path, askMaterial(), transformations);
+        _shapes.push_back(new_shape);
+    } else if (type == "torus") {
+        ParsingShape new_shape(type, position[X], position[Y], position[Z], 0, 0, 0, 0,
+        0, 0, 0, 0, 0, max_radius, min_radius, 0, path, askMaterial(), transformations);
+        _shapes.push_back(new_shape);
+    }
 }
 
 void Bonus::CFGGenerator::askCamera()
 {
-    int view_from[ALL_INDEXES];
-    int view_at[ALL_INDEXES];
-    int view_up[ALL_INDEXES];
-    int rotation[ALL_INDEXES];
+    float view_from[ALL_INDEXES];
+    float view_at[ALL_INDEXES];
+    float view_up[ALL_INDEXES];
+    float rotation[ALL_INDEXES];
     float fov;
     float aperture;
     float focus_dist;
     int resolution[RESO_INDEX];
     std::cout << "Enter the position of the camera (first the X and enter, then the Y and enter, then the Z and enter): ";
-    checkCin<int, ALL_INDEXES>(view_from, "Invalid view_from, please enter a valid integer for the position ", []([[maybe_unused]]int ex) { return true; }, A);
+    checkCin<float, ALL_INDEXES>(view_from, "Invalid view_from, please enter a valid integer for the position ", []([[maybe_unused]]float ex) { return true; }, A);
     std::cout << "Enter the point the camera is looking at (first the X and enter, then the Y and enter, then the Z and enter): ";
-    checkCin<int, ALL_INDEXES>(view_at, "Invalid view_at, please enter a valid integer for the position ", []([[maybe_unused]]int ex) { return true; }, A);
+    checkCin<float, ALL_INDEXES>(view_at, "Invalid view_at, please enter a valid integer for the position ", []([[maybe_unused]]float ex) { return true; }, A);
     std::cout << "Enter the up vector of the camera (first the X and enter, then the Y and enter, then the Z and enter): ";
-    checkCin<int, ALL_INDEXES>(view_up, "Invalid view_up, please enter a valid integer for the position ", []([[maybe_unused]]int ex) { return true; }, A);
+    checkCin<float, ALL_INDEXES>(view_up, "Invalid view_up, please enter a valid integer for the position ", []([[maybe_unused]]float ex) { return true; }, A);
     std::cout << "Enter the rotation of the camera (first the X and enter, then the Y and enter, then the Z and enter): ";
-    checkCin<int, ALL_INDEXES>(rotation, "Invalid rotation, please enter a valid integer for the rotation ", []([[maybe_unused]]int ex) { return true; }, A);
+    checkCin<float, ALL_INDEXES>(rotation, "Invalid rotation, please enter a valid integer for the rotation ", []([[maybe_unused]]float ex) { return true; }, A);
     std::cout << "Enter the field of view of the camera (float): ";
     checkCin<float>(fov, "Invalid fov, please enter a valid field of view: ", []([[maybe_unused]]float ex) { return ex >= 0; });
     std::cout << "Enter the aperture of the camera (float): ";
@@ -180,19 +245,19 @@ void Bonus::CFGGenerator::askCamera()
 
 void Bonus::CFGGenerator::askLight()
 {
-    int position[ALL_INDEXES];
+    float position[ALL_INDEXES];
     int color[ALL_INDEXES];
     float intensity;
-    int rotation[ALL_INDEXES];
+    float rotation[ALL_INDEXES];
     std::string type;
     std::cout << "Enter the position of the light (first the X and enter, then the Y and enter, then the Z and enter): ";
-    checkCin<int, ALL_INDEXES>(position, "Invalid position, please enter a valid position for the position ", []([[maybe_unused]]int ex) {return true;}, A);
+    checkCin<float, ALL_INDEXES>(position, "Invalid position, please enter a valid position for the position ", []([[maybe_unused]]float ex) {return true;}, A);
     std::cout << "Enter the color of the light (first the R and enter, then the G and enter, then the B and enter): ";
     checkCin<int, ALL_INDEXES>(color, "Invalid color, please enter a valid color for the color ", []([[maybe_unused]]int ex) { return ex >= 0 && ex <= 255; }, C);
     std::cout << "Enter the intensity of the light (float between 0 and 1): ";
     checkCin<float>(intensity, "Invalid intensity, please enter a valid intensity (between 0 and 1): ", []([[maybe_unused]]float ex) { return ex >= 0 && ex <= 1; });
     std::cout << "Enter the rotation of the light (first the X and enter, then the Y and enter, then the Z and enter): ";
-    checkCin<int, ALL_INDEXES>(rotation, "Invalid rotation, please enter a valid rotation for the rotation ", []([[maybe_unused]]int ex) { return true; }, A);
+    checkCin<float, ALL_INDEXES>(rotation, "Invalid rotation, please enter a valid rotation for the rotation ", []([[maybe_unused]]float ex) { return true; }, A);
     std::cout << "Enter the type of the light (point, directional, spot): ";
     checkCin<std::string>(type, "Invalid type of light, please enter a valid type (point, directional or spot): ", []([[maybe_unused]]std::string ex) { return ex == "point" || ex == "directional" || ex == "spot"; });
     ParsingLight new_light(position[X], position[Y], position[Z], color[R], color[G], color[B], intensity, rotation[X], rotation[Y], rotation[Z], type);
@@ -227,9 +292,9 @@ void Bonus::CFGGenerator::askPrecision()
     bool enable_reflections = true;
     bool enable_refractions = true;
     std::cout << "Enter the number of samples (int): ";
-    checkCin<int>(samples, "Invalid number of samples, please enter a valid number of samples: ", []([[maybe_unused]]int ex) { return ex > 0; });
+    checkCin<int>(samples, "Invalid number of samples, please enter a valid number of samples: ", []([[maybe_unused]]int ex) { return ex >= 0; });
     std::cout << "Enter the number of bounces (int): ";
-    checkCin<int>(number_of_bounces, "Invalid number of bounces, please enter a valid number of bounces: ", []([[maybe_unused]]int ex) { return ex > 0; });
+    checkCin<int>(number_of_bounces, "Invalid number of bounces, please enter a valid number of bounces: ", []([[maybe_unused]]int ex) { return ex >= 0; });
     std::cout << "Enable shadows? (1 for yes, 0 for no): ";
     checkCin<bool>(enable_shadows, "Invalid input, please enter a valid input (1 for yes, 0 for no): ", []([[maybe_unused]]bool ex) { return ex == 0 || ex == 1; });
     std::cout << "Enable reflections? (1 for yes, 0 for no): ";
@@ -251,10 +316,10 @@ void Bonus::CFGGenerator::askObjFiles()
 Bonus::ParsingTransformation Bonus::CFGGenerator::askTransformation()
 {
     std::string type;
-    int value[ALL_INDEXES];
+    float value[ALL_INDEXES];
     std::cout << "Enter the type of the transformation (translate, rotate, scale, mirror, shear): ";
     checkCin<std::string>(type, "Invalid type of transformation, please enter a valid type: ", []([[maybe_unused]]std::string ex) { return ex == "translate" || ex == "rotate" || ex == "scale" || ex == "mirror" || ex == "shear"; });
     std::cout << "Enter the values of the transformation (first the X and enter, then the Y and enter, then the Z and enter): ";
-    checkCin<int, ALL_INDEXES>(value, "Invalid values, please enter a valid value for the values ", []([[maybe_unused]]int ex) { return ex >= 0; }, A);
+    checkCin<float, ALL_INDEXES>(value, "Invalid values, please enter a valid value for the values ", []([[maybe_unused]]float ex) { return ex >= 0; }, A);
     return ParsingTransformation(type, value[X], value[Y], value[Z]);
 }

@@ -127,6 +127,11 @@ namespace App {
              */
             void setSample(int sample) { _sample = sample; }
 
+            /**
+             * @brief Set the size of the window.
+             */
+            void setWindowSize(unsigned int width, unsigned int height) { _windowWidth = width; _windowHeight = height; }
+
         // Sorter
             /**
              * @brief Sort the configuration based on the pair of unsigned integers in ascending order.

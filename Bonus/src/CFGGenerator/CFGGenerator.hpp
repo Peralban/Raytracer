@@ -129,14 +129,7 @@ namespace Bonus {
      */
     class ParsingTransformation {
     public:
-        /**
-         * @brief Constructor for ParsingTransformation.
-         * @param type The type of the transformation.
-         * @param position_x The x position of the transformation.
-         * @param position_y The y position of the transformation.
-         * @param position_z The z position of the transformation.
-         */
-        ParsingTransformation(std::string type, int position_x, int position_y, int position_z)
+        ParsingTransformation(std::string type, float position_x, float position_y, float position_z)
                 : _type(type), _position_x(position_x), _position_y(position_y), _position_z(position_z) {}
 
         /**
@@ -145,29 +138,17 @@ namespace Bonus {
          */
         std::string getType() { return _type; }
 
-        /**
-         * @brief Getter for the x position.
-         * @return The x position of the transformation.
-         */
-        int getPositionX() { return _position_x; }
+        float getPositionX() { return _position_x; }
 
-        /**
-         * @brief Getter for the y position.
-         * @return The y position of the transformation.
-         */
-        int getPositionY() { return _position_y; }
+        float getPositionY() { return _position_y; }
 
-        /**
-         * @brief Getter for the z position.
-         * @return The z position of the transformation.
-         */
-        int getPositionZ() { return _position_z; }
+        float getPositionZ() { return _position_z; }
 
     private:
-        std::string _type; ///< The type of the transformation.
-        int _position_x; ///< The x position of the transformation.
-        int _position_y; ///< The y position of the transformation.
-        int _position_z; ///< The z position of the transformation.
+        std::string _type;
+        float _position_x;
+        float _position_y;
+        float _position_z;
     };
 
     /**
@@ -176,23 +157,14 @@ namespace Bonus {
      */
     class ParsingShape {
     public:
-        /**
-         * @brief Constructor for ParsingShape.
-         * @param type The type of the shape.
-         * @param position_x The x position of the shape.
-         * @param position_y The y position of the shape.
-         * @param position_z The z position of the shape.
-         * @param size_x The x size of the shape.
-         * @param size_y The y size of the shape.
-         * @param size_z The z size of the shape.
-         * @param path The path of the shape.
-         * @param material The material of the shape.
-         * @param transformations The transformations of the shape.
-         */
-        ParsingShape(std::string type, int position_x, int position_y, int position_z,
-                int size_x, int size_y, int size_z, std::string path, ParsingMaterial material, std::vector<ParsingTransformation> transformations)
-                : _type(type), _position_x(position_x), _position_y(position_y), _position_z(position_z),
-                  _size_x(size_x), _size_y(size_y), _size_z(size_z), _path(path), _material(material), _transformations(transformations) {}
+        ParsingShape(std::string type, float position_x, float position_y, float position_z, float size_x, float size_y, float size_z, float radius,
+                     float normal_x, float normal_y, float normal_z, float angle, float height, float max_radius, float min_radius,
+                     float size, std::string path, ParsingMaterial material, std::vector<ParsingTransformation> transformations) :
+                _type(type), _position_x(position_x), _position_y(position_y), _position_z(position_z),
+                _size_x(size_x), _size_y(size_y), _size_z(size_z), _radius(radius),
+                _normal_x(normal_x), _normal_y(normal_y), _normal_z(normal_z), _angle(angle),
+                _height(height), _max_radius(max_radius), _min_radius(min_radius), _size(size),
+                _path(path), _material(material), _transformations(transformations) {}
 
         /**
          * @brief Getter for the type.
@@ -200,46 +172,36 @@ namespace Bonus {
          */
         std::string getType() { return _type; }
 
-        /**
-         * @brief Getter for the x position.
-         * @return The x position of the shape.
-         */
-        int getPositionX() { return _position_x; }
+        float getPositionX() { return _position_x; }
 
-        /**
-         * @brief Getter for the y position.
-         * @return The y position of the shape.
-         */
-        int getPositionY() { return _position_y; }
+        float getPositionY() { return _position_y; }
 
-        /**
-         * @brief Getter for the z position.
-         * @return The z position of the shape.
-         */
-        int getPositionZ() { return _position_z; }
+        float getPositionZ() { return _position_z; }
 
-        /**
-         * @brief Getter for the x size.
-         * @return The x size of the shape.
-         */
-        int getSizeX() { return _size_x; }
+        float getSizeX() { return _size_x; }
 
-        /**
-         * @brief Getter for the y size.
-         * @return The y size of the shape.
-         */
-        int getSizeY() { return _size_y; }
+        float getSizeY() { return _size_y; }
 
-        /**
-         * @brief Getter for the z size.
-         * @return The z size of the shape.
-         */
-        int getSizeZ() { return _size_z; }
+        float getSizeZ() { return _size_z; }
 
-        /**
-         * @brief Getter for the path.
-         * @return The path of the shape.
-         */
+        float getRadius() { return _radius; }
+
+        float getNormalX() { return _normal_x; }
+
+        float getNormalY() { return _normal_y; }
+
+        float getNormalZ() { return _normal_z; }
+
+        float getAngle() { return _angle; }
+
+        float getHeight() { return _height; }
+
+        float getMaxRadius() { return _max_radius; }
+
+        float getMinRadius() { return _min_radius; }
+
+        float getSize() { return _size; }
+
         std::string getPath() { return _path; }
 
         /**
@@ -255,15 +217,230 @@ namespace Bonus {
         std::vector<ParsingTransformation> getTransformations() { return _transformations; }
 
     private:
-        std::string _type; ///< The type of the shape.
-        int _position_x; ///< The x position of the shape.
-        int _position_y; ///< The y position of the shape.
-        int _position_z; ///< The z position of the shape.
-        int _size_x; ///< The x size of the shape.
-        int _size_y; ///< The y size of the shape.
-        int _size_z; ///< The z size of the shape.
-        std::string _path; ///< The path of the shape.
-        ParsingMaterial _material; ///< The material of the shape.
-        std::vector<ParsingTransformation> _transformations; ///< The transformations of the shape.
+        std::string _type;
+        float _position_x;
+        float _position_y;
+        float _position_z;
+        float _size_x;
+        float _size_y;
+        float _size_z;
+        float _radius;
+        float _normal_x;
+        float _normal_y;
+        float _normal_z;
+        float _angle;
+        float _height;
+        float _max_radius;
+        float _min_radius;
+        float _size;
+        std::string _path;
+        ParsingMaterial _material;
+        std::vector<ParsingTransformation> _transformations;
     };
 } // namespace Bonus
+
+    class ParsingLight {
+    public:
+        ParsingLight(float position_x, float position_y, float position_z, int color_r, int color_g, int color_b,
+                     float intensity, float rotation_x, float rotation_y, float rotation_z, std::string type)
+                : _position_x(position_x), _position_y(position_y), _position_z(position_z),
+                  _color_r(color_r), _color_g(color_g), _color_b(color_b), _intensity(intensity),
+                  _rotation_x(rotation_x), _rotation_y(rotation_y), _rotation_z(rotation_z), _type(type) {}
+
+        float getPositionX() { return _position_x; }
+
+        float getPositionY() { return _position_y; }
+
+        float getPositionZ() { return _position_z; }
+
+        int getColorR() { return _color_r; }
+
+        int getColorG() { return _color_g; }
+
+        int getColorB() { return _color_b; }
+
+        float getIntensity() { return _intensity; }
+
+        float getRotationX() { return _rotation_x; }
+
+        float getRotationY() { return _rotation_y; }
+
+        float getRotationZ() { return _rotation_z; }
+
+        std::string getType() { return _type; }
+
+    private:
+        float _position_x;
+        float _position_y;
+        float _position_z;
+        int _color_r;
+        int _color_g;
+        int _color_b;
+        float _intensity;
+        float _rotation_x;
+        float _rotation_y;
+        float _rotation_z;
+        std::string _type;
+    };
+
+    class ParsingCamera {
+    public:
+        ParsingCamera() = default;
+        ParsingCamera(float view_from_x, float view_from_y, float view_from_z, float view_at_x,
+                      float view_at_y, float view_at_z, float view_up_x, float view_up_y, float view_up_z, float rotation_x,
+                      float rotation_y, float rotation_z, float fov, float aperture, float focus_dist, float resolution_width,
+                      float resolution_height)
+                : _view_from_x(view_from_x), _view_from_y(view_from_y), _view_from_z(view_from_z),
+                  _view_at_x(view_at_x), _view_at_y(view_at_y), _view_at_z(view_at_z),
+                  _view_up_x(view_up_x), _view_up_y(view_up_y), _view_up_z(view_up_z),
+                  _rotation_x(rotation_x), _rotation_y(rotation_y), _rotation_z(rotation_z),
+                  _fov(fov), _aperture(aperture), _focus_dist(focus_dist),
+                  _resolution_width(resolution_width), _resolution_height(resolution_height) {}
+
+        float getViewFromX() { return _view_from_x; }
+
+        float getViewFromY() { return _view_from_y; }
+
+        float getViewFromZ() { return _view_from_z; }
+
+        float getViewAtX() { return _view_at_x; }
+
+        float getViewAtY() { return _view_at_y; }
+
+        float getViewAtZ() { return _view_at_z; }
+
+        float getViewUpX() { return _view_up_x; }
+
+        float getViewUpY() { return _view_up_y; }
+
+        float getViewUpZ() { return _view_up_z; }
+
+        float getRotationX() { return _rotation_x; }
+
+        float getRotationY() { return _rotation_y; }
+
+        float getRotationZ() { return _rotation_z; }
+
+        float getFov() { return _fov; }
+
+        float getAperture() { return _aperture; }
+
+        float getFocusDist() { return _focus_dist; }
+
+        int getResolutionWidth() { return _resolution_width; }
+
+        int getResolutionHeight() { return _resolution_height; }
+
+    private:
+        float _view_from_x;
+        float _view_from_y;
+        float _view_from_z;
+        float _view_at_x;
+        float _view_at_y;
+        float _view_at_z;
+        float _view_up_x;
+        float _view_up_y;
+        float _view_up_z;
+        float _rotation_x;
+        float _rotation_y;
+        float _rotation_z;
+        float _fov;
+        float _aperture;
+        float _focus_dist;
+        int _resolution_width;
+        int _resolution_height;
+    };
+
+    class ParsingBackground {
+    public:
+        ParsingBackground() = default;
+        ParsingBackground(int r, int g, int b, std::string path)
+                : _r(r), _g(g), _b(b), _path(path) {}
+
+        int getColorR() { return _r; }
+
+        int getColorG() { return _g; }
+
+        int getColorB() { return _b; }
+
+        std::string getTexturePath() { return _path; }
+
+    private:
+        int _r;
+        int _g;
+        int _b;
+        std::string _path;
+    };
+
+    class ParsingPrecision {
+    public:
+        ParsingPrecision() = default;
+        ParsingPrecision(int samples, int number_of_bounces, bool enable_shadows,
+                         bool enable_reflections, bool enable_refractions)
+                : _samples(samples), _number_of_bounces(number_of_bounces), _enable_shadows(enable_shadows),
+                  _enable_reflections(enable_reflections), _enable_refractions(enable_refractions) {}
+
+        int getSamples() { return _samples; }
+
+        int getNumberOfBounces() { return _number_of_bounces; }
+
+        bool getEnableShadows() { return _enable_shadows; }
+
+        bool getEnableReflections() { return _enable_reflections; }
+
+        bool getEnableRefractions() { return _enable_refractions; }
+
+    private:
+        int _samples;
+        int _number_of_bounces;
+        bool _enable_shadows;
+        bool _enable_reflections;
+        bool _enable_refractions;
+    };
+
+    class CFGGenerator {
+    public:
+        CFGGenerator() = default;
+
+        ~CFGGenerator() = default;
+
+        void GetInfo();
+
+        void askShape();
+
+        void askCamera();
+
+        void askLight();
+
+        void askBackground();
+
+        void askPrecision();
+
+        void askObjFiles();
+
+        Bonus::ParsingTransformation askTransformation();
+
+        std::vector<ParsingShape> getShapes() { return _shapes; }
+
+        std::vector<ParsingLight> getLights() { return _lights; }
+
+        ParsingCamera getCamera() { return _camera; }
+
+        ParsingBackground getBackground() { return _background; }
+
+        ParsingPrecision getPrecision() { return _precision; }
+
+        std::string getOutputFile() { return _output_file; }
+
+        std::vector<std::string> getObjPaths() { return _obj_files; }
+
+    private:
+        std::vector<ParsingShape> _shapes;
+        std::vector<ParsingLight> _lights;
+        std::vector<std::string> _obj_files;
+        ParsingCamera _camera;
+        ParsingBackground _background;
+        ParsingPrecision _precision;
+        std::string _output_file;
+    };
+}
