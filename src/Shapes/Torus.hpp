@@ -15,10 +15,18 @@
 namespace RayTracer {
     class Torus : public IShape {
         public:
-            Torus();
+            Torus() = default;
+
+            Torus(const Math::Vector3D &center, float major_radius, float minor_radius, std::shared_ptr<IMaterial> material);
 
             ~Torus() = default;
 
             bool hit(const Math::Ray3D &ray, double tmin, double tmax, hits &hit) const override;
+
+    private:
+        Math::Vector3D _center;
+        float _major_radius;
+        float _minor_radius;
+        std::shared_ptr<IMaterial> _material;
     };
 }
