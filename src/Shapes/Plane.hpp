@@ -14,11 +14,19 @@
 
 namespace RayTracer {
     class Plane : public IShape {
-        public:
-            Plane();
+    public:
+        Plane() = default;
 
-            ~Plane() = default;
+        Plane(const Math::Vector3D &pos, const Math::Vector3D &norm, std::shared_ptr<IMaterial> type)
+            : _position(pos), _normal(norm), _material(type) {}
 
-            bool hit(const Math::Ray3D &ray, double tmin, double tmax, hits &hit) const override;
+        ~Plane();
+
+        bool hit(const Math::Ray3D &ray, double tmin, double tmax, hits &hit) const override;
+
+    private:
+        Math::Vector3D _position;
+        Math::Vector3D _normal;
+        std::shared_ptr<IMaterial> _material;
     };
 }
