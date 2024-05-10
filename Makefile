@@ -24,7 +24,7 @@ SRC		= main.cpp								\
 				Shapes/Sphere.cpp						\
 				Shapes/Plane.cpp						\
 				Shapes/Obj.cpp 							\
-				Shapes/Cube.cpp							\
+				Shapes/Parallelepiped.cpp				\
 				Shapes/Cylinder.cpp						\
 				Shapes/Prism.cpp						\
 				Shapes/Torus.cpp						\
