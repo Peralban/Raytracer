@@ -15,7 +15,7 @@
 #include "Shapes/Cone.hpp"
 #include "Shapes/Prism.hpp"
 #include "Shapes/Torus.hpp"
-#include "Shapes/Cube.hpp"
+#include "Shapes/Parallelepiped.hpp"
 #include "Shapes/Plane.hpp"
 #include "Shapes/Obj.hpp"
 #include "Shapes/CylinderInfinite.hpp"
@@ -92,11 +92,11 @@ namespace Factory {
         std::shared_ptr<RayTracer::IShape> makeCone(App::ParsingShape &cone);
 
         /**
-         * @brief Creates a cube shape.
-         * @param cube - Parsing data for creating the cube.
-         * @return std::shared_ptr<RayTracer::IShape> - Pointer to the created cube shape.
+         * @brief Creates a parallelepiped shape.
+         * @param cube - Parsing data for creating the parallelepiped.
+         * @return std::shared_ptr<RayTracer::IShape> - Pointer to the created parallelepiped shape.
          */
-        std::shared_ptr<RayTracer::IShape> makeCube(App::ParsingShape &cube);
+        std::shared_ptr<RayTracer::IShape> makeParallelepiped(App::ParsingShape &parallelepiped);
 
         /**
          * @brief Creates a cylinder shape.
