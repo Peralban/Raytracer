@@ -317,8 +317,8 @@ Bonus::ParsingTransformation Bonus::CFGGenerator::askTransformation()
 {
     std::string type;
     float value[ALL_INDEXES];
-    std::cout << "Enter the type of the transformation (translate, rotate, scale, mirror, shear): ";
-    checkCin<std::string>(type, "Invalid type of transformation, please enter a valid type: ", []([[maybe_unused]]std::string ex) { return ex == "translate" || ex == "rotate" || ex == "scale" || ex == "mirror" || ex == "shear"; });
+    std::cout << "Enter the type of the transformation (translation, rotation, scale, shear): ";
+    checkCin<std::string>(type, "Invalid type of transformation, please enter a valid type: ", []([[maybe_unused]]std::string ex) { return ex == "translation" || ex == "rotation" || ex == "scale" || ex == "shear"; });
     std::cout << "Enter the values of the transformation (first the X and enter, then the Y and enter, then the Z and enter): ";
     checkCin<float, ALL_INDEXES>(value, "Invalid values, please enter a valid value for the values ", []([[maybe_unused]]float ex) { return ex >= 0; }, A);
     return ParsingTransformation(type, value[X], value[Y], value[Z]);

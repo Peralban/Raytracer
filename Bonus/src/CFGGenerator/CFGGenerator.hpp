@@ -237,7 +237,6 @@ namespace Bonus {
         ParsingMaterial _material;
         std::vector<ParsingTransformation> _transformations;
     };
-} // namespace Bonus
 
     class ParsingLight {
     public:
