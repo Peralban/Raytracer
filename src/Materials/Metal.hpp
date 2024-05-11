@@ -48,6 +48,19 @@ namespace RayTracer {
         bool scatter(const Math::Ray3D &ray, const hits &hit, Math::Vector3D &attenuation,
                      Math::Ray3D &scattered) const override;
 
+        /**
+         * @brief Determines the emitted light of the material.
+         *
+         * This method calculates the emitted light of the material.
+         *
+         * @return The emitted light of the material.
+         *
+         * @note This method is not used for glass materials.
+         *      It is only implemented to satisfy the IMaterial interface.
+         *      It always returns a black color.
+         */
+        Math::Vector3D emitted() const {return {0, 0, 0};}
+
         Math::Vector3D albedo; ///< The albedo of the material.
         float _fuzziness; ///< The fuzziness of the material. It is a value between 0 and 1, 0 being a perfect mirror and 1 being a diffuse surface.
     };
