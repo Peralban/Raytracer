@@ -16,6 +16,12 @@
 #include "Materials/Matte.hpp"
 #include "Materials/Metal.hpp"
 #include "Materials/Glass.hpp"
+#include "Shapes/TransformedShape.hpp"
+#include "Transformations/Translation.hpp"
+#include "Transformations/Rotation.hpp"
+#include "Transformations/Scale.hpp"
+#include "Transformations/Shear.hpp"
+#include <cmath>
 
 Factory::SceneFactory::SceneFactory() {}
 
@@ -127,6 +133,23 @@ std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeSphere(App::Parsin
     Math::Vector3D center = sphere.getPosition();
     double radius = (double) sphere.getRadius();
 
+    if (sphere.getTransformations().size() > 0) {
+        std::shared_ptr<RayTracer::IShape> shape = std::make_shared<RayTracer::Sphere>(center, radius, makeMaterial(sphere.getMaterial()));
+        for (auto &trans : sphere.getTransformations()) {
+            if (trans.getType() == "translation") {
+                std::unique_ptr<RayTracer::ITransformation> translation = std::make_unique<RayTracer::Translation>(trans.getPosition());
+                std::shared_ptr<RayTracer::IShape> transformed = std::make_shared<RayTracer::TransformedShape>(shape, translation);
+            } else if (trans.getType() == "rotation") {
+                std::unique_ptr<RayTracer::ITransformation> rotation = std::make_unique<RayTracer::Rotation>(trans.getPosition());
+                std::shared_ptr<RayTracer::IShape> transformed = std::make_shared<RayTracer::TransformedShape>(shape, rotation);
+            } else if (trans.getType() == "scale") {
+                std::unique_ptr<RayTracer::ITransformation> scale = std::make_unique<RayTracer::Scale>(trans.getPosition());
+                std::shared_ptr<RayTracer::IShape> transformed = std::make_shared<RayTracer::TransformedShape>(shape, scale);
+            } else if (trans.getType() == "shear") {
+                std::unique_ptr<RayTracer::ITransformation> shear = std::make_unique<RayTracer::Shear>(trans.getPosition());
+            }
+        }
+    }
     return std::make_shared<RayTracer::Sphere>(center, radius, makeMaterial(sphere.getMaterial()));
 }
 
@@ -156,7 +179,7 @@ std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeCone(App::ParsingS
     Math::Vector3D center = cone.getPosition();
     double angle = (double) cone.getAngle();
 
-    return std::make_shared<RayTracer::Cone>(center, angle, makeMaterial(cone.getMaterial()));
+    return std::make_shared<RayTracer::Cone>(center, angle * M_PI / 180, makeMaterial(cone.getMaterial()));
 }
 
 std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeCube(App::ParsingShape &cube)
