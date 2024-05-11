@@ -59,3 +59,48 @@ RayTracer::Shear::untransformCoordinates(const Math::Point3D &p)
 
     return ret;
 }
+
+void RayTracer::Shear::setinfo(const Math::Point3D &p)
+{
+    if (!_xShear) {
+        _xShear = p.y;
+        _yShear = p.z;
+
+        _shear_target = &Math::Point3D::x;
+        _x_coord = &Math::Point3D::y;
+        _y_coord = &Math::Point3D::z;
+    } else if (!_yShear) {
+        _xShear = p.x;
+        _yShear = p.z;
+
+        _shear_target = &Math::Point3D::y;
+        _x_coord = &Math::Point3D::x;
+        _y_coord = &Math::Point3D::z;
+    } else {
+        _xShear = p.x;
+        _yShear = p.y;
+
+        _shear_target = &Math::Point3D::z;
+        _x_coord = &Math::Point3D::x;
+        _y_coord = &Math::Point3D::y;
+    }
+}
+
+
+extern "C"
+{
+    RayTracer::Shear *entry_point()
+    {
+        return new RayTracer::Shear();
+    }
+
+    __attribute__((constructor)) void load()
+    {
+        std::cout << "Loading SDL2 Graphic" << std::endl;
+    }
+
+    __attribute__((destructor)) void unload()
+    {
+        std::cout << "Unloading SDL2 Graphic" << std::endl;
+    }
+}

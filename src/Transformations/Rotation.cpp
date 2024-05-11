@@ -7,6 +7,7 @@
 
 #include "Rotation.hpp"
 #include <cmath>
+#include <iostream>
 
 RayTracer::Rotation::Rotation()
 :   _angles(Math::Vector3D(0, 0, 0))
@@ -70,5 +71,31 @@ constexpr inline double RayTracer::Rotation::__get_magnitude(
         return y / sin(angle);
     } else {
         return x / cos(angle);
+    }
+}
+
+void RayTracer::Rotation::setinfo(const Math::Point3D &p)
+{
+    _angles.x = p.x;
+    _angles.y = p.y;
+    _angles.z = p.z;
+}
+
+
+extern "C"
+{
+    RayTracer::Rotation *entry_point()
+    {
+        return new RayTracer::Rotation();
+    }
+
+    __attribute__((constructor)) void load()
+    {
+        std::cout << "Loading SDL2 Graphic" << std::endl;
+    }
+
+    __attribute__((destructor)) void unload()
+    {
+        std::cout << "Unloading SDL2 Graphic" << std::endl;
     }
 }

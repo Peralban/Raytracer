@@ -6,7 +6,7 @@
 */
 
 #include "Matte.hpp"
-
+#include <iostream>
 
 static Math::Vector3D randomInUnitSphere()
 {
@@ -28,4 +28,27 @@ bool RayTracer::Matte::scatter([[maybe_unused]] const Math::Ray3D &ray, const hi
     scattered = Math::Ray3D(hit.point, reflectedRay-hit.point);
     attenuation = albedo;
     return true;
+}
+
+void RayTracer::Matte::setinfo(const Math::Vector3D &albedoValue)
+{
+    albedo = albedoValue;
+}
+
+extern "C"
+{
+    RayTracer::Matte *entry_point()
+    {
+        return new RayTracer::Matte();
+    }
+
+    __attribute__((constructor)) void load()
+    {
+        std::cout << "Loading Matte Material" << std::endl;
+    }
+
+    __attribute__((destructor)) void unload()
+    {
+        std::cout << "Unloading Matte Material" << std::endl;
+    }
 }

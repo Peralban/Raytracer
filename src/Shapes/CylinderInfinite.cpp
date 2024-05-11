@@ -5,7 +5,7 @@
 ** CylinderInfinite
 */
 
-#include "CylinderInfinite.hpp"
+#include "Shapes/CylinderInfinite.hpp"
 #include <iostream>
 #include <utility>
 
@@ -32,4 +32,28 @@ bool RayTracer::CylinderInfinite::hit(const Math::Ray3D &ray, double tmin, doubl
         return true;
     }
     return false;
+}
+
+void RayTracer::CylinderInfinite::setinfo(const Math::Vector3D &centerValue, double radiusValue, std::shared_ptr<IMaterial> materialValue) {
+    center = centerValue;
+    radius = radiusValue;
+    material = std::move(materialValue);
+}
+
+extern "C"
+{
+    RayTracer::CylinderInfinite *entry_point()
+    {
+        return new RayTracer::CylinderInfinite();
+    }
+
+    __attribute__((constructor)) void load()
+    {
+        std::cout << "Loading SDL2 Graphic" << std::endl;
+    }
+
+    __attribute__((destructor)) void unload()
+    {
+        std::cout << "Unloading SDL2 Graphic" << std::endl;
+    }
 }

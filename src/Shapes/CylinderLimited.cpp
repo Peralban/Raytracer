@@ -5,7 +5,7 @@
 ** CylinderLimited
 */
 
-#include "CylinderLimited.hpp"
+#include "Shapes/CylinderLimited.hpp"
 #include <iostream>
 
 
@@ -46,4 +46,29 @@ bool RayTracer::CylinderLimited::hit(const Math::Ray3D &ray, double tmin, double
         return true;
     }
     return false;
+}
+
+void RayTracer::CylinderLimited::setinfo(const Math::Vector3D &centerValue, double radiusValue, double heightValue, std::shared_ptr<IMaterial> materialValue) {
+    center = centerValue;
+    radius = radiusValue;
+    height = heightValue;
+    material = std::move(materialValue);
+}
+
+extern "C"
+{
+    RayTracer::CylinderLimited *entry_point()
+    {
+        return new RayTracer::CylinderLimited();
+    }
+
+    __attribute__((constructor)) void load()
+    {
+        std::cout << "Loading SDL2 Graphic" << std::endl;
+    }
+
+    __attribute__((destructor)) void unload()
+    {
+        std::cout << "Unloading SDL2 Graphic" << std::endl;
+    }
 }

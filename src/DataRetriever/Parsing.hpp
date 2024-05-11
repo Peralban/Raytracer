@@ -108,13 +108,13 @@ namespace App {
          * @brief Getter for the type of the transformation.
          * @return The type of the transformation.
          */
-        std::string getType() { return _type; }
+        std::string getType() const { return _type; }
 
         /**
          * @brief Getter for the position of the transformation.
          * @return The position of the transformation as a Vector3D.
          */
-        Math::Vector3D getPosition() { return _position; }
+        Math::Vector3D getPosition() const { return _position; }
 
         /**
          * @brief Outputs the transformation data to the provided ostream.

@@ -6,7 +6,7 @@
 */
 
 #include "Glass.hpp"
-
+#include <iostream>
 
 RayTracer::Glass::Glass(float refractionIndexValue, Math::Vector3D albedoValue)
         : refractionIndex(refractionIndexValue), albedo(albedoValue)
@@ -59,4 +59,29 @@ bool RayTracer::Glass::scatter(const Math::Ray3D &ray, const hits &hit, Math::Ve
         scattered = Math::Ray3D(hit.point, refracted);
     }
     return true;
+}
+
+void RayTracer::Glass::setinfo(float refractionIndexValue, Math::Vector3D albedoValue)
+{
+    refractionIndex = refractionIndexValue;
+    albedo = albedoValue;
+}
+
+
+extern "C"
+{
+    RayTracer::Glass *entry_point()
+    {
+        return new RayTracer::Glass();
+    }
+
+    __attribute__((constructor)) void load()
+    {
+        std::cout << "Loading SDL2 Graphic" << std::endl;
+    }
+
+    __attribute__((destructor)) void unload()
+    {
+        std::cout << "Unloading SDL2 Graphic" << std::endl;
+    }
 }

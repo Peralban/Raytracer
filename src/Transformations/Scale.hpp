@@ -37,8 +37,10 @@ namespace RayTracer {
             virtual std::optional<Math::Point3D>
             untransformCoordinates(const Math::Point3D &p) override final;
 
+            void setinfo(const Math::Point3D &p);
+
         protected:
-            const Math::Vector3D _coords;
+            Math::Vector3D _coords;
     };
 }
 #endif /* !SCALE_HPP_ */

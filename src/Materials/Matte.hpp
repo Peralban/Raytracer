@@ -18,6 +18,8 @@ namespace RayTracer {
      */
     class Matte : public IMaterial {
     public:
+
+        Matte() = default;
         /**
          * @brief Constructor for the Matte class.
          *
@@ -45,6 +47,8 @@ namespace RayTracer {
          */
         bool scatter(const Math::Ray3D &ray, const hits &hit, Math::Vector3D &attenuation,
                      Math::Ray3D &scattered) const override;
+
+        void setinfo(const Math::Vector3D &albedoValue);
 
         Math::Vector3D albedo; ///< The albedo of the material. Albedo is the proportion of the light that is reflected by the surface.
     };

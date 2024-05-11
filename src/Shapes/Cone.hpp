@@ -23,10 +23,11 @@ namespace RayTracer {
 
             bool hit(const Math::Ray3D &ray, double tmin, double tmax, hits &hit) const override;
 
+            void setinfo(const Math::Vector3D &origin, double angle, std::shared_ptr<IMaterial> material);
         private:
-            const Math::Vector3D _origin;
-            const double _tan; ///< The tangent of the angle
-            const double _sqtan; ///< The square of the tangent of the angle
+            Math::Vector3D _origin;
+            double _tan; ///< The tangent of the angle
+            double _sqtan; ///< The square of the tangent of the angle
             std::shared_ptr<IMaterial> _material;
 
             Math::Vector3D __getNormalAt(const Math::Point3D &point) const noexcept;

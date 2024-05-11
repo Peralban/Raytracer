@@ -5,7 +5,8 @@
 ** TransformedShape
 */
 
-#include "TransformedShape.hpp"
+#include "Shapes/TransformedShape.hpp"
+#include <iostream>
 
 RayTracer::TransformedShape::TransformedShape(
     std::shared_ptr<IShape> shape,
@@ -37,3 +38,4 @@ bool RayTracer::TransformedShape::hit(
     hit.normal = _tr->transformCoordinates(normal_tip) - hit.point;
     return true;
 }
+

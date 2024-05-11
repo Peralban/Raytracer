@@ -1,6 +1,14 @@
-#include "Parallelepiped.hpp"
+/*
+** EPITECH PROJECT, 2024
+** Parallelepiped.cpp
+** File description:
+** DESCRIPTION
+*/
+
+#include "Shapes/Parallelepiped.hpp"
 #include <cmath>
 #include <utility>
+#include <iostream>
 
 RayTracer::Parallelepiped::Parallelepiped(const Math::Vector3D &positionValue, float sizeXValue, float sizeYValue, float sizeZValue, std::shared_ptr<IMaterial> materialValue)
     : position(positionValue), sizeX(sizeXValue), sizeY(sizeYValue), sizeZ(sizeZValue), material(std::move(materialValue))
@@ -51,4 +59,31 @@ bool RayTracer::Parallelepiped::hit(const Math::Ray3D &ray, double tmin, double 
     hit.normal = normal;
     hit.material = material;
     return true;
+}
+
+void RayTracer::Parallelepiped::setinfo(const Math::Vector3D &positionValue, float sizeXValue, float sizeYValue, float sizeZValue, std::shared_ptr<IMaterial> materialValue)
+{
+    position = positionValue;
+    sizeX = sizeXValue;
+    sizeY = sizeYValue;
+    sizeZ = sizeZValue;
+    material = std::move(materialValue);
+}
+
+extern "C"
+{
+    RayTracer::Parallelepiped *entry_point()
+    {
+        return new RayTracer::Parallelepiped();
+    }
+
+    __attribute__((constructor)) void load()
+    {
+        std::cout << "Loading SDL2 Graphic" << std::endl;
+    }
+
+    __attribute__((destructor)) void unload()
+    {
+        std::cout << "Unloading SDL2 Graphic" << std::endl;
+    }
 }

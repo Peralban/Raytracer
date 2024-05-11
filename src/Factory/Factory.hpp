@@ -10,14 +10,13 @@
 #include <memory>
 #include <functional>
 #include <stdexcept>
+#include <map>
 #include "Interfaces/IShape.hpp"
 #include "Shapes/Sphere.hpp"
 #include "Shapes/Cone.hpp"
-#include "Shapes/Prism.hpp"
 #include "Shapes/Torus.hpp"
 #include "Shapes/Parallelepiped.hpp"
 #include "Shapes/Plane.hpp"
-#include "Shapes/Obj.hpp"
 #include "Shapes/CylinderInfinite.hpp"
 #include "Shapes/CylinderLimited.hpp"
 #include "Raytracer/Background.hpp"
@@ -30,6 +29,40 @@
  * @brief Factory class for creating shshared_ptrapes, cameras, lights, and backgrounds for a ray tracer scene.
  */
 namespace Factory {
+
+    enum AllPLUGIN {
+        SPHERE,
+        PLANE,
+        CONE,
+        PARALLELEPIPED,
+        CYLINDER,
+        LIMITEDCYLINDER,
+        TORUS,
+        GLASS,
+        MATTE,
+        METAL,
+        ROTATION,
+        TRANSLATION,
+        SCALE,
+        SHEAR
+    };
+
+    static std::map<AllPLUGIN, const std::string> ALLPLUGINNAME = {
+        {SPHERE, "libs/Shapes/libsphere.so"},
+        {PLANE, "libs/Shapes/libplane.so"},
+        {CONE, "libs/Shapes/libcone.so"},
+        {PARALLELEPIPED, "libs/Shapes/libparallelepiped.so"},
+        {CYLINDER, "libs/Shapes/libcylinderinfinite.so"},
+        {LIMITEDCYLINDER, "libs/Shapes/libcylinderlimited.so"},
+        {TORUS, "libs/Shapes/libtorus.so"},
+        {GLASS, "libs/Materials/libglass.so"},
+        {MATTE, "libs/Materials/libmatte.so"},
+        {METAL, "libs/Materials/libmetal.so"},
+        {ROTATION, "libs/Transformations/librotation.so"},
+        {TRANSLATION, "libs/Transformations/libtranslation.so"},
+        {SCALE, "libs/Transformations/libscale.so"},
+        {SHEAR, "libs/Transformations/libshear.so"}
+    };
     class SceneFactory {
     public:
 
@@ -57,12 +90,6 @@ namespace Factory {
          * @return std::shared_ptr<RayTracer::Camera> - Pointer to the created camera.
          */
         static std::shared_ptr<RayTracer::Camera> createCamera(App::ParsingCamera camera);
-
-        /**
-         * @brief Creates a background.
-         * @return std::shared_ptr<RayTracer::Background> - Pointer to the created background.
-         */
-        static std::shared_ptr<RayTracer::Background> createBackground(App::ParsingBackground &background);
 
         /**
          * @brief Creates a light.
@@ -118,20 +145,6 @@ namespace Factory {
          * @return std::shared_ptr<RayTracer::IShape> - Pointer to the created torus shape.
          */
         std::shared_ptr<RayTracer::IShape> makeTorus(App::ParsingShape &torus);
-
-        /**
-         * @brief Creates a prism shape.
-         * @param prism - Parsing data for creating the prism.
-         * @return std::shared_ptr<RayTracer::IShape> - Pointer to the created prism shape.
-         */
-        std::shared_ptr<RayTracer::IShape> makePrism(App::ParsingShape &prism);
-
-        /**
-         * @brief Creates an OBJ shape.
-         * @param obj - Parsing data for creating the OBJ.
-         * @return std::shared_ptr<RayTracer::IShape> - Pointer to the created OBJ shape.
-         */
-        std::shared_ptr<RayTracer::IShape> makeObj(App::ParsingShape &obj);
     };
 
     class ErrorMaterial : public AError {

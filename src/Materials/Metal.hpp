@@ -19,6 +19,8 @@ namespace RayTracer {
     class Metal : public IMaterial {
     public:
 
+        Metal() = default;
+
         /**
          * @brief Constructor for the Metal class.
          *
@@ -47,6 +49,8 @@ namespace RayTracer {
          */
         bool scatter(const Math::Ray3D &ray, const hits &hit, Math::Vector3D &attenuation,
                      Math::Ray3D &scattered) const override;
+
+        void setinfo(const Math::Vector3D &albedoValue, float fuzziness);
 
         Math::Vector3D albedo; ///< The albedo of the material.
         float _fuzziness; ///< The fuzziness of the material. It is a value between 0 and 1, 0 being a perfect mirror and 1 being a diffuse surface.

@@ -1,3 +1,10 @@
+/*
+** EPITECH PROJECT, 2024
+** Parallelepiped
+** File description:
+** DESCRIPTION
+*/
+
 #pragma once
 
 #include <optional>
@@ -53,6 +60,8 @@ namespace RayTracer {
              * @return A boolean indicating whether the ray hit the parallelepiped.
              */
             bool hit(const Math::Ray3D &ray, double tmin, double tmax, hits &hit) const override;
+
+            void setinfo(const Math::Vector3D &positionValue, float sizeXValue, float sizeYValue, float sizeZValue, std::shared_ptr<IMaterial> materialValue);
 
             Math::Vector3D position;
             float sizeX;

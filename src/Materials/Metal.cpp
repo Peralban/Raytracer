@@ -6,7 +6,7 @@
 */
 
 #include "Metal.hpp"
-
+#include <iostream>
 
 static Math::Vector3D randomInUnitSphere()
 {
@@ -32,4 +32,28 @@ bool RayTracer::Metal::scatter(const Math::Ray3D &ray, const hits &hit, Math::Ve
     scattered = Math::Ray3D(hit.point, reflectedRay + randomInUnitSphere() * _fuzziness);
     attenuation = albedo;
     return scattered.getDirection().dot(hit.normal) > 0;
+}
+
+void RayTracer::Metal::setinfo(const Math::Vector3D &albedoValue, float fuzziness)
+{
+    albedo = albedoValue;
+    _fuzziness = fuzziness;
+}
+
+extern "C"
+{
+    RayTracer::Metal *entry_point()
+    {
+        return new RayTracer::Metal();
+    }
+
+    __attribute__((constructor)) void load()
+    {
+        std::cout << "Loading Metal Material" << std::endl;
+    }
+
+    __attribute__((destructor)) void unload()
+    {
+        std::cout << "Unloading Metal Material" << std::endl;
+    }
 }

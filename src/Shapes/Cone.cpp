@@ -6,6 +6,7 @@
 */
 
 #include "Cone.hpp"
+#include <iostream>
 
 #define SQ(x) ((x)*(x))
 
@@ -59,4 +60,30 @@ Math::Vector3D RayTracer::Cone::__getNormalAt(const Math::Point3D &point) const 
     om.makeUnitVector();
     om.y = std::copysign(_tan, -y_diff);
     return om;
+}
+
+void RayTracer::Cone::setinfo(const Math::Vector3D &origin, double angle, std::shared_ptr<IMaterial> material)
+{
+    _origin = origin;
+    _tan = std::tan(angle);
+    _sqtan = SQ(_tan);
+    _material = std::move(material);
+}
+
+extern "C"
+{
+    RayTracer::Cone *entry_point()
+    {
+        return new RayTracer::Cone();
+    }
+
+    __attribute__((constructor)) void load()
+    {
+        std::cout << "Loading SDL2 Graphic" << std::endl;
+    }
+
+    __attribute__((destructor)) void unload()
+    {
+        std::cout << "Unloading SDL2 Graphic" << std::endl;
+    }
 }

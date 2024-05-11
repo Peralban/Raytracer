@@ -24,6 +24,7 @@ namespace RayTracer {
 
         bool hit(const Math::Ray3D &ray, double tmin, double tmax, hits &hit) const override;
 
+        void setinfo(const Math::Vector3D &pos, const Math::Vector3D &norm, std::shared_ptr<IMaterial> type);
     private:
         Math::Vector3D _position;
         Math::Vector3D _normal;

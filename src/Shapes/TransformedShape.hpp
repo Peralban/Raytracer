@@ -22,6 +22,10 @@ namespace RayTracer {
     /// This class conforms to the *Decorator* design pattern
     class TransformedShape : public IShape {
         public:
+            /// @brief Construct a new TransformedShape object
+
+            TransformedShape() = default;
+
             TransformedShape(
                 std::shared_ptr<IShape> shape,
                 std::shared_ptr<ITransformation> tr
@@ -29,8 +33,6 @@ namespace RayTracer {
             ~TransformedShape() = default;
 
             bool hit(const Math::Ray3D &ray, double tmin, double tmax, struct hits &hit) const override;
-
-
         protected:
             std::shared_ptr<IShape> _shape;
             std::shared_ptr<ITransformation> _tr;

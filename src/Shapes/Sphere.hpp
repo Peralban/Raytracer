@@ -59,6 +59,8 @@ namespace RayTracer {
              */
             bool hit(const Math::Ray3D &ray, double tmin, double tmax, hits &hit) const override;
 
+            void setinfo(const Math::Vector3D &centerValue, float radiusValue, std::shared_ptr<IMaterial> materialValue);
+
             Math::Vector3D center; ///< The center of the sphere.
             float radius; ///< The radius of the sphere.
             std::shared_ptr<IMaterial> material; ///< The material of the sphere.

@@ -61,6 +61,8 @@ namespace RayTracer {
          */
         bool hit(const Math::Ray3D &ray, double tmin, double tmax, hits &hit) const override;
 
+        void setinfo(const Math::Vector3D &centerValue, double radiusValue, double heightValue, std::shared_ptr<IMaterial> materialValue);
+
         Math::Vector3D center; ///< The center of the cylinder.
         double radius; ///< The radius of the cylinder.
         double height; ///< The height of the cylinder.

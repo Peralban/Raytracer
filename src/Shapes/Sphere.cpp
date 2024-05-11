@@ -5,13 +5,21 @@
 ** IShape
 */
 
-#include "Sphere.hpp"
+#include "Shapes/Sphere.hpp"
 #include <cmath>
 #include <utility>
+#include <iostream>
 
 RayTracer::Sphere::Sphere(const Math::Vector3D &centerValue, float radiusValue, std::shared_ptr<IMaterial> materialValue)
     : center(centerValue), radius(radiusValue), material(std::move(materialValue))
 {}
+
+void RayTracer::Sphere::setinfo(const Math::Vector3D &centerValue, float radiusValue, std::shared_ptr<IMaterial> materialValue)
+{
+    center = centerValue;
+    radius = radiusValue;
+    material = std::move(materialValue);
+}
 
 bool RayTracer::Sphere::hit(const Math::Ray3D &ray, double tmin, double tmax, hits &hit) const
 {
@@ -42,4 +50,22 @@ bool RayTracer::Sphere::hit(const Math::Ray3D &ray, double tmin, double tmax, hi
         }
     }
     return false;
+}
+
+extern "C"
+{
+    RayTracer::Sphere *entry_point()
+    {
+        return new RayTracer::Sphere();
+    }
+
+    __attribute__((constructor)) void load()
+    {
+        std::cout << "Loading SDL2 Graphic" << std::endl;
+    }
+
+    __attribute__((destructor)) void unload()
+    {
+        std::cout << "Unloading SDL2 Graphic" << std::endl;
+    }
 }

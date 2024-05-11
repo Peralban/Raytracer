@@ -20,5 +20,7 @@ namespace RayTracer {
             ~Torus() = default;
 
             bool hit(const Math::Ray3D &ray, double tmin, double tmax, hits &hit) const override;
+
+            void setinfo(const Math::Vector3D &origin, double angle, std::shared_ptr<IMaterial> material);
     };
 }

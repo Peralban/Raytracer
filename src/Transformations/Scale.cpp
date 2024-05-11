@@ -6,6 +6,7 @@
 */
 
 #include "Scale.hpp"
+#include <iostream>
 
 RayTracer::Scale::Scale()
 :   _coords(0, 0, 0)
@@ -37,5 +38,28 @@ RayTracer::Scale::untransformCoordinates(const Math::Point3D &p)
             p.y / _coords.y,
             p.z / _coords.z
         });
+    }
+}
+
+void RayTracer::Scale::setinfo(const Math::Point3D &p)
+{
+    _coords = p;
+}
+
+extern "C"
+{
+    RayTracer::Scale *entry_point()
+    {
+        return new RayTracer::Scale();
+    }
+
+    __attribute__((constructor)) void load()
+    {
+        std::cout << "Loading SDL2 Graphic" << std::endl;
+    }
+
+    __attribute__((destructor)) void unload()
+    {
+        std::cout << "Unloading SDL2 Graphic" << std::endl;
     }
 }
