@@ -30,8 +30,8 @@ std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::createPrimitive(App::P
         {"cone", [this](App::ParsingShape& shapeArgs) {
             return makeCone(shapeArgs); 
         }},
-        {"cube", [this](App::ParsingShape& shapeArgs) {
-            return makeCube(shapeArgs); 
+        {"parallelepiped", [this](App::ParsingShape& shapeArgs) {
+            return makeParallelepiped(shapeArgs); 
         }},
         {"cylinder", [this](App::ParsingShape& shapeArgs) {
             return makeCylinder(shapeArgs); 
@@ -108,7 +108,7 @@ static std::shared_ptr<RayTracer::IMaterial> makeMaterial(App::ParsingMaterial m
 {
     std::string type = material.getType();
     Math::Vector3D color = material.getColor();
-    Math::Vector3D material_color(color.x / 255, color.y / 255, color.z / 255);
+    Math::Vector3D material_color = color;
 
     if (type == "matte") {
         return std::make_shared<RayTracer::Matte>(material_color);
@@ -159,12 +159,12 @@ std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeCone(App::ParsingS
     return std::make_shared<RayTracer::Cone>(center, angle, makeMaterial(cone.getMaterial()));
 }
 
-std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeCube(App::ParsingShape &cube)
+std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeParallelepiped(App::ParsingShape &parallelepiped)
 {
-    Math::Vector3D center = cube.getPosition();
+    Math::Vector3D center = parallelepiped.getPosition();
+    Math::Vector3D size = parallelepiped.getSize();
 
-    (void)center;
-    return std::make_shared<RayTracer::Cube>();
+    return std::make_shared<RayTracer::Parallelepiped>(center, size.x, size.y, size.z, makeMaterial(parallelepiped.getMaterial()));
 }
 
 std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeCylinder(App::ParsingShape &cylinder)
