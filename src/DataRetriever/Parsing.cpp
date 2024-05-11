@@ -116,7 +116,7 @@ void App::Parsing::parseShapes(const libconfig::Setting &shapes)
         } else if (type == "torus") {
             max_radius = shape["max_radius"];
             min_radius = shape["min_radius"];
-        } else if (type == "cube") {
+        } else if (type == "parallelepiped") {
             size = createVector3Df(shape["size"]);
         } else if (type == "tangle_cube") {
             max_radius = shape["max_radius"];

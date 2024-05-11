@@ -200,7 +200,7 @@ void Bonus::CFGGenerator::askShape()
         ParsingShape new_shape(type, position[X], position[Y], position[Z], 0, 0, 0, 0,
         0, 0, 0, angle, height, 0, 0, 0, path, askMaterial(), transformations);
         _shapes.push_back(new_shape);
-    } else if (type == "cube") {
+    } else if (type == "parallelepiped") {
         ParsingShape new_shape(type, position[X], position[Y], position[Z], size[X], size[Y], size[Z], 0,
         0, 0, 0, 0, 0, 0, 0, 0, path, askMaterial(), transformations);
         _shapes.push_back(new_shape);
