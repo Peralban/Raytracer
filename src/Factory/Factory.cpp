@@ -137,18 +137,20 @@ std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeSphere(App::Parsin
         std::shared_ptr<RayTracer::IShape> shape = std::make_shared<RayTracer::Sphere>(center, radius, makeMaterial(sphere.getMaterial()));
         for (auto &trans : sphere.getTransformations()) {
             if (trans.getType() == "translation") {
-                std::unique_ptr<RayTracer::ITransformation> translation = std::make_unique<RayTracer::Translation>(trans.getPosition());
-                std::shared_ptr<RayTracer::IShape> transformed = std::make_shared<RayTracer::TransformedShape>(shape, translation);
+                std::shared_ptr<RayTracer::ITransformation> translation = std::make_shared<RayTracer::Translation>(trans.getPosition());
+                shape = std::make_shared<RayTracer::TransformedShape>(shape, translation);
             } else if (trans.getType() == "rotation") {
-                std::unique_ptr<RayTracer::ITransformation> rotation = std::make_unique<RayTracer::Rotation>(trans.getPosition());
-                std::shared_ptr<RayTracer::IShape> transformed = std::make_shared<RayTracer::TransformedShape>(shape, rotation);
+                std::shared_ptr<RayTracer::ITransformation> rotation = std::make_shared<RayTracer::Rotation>(trans.getPosition());
+                shape = std::make_shared<RayTracer::TransformedShape>(shape, rotation);
             } else if (trans.getType() == "scale") {
-                std::unique_ptr<RayTracer::ITransformation> scale = std::make_unique<RayTracer::Scale>(trans.getPosition());
-                std::shared_ptr<RayTracer::IShape> transformed = std::make_shared<RayTracer::TransformedShape>(shape, scale);
+                std::shared_ptr<RayTracer::ITransformation> scale = std::make_shared<RayTracer::Scale>(trans.getPosition());
+                shape = std::make_shared<RayTracer::TransformedShape>(shape, scale);
             } else if (trans.getType() == "shear") {
-                std::unique_ptr<RayTracer::ITransformation> shear = std::make_unique<RayTracer::Shear>(trans.getPosition());
+                std::shared_ptr<RayTracer::ITransformation> shear = std::make_shared<RayTracer::Shear>(trans.getPosition());
+                shape = std::make_shared<RayTracer::TransformedShape>(shape, shear);
             }
         }
+        return shape;
     }
     return std::make_shared<RayTracer::Sphere>(center, radius, makeMaterial(sphere.getMaterial()));
 }
@@ -195,6 +197,25 @@ std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeCylinder(App::Pars
     Math::Vector3D center = cylinder.getPosition();
     double radius = (double) cylinder.getRadius();
 
+    if (cylinder.getTransformations().size() > 0) {
+        std::shared_ptr<RayTracer::IShape> shape = std::make_shared<RayTracer::Sphere>(center, radius, makeMaterial(cylinder.getMaterial()));
+        for (auto &trans : cylinder.getTransformations()) {
+            if (trans.getType() == "translation") {
+                std::shared_ptr<RayTracer::ITransformation> translation = std::make_shared<RayTracer::Translation>(trans.getPosition());
+                shape = std::make_shared<RayTracer::TransformedShape>(shape, translation);
+            } else if (trans.getType() == "rotation") {
+                std::shared_ptr<RayTracer::ITransformation> rotation = std::make_shared<RayTracer::Rotation>(trans.getPosition());
+                shape = std::make_shared<RayTracer::TransformedShape>(shape, rotation);
+            } else if (trans.getType() == "scale") {
+                std::shared_ptr<RayTracer::ITransformation> scale = std::make_shared<RayTracer::Scale>(trans.getPosition());
+                shape = std::make_shared<RayTracer::TransformedShape>(shape, scale);
+            } else if (trans.getType() == "shear") {
+                std::shared_ptr<RayTracer::ITransformation> shear = std::make_shared<RayTracer::Shear>(trans.getPosition());
+                shape = std::make_shared<RayTracer::TransformedShape>(shape, shear);
+            }
+        }
+        return shape;
+    }
     return std::make_shared<RayTracer::CylinderInfinite>(center, radius, makeMaterial(cylinder.getMaterial()));
 }
 
