@@ -20,7 +20,16 @@ namespace Core {
             _parser.checkArguments(argc, argv);
             initialize();
         } catch (const std::exception &e) {
-            std::cerr << e.what() << std::endl;
+            if (std::string(e.what()) == "Too many arguments")
+                throw App::Parsing::ErrorTooManyArguments();
+            if (std::string(e.what()) == "Too few arguments")
+                throw App::Parsing::ErrorTooFewArguments();
+            if (std::string(e.what()) == "Error in treatment of the configuration file")
+                throw App::Parsing::ErrorCFGFile();
+            if (std::string(e.what()) == "Invalid type of file")
+                throw App::Parsing::ErrorInvalidType();
+            if (std::string(e.what()) == "CFG file not found")
+                throw App::Parsing::ErrorNoCFGFile();
         }
     }
 
@@ -37,6 +46,7 @@ namespace Core {
 
     void Engine::parseConfigFile() {
         _parser.parseConfigFile();
+        std::cout << _parser << std::endl;
         _clusterManagement.setSample(_parser.getPrecision().getSamples());
         unsigned int width = _parser.getCamera().getResolution().first;
         unsigned int height = _parser.getCamera().getResolution().second;
