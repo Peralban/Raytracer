@@ -38,6 +38,7 @@ SRC		= 		main.cpp								\
 				Transformations/Rotation.cpp			\
 				Transformations/Scale.cpp				\
 				Transformations/Shear.cpp				\
+				Materials/LightDirectional.cpp			\
 
 TRUE_SRC 	= 	$(patsubst %,src/%, $(SRC))
 
