@@ -108,7 +108,7 @@ static std::shared_ptr<RayTracer::IMaterial> makeMaterial(App::ParsingMaterial m
 {
     std::string type = material.getType();
     Math::Vector3D color = material.getColor();
-    Math::Vector3D material_color(color.x, color.y, color.z);
+    Math::Vector3D material_color = color;
 
     if (type == "matte") {
         return std::make_shared<RayTracer::Matte>(material_color);
@@ -163,13 +163,8 @@ std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeParallelepiped(App
 {
     Math::Vector3D center = parallelepiped.getPosition();
     Math::Vector3D size = parallelepiped.getSize();
-    float radius = size.x;
-    RayTracer::IMaterial *material = nullptr;
 
-    (void)center;
-    (void)radius;
-    (void)material;
-    return std::make_shared<RayTracer::Parallelepiped>();
+    return std::make_shared<RayTracer::Parallelepiped>(center, size.x, size.y, size.z, makeMaterial(parallelepiped.getMaterial()));
 }
 
 std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeCylinder(App::ParsingShape &cylinder)
