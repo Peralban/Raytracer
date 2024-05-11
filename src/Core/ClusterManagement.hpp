@@ -127,6 +127,11 @@ namespace App {
              */
             void setSample(int sample) { _sample = sample; }
 
+            /**
+             * @brief Set the number of bounces.
+             */
+            void setNbBounces(int nbBounces) { _nbBounces = nbBounces; }
+
         // Sorter
             /**
              * @brief Sort the configuration based on the pair of unsigned integers in ascending order.
@@ -163,6 +168,7 @@ namespace App {
             volatile unsigned int _windowWidth;
             volatile unsigned int _windowHeight;
             volatile int _sample;
+            int _nbBounces;
             std::vector<std::shared_ptr<Cluster>> _clusters;
             std::vector<std::pair<std::pair<unsigned int, unsigned int>, std::string>> _config;
     };
