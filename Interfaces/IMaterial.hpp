@@ -11,7 +11,7 @@
 #include "IShape.hpp"
 
 namespace RayTracer {
-    /**
+     /**
      * @class IMaterial
      * @brief Represents the material of a shape in the 3D space.
      *
@@ -20,7 +20,7 @@ namespace RayTracer {
      */
     class IMaterial {
         public:
-            /**
+             /**
              * @brief Default constructor for the IMaterial class.
              *
              * Initializes a new instance of the IMaterial class.
@@ -32,7 +32,7 @@ namespace RayTracer {
              */
             virtual ~IMaterial() = default;
 
-            /**
+             /**
              * @brief Determines how a ray interacts with the material.
              *
              * This method is called when a ray hits a shape with this material. It calculates the scattered ray and the attenuation.
@@ -44,7 +44,14 @@ namespace RayTracer {
              * @return A boolean indicating whether the ray was scattered.
              */
             virtual bool scatter(const Math::Ray3D &ray, const hits  &hit, Math::Vector3D  &attenuation, Math::Ray3D &scattered) const = 0;
-        protected:
-        private:
+
+             /**
+             * @brief Determines the emitted light of the material.
+             *
+             * This method calculates the emitted light of the material.
+             *
+             * @return The emitted light of the material.
+             */
+            virtual Math::Vector3D emitted() const = 0;
     };
 }
