@@ -23,8 +23,8 @@ namespace RayTracer {
     class TransformedShape : public IShape {
         public:
             TransformedShape(
-                std::unique_ptr<IShape> shape,
-                std::unique_ptr<ITransformation> tr
+                std::shared_ptr<IShape> shape,
+                std::shared_ptr<ITransformation> tr
             );
             ~TransformedShape() = default;
 
@@ -32,8 +32,8 @@ namespace RayTracer {
 
 
         protected:
-            std::unique_ptr<IShape> _shape;
-            std::unique_ptr<ITransformation> _tr;
+            std::shared_ptr<IShape> _shape;
+            std::shared_ptr<ITransformation> _tr;
         private:
     };
 }
