@@ -152,5 +152,4 @@ void App::ClusterManagement::printSDL()
         _sdl.startRendering();
         _sdl.stopRendering();
     }
-    _sdl.closeWindow();
 }
