@@ -10,27 +10,25 @@
 
 RayTracer::FromImage::FromImage(const std::string &imagePath)
 {
-    _image = Images::ImageReader(imagePath);
+    reader = new Images::ImageReader(imagePath);
 }
 
 Math::Vector3D RayTracer::FromImage::get(double u, double v, const Math::Vector3D &p) const
 {
-    int i = u * _image.width();
-    int j = (1 - v) * _image.height() - 0.001;
-    if (i < 0) {
-        i = 0;
-    }
-    if (j < 0) {
-        j = 0;
-    }
-    if (i > _image.width() - 1) {
-        i = _image.width() - 1;
-    }
-    if (j > _image.height() - 1) {
-        j = _image.height() - 1;
-    }
-    double r = static_cast<int>(_image.getPixel(i, j).r) / 255.0;
-    double g = static_cast<int>(_image.getPixel(i, j).g) / 255.0;
-    double b = static_cast<int>(_image.getPixel(i, j).b) / 255.0;
+    int width = reader->width();
+    int height = reader->height();
+    unsigned char *imageData = reader->getImageData();
+
+    int i = u * width;
+    int j = (1 - v) * height;
+    if (i < 0) i = 0;
+    if (j < 0) j = 0;
+    if (i > width - 1) i = width - 1;
+    if (j > height - 1) j = height - 1;
+
+    double b = static_cast<double>(imageData[3*i + 3*width*j]) / 255.0;
+    double g = static_cast<double>(imageData[3*i + 3*width*j + 1]) / 255.0;
+    double r = static_cast<double>(imageData[3*i + 3*width*j + 2]) / 255.0;
+
     return Math::Vector3D(r, g, b);
 }

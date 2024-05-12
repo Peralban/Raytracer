@@ -10,6 +10,7 @@
 #include "Interfaces/ITextures.hpp"
 #include "Images/ImageLoad.hpp"
 
+
 namespace RayTracer {
     class FromImage : public ITextures {
     public:
@@ -48,6 +49,8 @@ namespace RayTracer {
         Math::Vector3D get(double u, double v, const Math::Vector3D &p) const override;
 
     private:
-        Images::ImageReader _image; ///< The image of the texture.
+        Images::ImageReader *reader;
+        unsigned char *imageData;
+        std::string _imagePath;
     };
 }
