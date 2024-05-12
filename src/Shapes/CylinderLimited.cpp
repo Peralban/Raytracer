@@ -7,6 +7,7 @@
 
 #include "CylinderLimited.hpp"
 #include <iostream>
+#include <cmath>
 
 
 RayTracer::CylinderLimited::CylinderLimited(const Math::Vector3D &centerValue, double radiusValue, double heightValue, std::shared_ptr<IMaterial> materialValue)
