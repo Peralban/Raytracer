@@ -204,9 +204,8 @@ void Bonus::CFGGenerator::askShape()
     std::cout << "Enable texture? (1 for yes, 0 for no): ";
     checkCin<bool>(enable_texture, "Invalid input, please enter a valid input (1 for yes, 0 for no): ", []([[maybe_unused]]bool ex) { return ex == 0 || ex == 1; });
     if (enable_texture) {
-        std::cout << "Enter the path to the texture of the shape: ";
-        std::cin >> path;
-        checkCin<std::string>(path, "Invalid path, please enter a valid path: ", []([[maybe_unused]]std::string ex) { return std::filesystem::exists(ex); });
+        std::cout << "Enter the path to the texture of the shape or chessboard: ";
+        checkCin<std::string>(path, "Invalid path, please enter a valid path: ", []([[maybe_unused]]std::string ex) { return ex == "chessboard" || std::filesystem::exists(ex); });
     } else {
         path = "none";
     }
@@ -296,7 +295,6 @@ void Bonus::CFGGenerator::askBackground()
     checkCin<bool>(enable_background, "Invalid input, please enter a valid input (1 for yes, 0 for no): ", []([[maybe_unused]]bool ex) { return ex == 0 || ex == 1; });
     if (enable_background) {
         std::cout << "Enter the path of the background texture: ";
-        std::cin >> path;
         checkCin<std::string>(path, "Invalid path, please enter a valid path: ", []([[maybe_unused]]std::string ex) { return std::filesystem::exists(ex); });
     } else {
         path = "none";
