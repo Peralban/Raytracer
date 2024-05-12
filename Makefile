@@ -39,6 +39,7 @@ SRC		= 		main.cpp								\
 				Transformations/Scale.cpp				\
 				Transformations/Shear.cpp				\
 				Materials/LightDirectional.cpp			\
+				Textures/SolidColor.cpp					\
 
 TRUE_SRC 	= 	$(patsubst %,src/%, $(SRC))
 
@@ -94,6 +95,14 @@ BONUS_LIBS	=	-lconfig++
 #-------------- Rules --------------#
 
 all:	$(NAME)
+
+%.o:	%.cpp
+	@g++ -c -o $@ $< $(CXXFLAGS)
+	@if [ -f $@ ]; then \
+		printf "\033[1;32mCompiled $< ✅\033[0m\n"; \
+	else \
+		printf "\033[1;31mCompilation failed for $< ❌\033[0m\n"; \
+	fi
 
 $(NAME):	$(OBJ)
 	g++ -o $(NAME) $(OBJ) $(CXXFLAGS)

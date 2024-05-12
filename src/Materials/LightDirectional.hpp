@@ -8,6 +8,7 @@
 #pragma once
 
 #include "Interfaces/IMaterial.hpp"
+#include "Interfaces/ITextures.hpp"
 #include <cmath>
 
 namespace RayTracer {
@@ -19,8 +20,11 @@ namespace RayTracer {
          *
          * Initializes a new instance of the LightDirectional class with default color.
          */
-        LightDirectional(const Math::Vector3D &color);
+        LightDirectional(std::shared_ptr<ITextures> color);
 
+        /**
+         * @brief Default destructor for the LightDirectional class.
+         */
         ~LightDirectional() = default;
 
         /**
@@ -33,12 +37,18 @@ namespace RayTracer {
         bool scatter(const Math::Ray3D &ray, const hits &hit, Math::Vector3D &attenuation, Math::Ray3D &scattered) const override;
 
         /**
-         * @brief Default destructor for the LightDirectional class.
+         * @brief Determines the emitted light of the material.
+         *
+         * This method calculates the emitted light of the material.
+         *
+         * @param uPos The u coordinate of the texture.
+         * @param vPos The v coordinate of the texture.
+         * @param p The point at which the texture is calculated.
+         * @return The emitted light of the material.
          */
-
-        Math::Vector3D emitted() const;
+        Math::Vector3D emitted(double uPos, double vPos, const Math::Vector3D &p) const override;
 
     private:
-        Math::Vector3D _emit; // The color of the light.
+        std::shared_ptr<ITextures> _color;
     };
 }
