@@ -1,4 +1,9 @@
-// kernel.cu
+/*
+** EPITECH PROJECT, 2024
+** kernel.cpp
+** File description:
+** Create the scene and camera, and render the scene.
+*/
 #include "../Math/Ray3D.hpp"
 #include "IShape.hpp"
 #include "IMaterial.hpp"

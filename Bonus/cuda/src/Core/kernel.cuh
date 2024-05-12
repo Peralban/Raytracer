@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2024
-** ClusterManagement.hpp
+** kernel.cuh
 ** File description:
 ** DESCRIPTION
 */

@@ -1,3 +1,9 @@
+/*
+** EPITECH PROJECT, 2024
+** Core.gpp
+** File description:
+** Create the scene and camera, and render the scene.
+*/
 #pragma once
 
 #include "ClusterManagement.hpp"
