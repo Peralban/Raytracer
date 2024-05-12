@@ -36,6 +36,7 @@ SRC		= 		main.cpp								\
 				Transformations/Shear.cpp				\
 				Materials/LightDirectional.cpp			\
 				Textures/SolidColor.cpp					\
+				Textures/ChessBoardTexture.cpp			\
 
 TRUE_SRC 	= 	$(patsubst %,src/%, $(SRC))
 
