@@ -7,9 +7,11 @@
 
 #include "Glass.hpp"
 
+#include <utility>
 
-RayTracer::Glass::Glass(float refractionIndexValue, Math::Vector3D albedoValue)
-        : refractionIndex(refractionIndexValue), albedo(albedoValue)
+
+RayTracer::Glass::Glass(float refractionIndexValue, std::shared_ptr<ITextures> texture)
+        : _refractionIndex(refractionIndexValue), _albedo(std::move(texture))
 {
 }
 
@@ -22,7 +24,7 @@ float RayTracer::Glass::schlick(double cosine, float refractionIndexValue) const
 
 bool RayTracer::Glass::scatter(const Math::Ray3D &ray, const hits &hit, Math::Vector3D &attenuation, Math::Ray3D &scattered) const
 {
-    attenuation = albedo;
+    attenuation = _albedo->get(hit.uPos, hit.vPos, hit.point);
 
     Math::Vector3D outwardNormal;
     Math::Vector3D reflected = reflect(ray.getDirection(), hit.normal);
@@ -37,18 +39,18 @@ bool RayTracer::Glass::scatter(const Math::Ray3D &ray, const hits &hit, Math::Ve
     //When the ray is going inside the object is send to the outside
     if (ray.getDirection().dot(hit.normal) > 0) {
         outwardNormal = -hit.normal;
-        niOverNt = refractionIndex;
-        cosine = refractionIndex * ray.getDirection().getUnitVector().dot(hit.normal);
+        niOverNt = _refractionIndex;
+        cosine = _refractionIndex * ray.getDirection().getUnitVector().dot(hit.normal);
     } else { //when the ray shoot into the object
         outwardNormal = hit.normal;
-        niOverNt = 1.0 / refractionIndex;
+        niOverNt = 1.0 / _refractionIndex;
         cosine = -ray.getDirection().getUnitVector().dot(hit.normal);
     }
     //Here we determine if the ray is reflected or refracted (fresnel equation)
 
     //If refracted ray exists
     if (refract(ray.getDirection(), outwardNormal, niOverNt, refracted)) {
-        reflectProb = schlick(cosine, refractionIndex);
+        reflectProb = schlick(cosine, _refractionIndex);
     } else { //the case of refracted ray not existing so the reflected ray is 100%
         reflectProb = 1.0;
     }
