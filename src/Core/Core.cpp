@@ -16,8 +16,8 @@
 namespace Core {
 
     Engine::Engine(int argc, char **argv) : _parser(), _factory(), _clusterManagement(2160, 1080) {
-            _parser.checkArguments(argc, argv);
-            initialize();
+        _parser.checkArguments(argc, argv);
+        initialize();
     }
 
     void Engine::run() {
