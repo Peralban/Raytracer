@@ -56,12 +56,6 @@ namespace Factory {
         static std::shared_ptr<RayTracer::Camera> createCamera(App::ParsingCamera camera);
 
         /**
-         * @brief Creates a light.
-         * @return std::shared_ptr<RayTracer::Light> - Pointer to the created light.
-         */
-        static std::shared_ptr<RayTracer::Light> createLight(App::ParsingLight &light);
-
-        /**
          * @brief Creates a sphere shape.
          * @param sphere - Parsing data for creating the sphere.
          * @return std::shared_ptr<RayTracer::IShape> - Pointer to the created sphere shape.

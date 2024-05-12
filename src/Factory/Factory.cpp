@@ -82,23 +82,6 @@ std::shared_ptr<RayTracer::Camera> Factory::SceneFactory::createCamera(App::Pars
     return std::make_shared<RayTracer::Camera>(viewFrom, viewAt, viewUp, fov, resolution, aperture, focusDist);
 }
 
-std::shared_ptr<RayTracer::Light> Factory::SceneFactory::createLight(App::ParsingLight &light)
-{
-
-    Math::Vector3D position = light.getPosition();
-    Math::Vector3D color = light.getColor();
-    float intensity = light.getIntensity();
-    Math::Vector3D direction =  light.getDirection();
-    std::string type = light.getType();
-
-    (void)position;
-    (void)color;
-    (void)intensity;
-    (void)direction;
-    (void)type;
-    return std::make_shared<RayTracer::Light>();
-}
-
 static std::shared_ptr<RayTracer::IMaterial> makeMaterial(App::ParsingMaterial material)
 {
     std::string type = material.getType();

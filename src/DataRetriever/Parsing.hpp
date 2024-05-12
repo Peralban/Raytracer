@@ -233,71 +233,6 @@ namespace App {
     };
 
     /**
-     * @class ParsingLight
-     * @brief Class representing a light in the parsing process.
-     */
-    class ParsingLight {
-    public:
-        /**
-         * @brief Constructor for ParsingLight.
-         * @param position The position of the light as a Vector3D.
-         * @param color The color of the light as a Vector3D.
-         * @param intensity The intensity of the light.
-         * @param direction The direction of the light as a Vector3D.
-         * @param type The type of the light.
-         */
-        ParsingLight(Math::Vector3D position, Math::Vector3D color, float intensity,
-                     Math::Vector3D direction, std::string type)
-                : _position(position), _color(color), _intensity(intensity), _direction(direction),
-                  _type(type) {}
-
-        /**
-         * @brief Getter for the position of the light.
-         * @return The position of the light as a Vector3D.
-         */
-        Math::Vector3D getPosition() { return _position; }
-
-        /**
-         * @brief Getter for the color of the light.
-         * @return The color of the light as a Vector3D.
-         */
-        Math::Vector3D getColor() { return _color; }
-
-        /**
-         * @brief Getter for the intensity of the light.
-         * @return The intensity of the light.
-         */
-        float getIntensity() { return _intensity; }
-
-        /**
-         * @brief Getter for the direction of the light.
-         * @return The direction of the light as a Vector3D.
-         */
-        Math::Vector3D getDirection() { return _direction; }
-
-        /**
-         * @brief Getter for the type of the light.
-         * @return The type of the light.
-         */
-        std::string getType() { return _type; }
-
-        /**
-         * @brief Outputs the light data to the provided ostream.
-         * @param os The ostream to output to.
-         */
-        void output(std::ostream &os) const
-
-        noexcept;
-
-    private:
-        Math::Vector3D _position; ///< The position of the light.
-        Math::Vector3D _color; ///< The color of the light.
-        float _intensity; ///< The intensity of the light.
-        Math::Vector3D _direction; ///< The direction of the light.
-        std::string _type; ///< The type of the light.
-    };
-
-    /**
      * @class ParsingCamera
      * @brief Class representing a camera in the parsing process.
      */
@@ -624,12 +559,6 @@ namespace App {
         std::vector <ParsingShape> getShapes() { return _shapes; }
 
         /**
-         * @brief Get the lights parsed from the configuration file.
-         * @return A vector of ParsingLight objects.
-         */
-        std::vector <ParsingLight> getLights() { return _lights; }
-
-        /**
          * @brief Get the object files parsed from the configuration file.
          * @return A vector of strings representing the paths to the object files.
          */
@@ -672,12 +601,6 @@ namespace App {
         void parseMaterials(const libconfig::Setting &materials);
 
         /**
-         * @brief Parse the lights from the configuration file.
-         * @param lights A libconfig::Setting representing the lights in the configuration file.
-         */
-        void parseLights(const libconfig::Setting &lights);
-
-        /**
          * @brief Parse the camera from the configuration file.
          * @param camera A libconfig::Setting representing the camera in the configuration file.
          */
@@ -712,7 +635,6 @@ namespace App {
     private:
         std::string _configFile; ///< The path to the configuration file.
         std::vector <ParsingShape> _shapes; ///< The shapes parsed from the configuration file.
-        std::vector <ParsingLight> _lights; ///< The lights parsed from the configuration file.
         std::vector <std::string> _obj_files; ///< The object files parsed from the configuration file.
         ParsingCamera _camera; ///< The camera parsed from the configuration file.
         ParsingBackground _background; ///< The background parsed from the configuration file.
@@ -722,7 +644,6 @@ namespace App {
 // Overloaded output operators for various classes
 std::ostream &operator<<(std::ostream &os, const App::ParsingTransformation &transformation);
 std::ostream &operator<<(std::ostream &os, const App::ParsingShape &shape);
-std::ostream &operator<<(std::ostream &os, const App::ParsingLight &light);
 std::ostream &operator<<(std::ostream &os, const App::ParsingCamera &camera);
 std::ostream &operator<<(std::ostream &os, const App::ParsingBackground &background);
 std::ostream &operator<<(std::ostream &os, const App::ParsingPrecision &precision);

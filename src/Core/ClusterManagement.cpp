@@ -69,10 +69,6 @@ static Math::Vector3D color(const Math::Ray3D &ray, RayTracer::IShape *scene, in
         else
             return emitted;
     } else {
-        //Math::Vector3D unitDirection = ray.getDirection().getUnitVector();
-        //double t = 0.5 * (unitDirection.y + 1.0);
-        //return background * (1.0 - t) + Math::Vector3D(0.5, 0.7, 1.0) * t;
-
         return background;
     }
 }
@@ -154,7 +150,7 @@ void App::ClusterManagement::initSDL()
         int r = std::stoi(node.second.substr(0, node.second.find(" ")));
         int g = std::stoi(node.second.substr(node.second.find(" ") + 1, node.second.rfind(" ")));
         int b = std::stoi(node.second.substr(node.second.rfind(" ") + 1));
-        _sdl.drawPoint(node.first.first,  _windowHeight-node.first.second, r, g, b);
+        _sdl.drawPoint(_windowWidth-node.first.first,  _windowHeight-node.first.second, r, g, b);
     }
 }
 
