@@ -24,6 +24,7 @@
 #include "Transformations/Shear.hpp"
 #include "Textures/SolidColor.hpp"
 #include "Textures/ChessBoardTexture.hpp"
+#include "Textures/FromImage.hpp"
 #include <cmath>
 
 Factory::SceneFactory::SceneFactory() {}
@@ -95,11 +96,17 @@ static std::shared_ptr<RayTracer::IMaterial> makeMaterial(App::ParsingMaterial m
         if (hasTexture && texture == "chessboard") {
             return std::make_shared<RayTracer::Matte>(std::make_shared<RayTracer::ChessBoardTexture>(material_color1, material_color2, material.getScale()));
         }
+        if (hasTexture) {
+            return std::make_shared<RayTracer::Matte>(std::make_shared<RayTracer::FromImage>(texture));
+        }
         return std::make_shared<RayTracer::Matte>(std::make_shared<RayTracer::SolidColor>(material_color));
     }
     if (type == "metal") {
         if (hasTexture && texture == "chessboard") {
             return std::make_shared<RayTracer::Metal>(std::make_shared<RayTracer::ChessBoardTexture>(material_color1, material_color2, material.getScale()), material.getFuzziness());
+        }
+        if (hasTexture) {
+            return std::make_shared<RayTracer::Metal>(std::make_shared<RayTracer::FromImage>(texture), material.getFuzziness());
         }
         return std::make_shared<RayTracer::Metal>(std::make_shared<RayTracer::SolidColor>(material_color), material.getFuzziness());
     }
@@ -107,11 +114,17 @@ static std::shared_ptr<RayTracer::IMaterial> makeMaterial(App::ParsingMaterial m
         if (hasTexture && texture == "chessboard") {
             return std::make_shared<RayTracer::Glass>(material.getRefractiveIndex(), std::make_shared<RayTracer::ChessBoardTexture>(material_color1, material_color2, material.getScale()));
         }
+        if (hasTexture) {
+            return std::make_shared<RayTracer::Glass>(material.getRefractiveIndex(), std::make_shared<RayTracer::FromImage>(texture));
+        }
         return std::make_shared<RayTracer::Glass>(material.getRefractiveIndex(), std::make_shared<RayTracer::SolidColor>(albedo));
     }
     if (type == "light") {
         if (hasTexture && texture == "chessboard") {
             return std::make_shared<RayTracer::LightDirectional>(std::make_shared<RayTracer::ChessBoardTexture>(material_color1, material_color2, material.getScale()), material.getLightIntensity());
+        }
+        if (hasTexture) {
+            return std::make_shared<RayTracer::LightDirectional>(std::make_shared<RayTracer::FromImage>(texture), material.getLightIntensity());
         }
         return std::make_shared<RayTracer::LightDirectional>(std::make_shared<RayTracer::SolidColor>(material_color), material.getLightIntensity());
     }
