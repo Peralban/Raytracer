@@ -170,6 +170,8 @@ bonus_re: bonus_fclean bonus_compile
 #-------------- Docs --------------#
 
 doc:
+	@which doxygen >/dev/null 2>&1 || { printf "\033[1;31mDoxygen is not installed. Aborting.\033[0m\n"; exit 1; }
+	@which pdflatex >/dev/null 2>&1 || { printf "\033[1;31mpdflatex is not installed. Aborting.\033[0m\n"; exit 1; }
 	@doxygen Doc/Doxyfile && make -C Doc/doxygen/latex
 	@mv Doc/doxygen/latex/refman.pdf ./Doc
 	@printf "\033[1;35mDocumentation generated ✅\033[0m\n"
