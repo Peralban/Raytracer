@@ -104,12 +104,6 @@ void Bonus::CFGGenerator::GetInfo()
     for (int i = 0; i < number_of_shapes; i++)
         askShape(); // Ask for shape information
     askCamera(); // Ask for camera information
-
-    // Prompt for the number of lights
-    std::cout << "Enter the number of lights: ";
-    checkCin<int>(number_of_lights, "Invalid position, please enter a valid integer: ", []([[maybe_unused]]int ex) { return ex >= 0; });
-    for (int i = 0; i < number_of_lights; i++)
-        askLight(); // Ask for light information
     askBackground(); // Ask for background information
     askPrecision(); // Ask for precision information
 
@@ -290,27 +284,6 @@ void Bonus::CFGGenerator::askCamera()
     view_at[X], view_at[Y], view_at[Z], view_up[X], view_up[Y], view_up[Z],
     rotation[X], rotation[Y], rotation[Z], fov, aperture, focus_dist, resolution[WIDTH], resolution[HEIGHT]);
     _camera = new_camera;
-}
-
-void Bonus::CFGGenerator::askLight()
-{
-    float position[ALL_INDEXES];
-    int color[ALL_INDEXES];
-    float intensity;
-    float rotation[ALL_INDEXES];
-    std::string type;
-    std::cout << "Enter the position of the light (first the X and enter, then the Y and enter, then the Z and enter): ";
-    checkCin<float, ALL_INDEXES>(position, "Invalid position, please enter a valid position for the position ", []([[maybe_unused]]float ex) {return true;}, A);
-    std::cout << "Enter the color of the light (first the R and enter, then the G and enter, then the B and enter): ";
-    checkCin<int, ALL_INDEXES>(color, "Invalid color, please enter a valid color for the color ", []([[maybe_unused]]int ex) { return ex >= 0 && ex <= 255; }, C);
-    std::cout << "Enter the intensity of the light (float between 0 and 1): ";
-    checkCin<float>(intensity, "Invalid intensity, please enter a valid intensity (between 0 and 1): ", []([[maybe_unused]]float ex) { return ex >= 0 && ex <= 1; });
-    std::cout << "Enter the rotation of the light (first the X and enter, then the Y and enter, then the Z and enter): ";
-    checkCin<float, ALL_INDEXES>(rotation, "Invalid rotation, please enter a valid rotation for the rotation ", []([[maybe_unused]]float ex) { return true; }, A);
-    std::cout << "Enter the type of the light (point, directional, spot): ";
-    checkCin<std::string>(type, "Invalid type of light, please enter a valid type (point, directional or spot): ", []([[maybe_unused]]std::string ex) { return ex == "point" || ex == "directional" || ex == "spot"; });
-    ParsingLight new_light(position[X], position[Y], position[Z], color[R], color[G], color[B], intensity, rotation[X], rotation[Y], rotation[Z], type);
-    _lights.push_back(new_light);
 }
 
 void Bonus::CFGGenerator::askBackground()
