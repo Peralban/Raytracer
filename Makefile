@@ -96,7 +96,7 @@ BONUS_LIBS	=	-lconfig++
 all:	$(NAME)
 
 %.o:	%.cpp
-	@g++ -c -o $@ $< $(CXXFLAGS)
+	@g++ -fopenmp -c -o $@ $< $(CXXFLAGS)
 	@if [ -f $@ ]; then \
 		printf "\033[1;32mCompiled $< ✅\033[0m\n"; \
 	else \
@@ -104,7 +104,7 @@ all:	$(NAME)
 	fi
 
 $(NAME):	$(OBJ)
-	g++ -o $(NAME) $(OBJ) $(CXXFLAGS)
+	@g++ -fopenmp -o $(NAME) $(OBJ) $(CXXFLAGS)
 	@if [ -f $(NAME) ]; then \
 		printf "\033[1;32mCompilation completed ✅\033[0m\n"; \
 	else \
@@ -129,7 +129,7 @@ re:	fclean all
 #-------------- Tests --------------#
 
 tests_compile: fclean
-	g++ -o unit_tests $(TEST_TRUE_SRC) $(TESTS_FLAGS)
+	g++ -fopenmp -o unit_tests $(TEST_TRUE_SRC) $(TESTS_FLAGS)
 	@if [ -f unit_tests ]; then \
 		printf "\033[1;32mTests compiled ✅\033[0m\n"; \
 	else \
@@ -149,7 +149,7 @@ tests_run: tests_compile tests_launch
 #-------------- Bonus --------------#
 
 bonus_compile:
-	g++ -o $(BONUS_NAME) $(BONUS_TRUE_SRC) $(CXXFLAGS)
+	g++ -fopenmp -o $(BONUS_NAME) $(BONUS_TRUE_SRC) $(CXXFLAGS)
 	@if [ -f $(BONUS_NAME) ]; then \
 		printf "\033[1;32mBonus compiled ✅\033[0m\n"; \
 	else \

@@ -21,6 +21,7 @@
 #include "Transformations/Rotation.hpp"
 #include "Transformations/Scale.hpp"
 #include "Transformations/Shear.hpp"
+#include "Textures/SolidColor.hpp"
 #include <cmath>
 
 Factory::SceneFactory::SceneFactory() {}
