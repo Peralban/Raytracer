@@ -126,10 +126,11 @@ static Bonus::ParsingMaterial askMaterial()
     float albedo[ALL_INDEXES];
     float fuzz;
     float ref_idx;
+    double intensity;
     std::string material_type;
 
     std::cout << "Enter the type of the material (matte, metal, glass): ";
-    checkCin<std::string>(material_type, "Invalid type, please enter a valid type: ", []([[maybe_unused]]std::string ex) { return ex == "matte" || ex == "metal" || ex == "glass"; });
+    checkCin<std::string>(material_type, "Invalid type, please enter a valid type: ", []([[maybe_unused]]std::string ex) { return ex == "matte" || ex == "metal" || ex == "glass" || ex == "light"; });
     if (material_type == "matte") {
         std::cout << "Enter the color of the material (first the R and enter, then the G and enter, then the B and enter):";
         checkCin<int, ALL_INDEXES>(color, "Invalid color, please enter a valid color for the color ", []([[maybe_unused]]int ex) { return ex >= 0 && ex <= 255; }, Bonus::C);
@@ -140,12 +141,18 @@ static Bonus::ParsingMaterial askMaterial()
         std::cout << "Enter the fuzziness of the material (float between 0 and 1): ";
         checkCin<float>(fuzz, "Invalid fuzziness, please enter a valid fuzziness (between 0 and 1): ", []([[maybe_unused]]float ex) { return ex >= 0 && ex <= 1; });
         return Bonus::ParsingMaterial(material_type, fuzz, color[Bonus::R], color[Bonus::G], color[Bonus::B]);
-    } else {
+    } else if (material_type == "glass") {
         std::cout << "Enter the albedo of the material (first the X and enter, then the Y and enter, then the Z and enter, each between 0 and 1):";
         checkCin<float, ALL_INDEXES>(albedo, "Invalid albedo, please enter a valid albedo for the albedo ", []([[maybe_unused]]float ex) { return ex >= 0 && ex <= 1; }, Bonus::A);
         std::cout << "Enter the refraction index of the material (float, between 0 and 1): ";
         checkCin<float>(ref_idx, "Invalid refraction index, please enter a valid refraction index: ", []([[maybe_unused]]float ex) { return ex >= 0 && ex <= 1; });
         return Bonus::ParsingMaterial(material_type, albedo[Bonus::R], albedo[Bonus::G], albedo[Bonus::B], ref_idx);
+    } else {
+        std::cout << "Enter the color of the light (first the R and enter, then the G and enter, then the B and enter):";
+        checkCin<int, ALL_INDEXES>(color, "Invalid color, please enter a valid color for the color ", []([[maybe_unused]]int ex) { return ex >= 0 && ex <= 255; }, Bonus::C);
+        std::cout << "Enter the intensity of the light (double): ";
+        checkCin<double>(intensity, "Invalid intensity, please enter a valid intensity: ", []([[maybe_unused]]double ex) { return ex >= 0; });
+        return Bonus::ParsingMaterial(material_type, intensity, color[Bonus::R], color[Bonus::G], color[Bonus::B]);
     }
 }
 
