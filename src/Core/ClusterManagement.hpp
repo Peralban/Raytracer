@@ -141,7 +141,11 @@ namespace App {
              * @brief Set the color of the background.
              * @param color The color of the background.
              */
-            void setColor(Math::Vector3D color) { _color = color; }
+            void setColor(Math::Vector3D color) {
+                _color.x = color.x / 255.0;
+                _color.y = color.y / 255.0;
+                _color.z = color.z / 255.0;
+            }
 
         // Sorter
             /**
