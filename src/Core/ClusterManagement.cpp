@@ -8,6 +8,7 @@
 #include "ClusterManagement.hpp"
 #include "Interfaces/IMaterial.hpp"
 #include <time.h>
+#include <parallel/algorithm>
 
 #include <algorithm>
 #include <fstream>
@@ -23,8 +24,8 @@ App::ClusterManagement::ClusterManagement(int width, int height)
     :   _nbThreads(std::thread::hardware_concurrency()),
         _windowWidth(width),
         _windowHeight(height),
-        _sample(20),
-        _nbBounces(10),
+        _sample(15),
+        _nbBounces(20),
         _clusters(),
         _config()
 {
@@ -55,13 +56,13 @@ static Math::Vector3D color(const Math::Ray3D &ray, RayTracer::IShape *scene, in
     if (scene->hit(ray, 0.001, 10000.0, hit)) {
         Math::Ray3D scattered;
         Math::Vector3D attenuation;
-        Math::Vector3D emitted = hit.material->emitted();
+        Math::Vector3D emitted = hit.material->emitted(hit.uPos, hit.vPos, hit.point);
         if (depth < nbBounces && hit.material->scatter(ray, hit, attenuation, scattered)) {
-            return emitted + attenuation * color(scattered, scene, depth + 1, nbBounces);
-        } else if (hit.material && hit.material->scatter(ray, hit, attenuation, scattered)) {
+            return emitted + (attenuation * color(scattered, scene, depth + 1, nbBounces));
+        } else if (hit.material->scatter(ray, hit, attenuation, scattered)) {
             return emitted + attenuation;
         } else {
-            return {0, 0, 0};
+            return emitted;
         }
 
     } else {
@@ -125,7 +126,8 @@ void App::ClusterManagement::executeRendering(std::shared_ptr<RayTracer::ShapeLi
 
 void App::ClusterManagement::sortConfig()
 {
-    std::sort(_config.begin(), _config.end(), [](const std::pair<std::pair<unsigned int, unsigned int>, std::string> &a, const std::pair<std::pair<unsigned int, unsigned int>, std::string> &b) {
+    __gnu_parallel::sort(_config.begin(), _config.end(), [](const std::pair<std::pair<unsigned int, unsigned int>,
+            std::string> &a, const std::pair<std::pair<unsigned int, unsigned int>, std::string> &b) {
         if (a.first.second == b.first.second)
             return a.first.first > b.first.first;
         else
