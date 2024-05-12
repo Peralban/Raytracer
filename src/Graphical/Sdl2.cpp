@@ -37,7 +37,6 @@ Sdl::Sdl()
 Sdl::~Sdl()
 {
     SDL_DestroyRenderer(this->_renderer);
-    // SDL_DestroyTexture(_screenTexture);
     SDL_DestroyWindow(this->_window);
     SDL_Quit();
 }
