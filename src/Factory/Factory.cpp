@@ -87,6 +87,7 @@ static std::shared_ptr<RayTracer::IMaterial> makeMaterial(App::ParsingMaterial m
     std::string type = material.getType();
     Math::Vector3D color = material.getColor();
     Math::Vector3D material_color(color.x / 255, color.y / 255, color.z / 255);
+    Math::Vector3D albedo = material.getAlbedo();
 
     if (type == "matte") {
         return std::make_shared<RayTracer::Matte>(std::make_shared<RayTracer::SolidColor>(material_color));
@@ -95,7 +96,7 @@ static std::shared_ptr<RayTracer::IMaterial> makeMaterial(App::ParsingMaterial m
         return std::make_shared<RayTracer::Metal>(std::make_shared<RayTracer::SolidColor>(material_color), material.getFuzziness());
     }
     if (type == "glass") {
-        return std::make_shared<RayTracer::Glass>(material.getRefractiveIndex(), std::make_shared<RayTracer::SolidColor>(material_color));
+        return std::make_shared<RayTracer::Glass>(material.getRefractiveIndex(), std::make_shared<RayTracer::SolidColor>(albedo));
     }
     if (type == "light") {
         return std::make_shared<RayTracer::LightDirectional>(std::make_shared<RayTracer::SolidColor>(material_color), material.getLightIntensity());
