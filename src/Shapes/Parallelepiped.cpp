@@ -6,6 +6,12 @@ RayTracer::Parallelepiped::Parallelepiped(const Math::Vector3D &positionValue, f
     : position(positionValue), sizeX(sizeXValue), sizeY(sizeYValue), sizeZ(sizeZValue), material(std::move(materialValue))
 {}
 
+void get_parallelepiped_uv(const Math::Vector3D &p, double &uPos, double &vPos)
+{
+    uPos = p.x;
+    vPos = p.z;
+}
+
 bool RayTracer::Parallelepiped::hit(const Math::Ray3D &ray, double tmin, double tmax, hits &hit) const
 {
     double tx1 = (position.x - ray.getOrigin().x) / ray.getDirection().x;
@@ -50,5 +56,6 @@ bool RayTracer::Parallelepiped::hit(const Math::Ray3D &ray, double tmin, double 
     }
     hit.normal = normal;
     hit.material = material;
+    get_parallelepiped_uv(hit.normal, hit.uPos, hit.vPos);
     return true;
 }
