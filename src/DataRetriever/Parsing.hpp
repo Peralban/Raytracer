@@ -145,9 +145,11 @@ namespace App {
          * @param transformations The transformations of the shape as a vector of ParsingTransformation.
          */
         ParsingShape(std::string type, Math::Vector3D position, Math::Vector3D size, std::string path,
-                     ParsingMaterial material, std::vector <ParsingTransformation> transformations)
+                     ParsingMaterial material, std::vector <ParsingTransformation> transformations,
+                     float radius, Math::Vector3D normal, float angle, float height, float max_radius, float min_radius)
                 : _type(type), _position(position), _size(size), _path(path),
-                  _material(material), _transformations(transformations) {}
+                  _material(material), _transformations(transformations),
+                  _radius(radius), _normal(normal), _angle(angle), _height(height), _max_radius(max_radius), _min_radius(min_radius) {}
 
         /**
          * @brief Getter for the transformations of the shape.
@@ -185,6 +187,18 @@ namespace App {
          */
         std::string getPath() { return _path; }
 
+        float getRadius() { return _radius; }
+
+        Math::Vector3D getNormal() { return _normal; }
+
+        float getAngle() { return _angle; }
+
+        float getHeight() { return _height; }
+
+        float getMaxRadius() { return _max_radius; }
+
+        float getMinRadius() { return _min_radius; }
+
         /**
          * @brief Outputs the shape data to the provided ostream.
          * @param os The ostream to output to.
@@ -200,6 +214,12 @@ namespace App {
         std::string _path; ///< The path to the shape file.
         ParsingMaterial _material; ///< The material of the shape.
         std::vector <ParsingTransformation> _transformations; ///< The transformations of the shape.
+        float _radius; ///< The radius of the shape.
+        Math::Vector3D _normal; ///< The normal of the shape.
+        float _angle; ///< The angle of the shape.
+        float _height; ///< The height of the shape.
+        float _max_radius; ///< The max radius of the shape.
+        float _min_radius; ///< The min radius of the shape.
     };
 
     /**

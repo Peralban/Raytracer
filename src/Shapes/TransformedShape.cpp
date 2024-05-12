@@ -8,11 +8,10 @@
 #include "TransformedShape.hpp"
 
 RayTracer::TransformedShape::TransformedShape(
-    std::unique_ptr<IShape> shape,
-    std::unique_ptr<ITransformation> tr
+    std::shared_ptr<IShape> shape,
+    std::shared_ptr<ITransformation> tr
 )
-:   _shape(std::move(shape)),
-    _tr(std::move(tr))
+: _shape(shape), _tr(tr)
 {
 }
 
