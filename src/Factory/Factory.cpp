@@ -48,9 +48,6 @@ std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::createPrimitive(App::P
         {"limited_cylinder", [this](App::ParsingShape& shapeArgs) {
             return makeLimitedCylinder(shapeArgs);
         }},
-        {"torus", [this](App::ParsingShape& shapeArgs) {
-            return makeTorus(shapeArgs); 
-        }},
         {"plane", [this](App::ParsingShape& shapeArgs) {
             return makePlane(shapeArgs); 
         }}
@@ -286,17 +283,4 @@ std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeLimitedCylinder(Ap
         }
     }
     return shape;
-}
-
-std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeTorus(App::ParsingShape &torus)
-{
-    Math::Vector3D center = torus.getPosition();
-    Math::Vector3D size = torus.getSize();
-    float radius = size.x;
-    RayTracer::IMaterial *material = nullptr;
-
-    (void)center;
-    (void)radius;
-    (void)material;
-    return std::make_shared<RayTracer::Torus>();
 }
