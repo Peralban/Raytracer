@@ -37,6 +37,9 @@ SRC		= 		main.cpp								\
 				Materials/LightDirectional.cpp			\
 				Textures/SolidColor.cpp					\
 				Textures/ChessBoardTexture.cpp			\
+				Textures/FromImage.cpp					\
+				Images/ImageLoad.cpp					\
+
 
 TRUE_SRC 	= 	$(patsubst %,src/%, $(SRC))
 
