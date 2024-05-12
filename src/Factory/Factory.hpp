@@ -15,10 +15,11 @@
 #include "Shapes/Cone.hpp"
 #include "Shapes/Prism.hpp"
 #include "Shapes/Torus.hpp"
-#include "Shapes/Cube.hpp"
+#include "Shapes/Parallelepiped.hpp"
 #include "Shapes/Plane.hpp"
 #include "Shapes/Obj.hpp"
-#include "Shapes/Cylinder.hpp"
+#include "Shapes/CylinderInfinite.hpp"
+#include "Shapes/CylinderLimited.hpp"
 #include "Raytracer/Background.hpp"
 #include "Raytracer/Light.hpp"
 #include "Raytracer/Camera.hpp"
@@ -91,11 +92,11 @@ namespace Factory {
         std::shared_ptr<RayTracer::IShape> makeCone(App::ParsingShape &cone);
 
         /**
-         * @brief Creates a cube shape.
-         * @param cube - Parsing data for creating the cube.
-         * @return std::shared_ptr<RayTracer::IShape> - Pointer to the created cube shape.
+         * @brief Creates a parallelepiped shape.
+         * @param cube - Parsing data for creating the parallelepiped.
+         * @return std::shared_ptr<RayTracer::IShape> - Pointer to the created parallelepiped shape.
          */
-        std::shared_ptr<RayTracer::IShape> makeCube(App::ParsingShape &cube);
+        std::shared_ptr<RayTracer::IShape> makeParallelepiped(App::ParsingShape &parallelepiped);
 
         /**
          * @brief Creates a cylinder shape.
@@ -103,6 +104,13 @@ namespace Factory {
          * @return std::shared_ptr<RayTracer::IShape> - Pointer to the created cylinder shape.
          */
         std::shared_ptr<RayTracer::IShape> makeCylinder(App::ParsingShape &cylinder);
+
+        /**
+         * @brief Creates a limited cylinder shape.
+         * @param limitedCylinder - Parsing data for creating the limited cylinder.
+         * @return std::shared_ptr<RayTracer::IShape> - Pointer to the created limited cylinder shape.
+         */
+        std::shared_ptr<RayTracer::IShape> makeLimitedCylinder(App::ParsingShape &limitedCylinder);
 
         /**
          * @brief Creates a torus shape.

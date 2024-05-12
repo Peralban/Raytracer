@@ -13,6 +13,14 @@ RayTracer::Sphere::Sphere(const Math::Vector3D &centerValue, float radiusValue, 
     : center(centerValue), radius(radiusValue), material(std::move(materialValue))
 {}
 
+static void get_sphere_uv(const Math::Vector3D &p, double &uPos, double &vPos)
+{
+    double phi = atan2(p.z, p.x);
+    double theta = asin(p.y);
+    uPos = 1 - (phi + M_PI) / (2 * M_PI);
+    vPos = (theta + M_PI / 2) / M_PI;
+}
+
 bool RayTracer::Sphere::hit(const Math::Ray3D &ray, double tmin, double tmax, hits &hit) const
 {
     Math::Vector3D oc = ray.getOrigin() - center;
@@ -28,6 +36,7 @@ bool RayTracer::Sphere::hit(const Math::Ray3D &ray, double tmin, double tmax, hi
             hit.point = ray.pointOnRay(hit.t);
             hit.normal = (hit.point - center) / radius;
             hit.material = material;
+            get_sphere_uv(hit.normal, hit.uPos, hit.vPos);
             return true;
         }
         // get the solution of the point on the sphere behind the sphere
@@ -38,6 +47,7 @@ bool RayTracer::Sphere::hit(const Math::Ray3D &ray, double tmin, double tmax, hi
             hit.point = ray.pointOnRay(hit.t);
             hit.normal = (hit.point - center) / radius;
             hit.material = material;
+            get_sphere_uv(hit.normal, hit.uPos, hit.vPos);
             return true;
         }
     }

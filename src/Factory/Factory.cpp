@@ -16,7 +16,12 @@
 #include "Materials/Matte.hpp"
 #include "Materials/Metal.hpp"
 #include "Materials/Glass.hpp"
-#include "Textures/SolidColor.hpp"
+#include "Shapes/TransformedShape.hpp"
+#include "Transformations/Translation.hpp"
+#include "Transformations/Rotation.hpp"
+#include "Transformations/Scale.hpp"
+#include "Transformations/Shear.hpp"
+#include <cmath>
 
 Factory::SceneFactory::SceneFactory() {}
 
@@ -31,11 +36,14 @@ std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::createPrimitive(App::P
         {"cone", [this](App::ParsingShape& shapeArgs) {
             return makeCone(shapeArgs); 
         }},
-        {"cube", [this](App::ParsingShape& shapeArgs) {
-            return makeCube(shapeArgs); 
+        {"parallelepiped", [this](App::ParsingShape& shapeArgs) {
+            return makeParallelepiped(shapeArgs);
         }},
         {"cylinder", [this](App::ParsingShape& shapeArgs) {
             return makeCylinder(shapeArgs); 
+        }},
+        {"limited_cylinder", [this](App::ParsingShape& shapeArgs) {
+            return makeLimitedCylinder(shapeArgs);
         }},
         {"torus", [this](App::ParsingShape& shapeArgs) {
             return makeTorus(shapeArgs); 
@@ -123,9 +131,28 @@ static std::shared_ptr<RayTracer::IMaterial> makeMaterial(App::ParsingMaterial m
 std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeSphere(App::ParsingShape &sphere)
 {
     Math::Vector3D center = sphere.getPosition();
-    Math::Vector3D size = sphere.getSize();
-    float radius = size.x;
+    double radius = (double) sphere.getRadius();
 
+    if (sphere.getTransformations().size() > 0) {
+        std::shared_ptr<RayTracer::IShape> shape = std::make_shared<RayTracer::Sphere>(center, radius, makeMaterial(sphere.getMaterial()));
+        for (auto &trans : sphere.getTransformations()) {
+            if (trans.getType() == "translation") {
+                std::shared_ptr<RayTracer::ITransformation> translation = std::make_shared<RayTracer::Translation>(trans.getPosition());
+                shape = std::make_shared<RayTracer::TransformedShape>(shape, translation);
+            } else if (trans.getType() == "rotation") {
+                std::shared_ptr<RayTracer::ITransformation> rotation = std::make_shared<RayTracer::Rotation>(Math::Vector3D(trans.getPosition().x * M_PI / 180,
+                trans.getPosition().y * M_PI / 180, trans.getPosition().z * M_PI / 180));
+                shape = std::make_shared<RayTracer::TransformedShape>(shape, rotation);
+            } else if (trans.getType() == "scale") {
+                std::shared_ptr<RayTracer::ITransformation> scale = std::make_shared<RayTracer::Scale>(trans.getPosition());
+                shape = std::make_shared<RayTracer::TransformedShape>(shape, scale);
+            } else if (trans.getType() == "shear") {
+                std::shared_ptr<RayTracer::ITransformation> shear = std::make_shared<RayTracer::Shear>(trans.getPosition());
+                shape = std::make_shared<RayTracer::TransformedShape>(shape, shear);
+            }
+        }
+        return shape;
+    }
     return std::make_shared<RayTracer::Sphere>(center, radius, makeMaterial(sphere.getMaterial()));
 }
 
@@ -145,43 +172,140 @@ std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeObj(App::ParsingSh
 std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makePlane(App::ParsingShape &plane)
 {
     Math::Vector3D pos = plane.getPosition();
-    Math::Vector3D norm = plane.getSize();
+    Math::Vector3D norm = plane.getNormal();
 
-    return std::make_shared<RayTracer::Plane>(pos, norm, makeMaterial(plane.getMaterial()));
+    std::shared_ptr <RayTracer::IShape> shape = std::make_shared<RayTracer::Plane>(pos, norm, makeMaterial(plane.getMaterial()));
+    if (plane.getTransformations().size() > 0) {
+        for (auto &trans: plane.getTransformations()) {
+            if (trans.getType() == "translation") {
+                std::shared_ptr <RayTracer::ITransformation> translation = std::make_shared<RayTracer::Translation>(
+                        trans.getPosition());
+                shape = std::make_shared<RayTracer::TransformedShape>(shape, translation);
+            } else if (trans.getType() == "rotation") {
+                std::shared_ptr <RayTracer::ITransformation> rotation = std::make_shared<RayTracer::Rotation>(
+                        trans.getPosition());
+                shape = std::make_shared<RayTracer::TransformedShape>(shape, rotation);
+            } else if (trans.getType() == "scale") {
+                std::shared_ptr <RayTracer::ITransformation> scale = std::make_shared<RayTracer::Scale>(
+                        trans.getPosition());
+                shape = std::make_shared<RayTracer::TransformedShape>(shape, scale);
+            } else if (trans.getType() == "shear") {
+                std::shared_ptr <RayTracer::ITransformation> shear = std::make_shared<RayTracer::Shear>(
+                        trans.getPosition());
+                shape = std::make_shared<RayTracer::TransformedShape>(shape, shear);
+            }
+        }
+    }
+    return shape;
 }
 
 std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeCone(App::ParsingShape &cone)
 {
     Math::Vector3D center = cone.getPosition();
-    Math::Vector3D size = cone.getSize();
-    float radius = size.x;
-    float height = size.y;
+    double angle = (double) cone.getAngle();
 
-    return std::make_shared<RayTracer::Cone>(center, radius, makeMaterial(cone.getMaterial()));
+    std::shared_ptr<RayTracer::IShape> shape = std::make_shared<RayTracer::Cone>(center, angle * M_PI / 180, makeMaterial(cone.getMaterial()));
+    if (cone.getTransformations().size() > 0) {
+        for (auto &trans : cone.getTransformations()) {
+            if (trans.getType() == "translation") {
+                std::shared_ptr<RayTracer::ITransformation> translation = std::make_shared<RayTracer::Translation>(trans.getPosition());
+                shape = std::make_shared<RayTracer::TransformedShape>(shape, translation);
+            } else if (trans.getType() == "rotation") {
+                std::shared_ptr<RayTracer::ITransformation> rotation = std::make_shared<RayTracer::Rotation>(Math::Vector3D(trans.getPosition().x * M_PI / 180,
+                trans.getPosition().y * M_PI / 180, trans.getPosition().z * M_PI / 180));
+                shape = std::make_shared<RayTracer::TransformedShape>(shape, rotation);
+            } else if (trans.getType() == "scale") {
+                std::shared_ptr<RayTracer::ITransformation> scale = std::make_shared<RayTracer::Scale>(trans.getPosition());
+                shape = std::make_shared<RayTracer::TransformedShape>(shape, scale);
+            } else if (trans.getType() == "shear") {
+                std::shared_ptr<RayTracer::ITransformation> shear = std::make_shared<RayTracer::Shear>(trans.getPosition());
+                shape = std::make_shared<RayTracer::TransformedShape>(shape, shear);
+            }
+        }
+    }
+    return shape;
 }
 
-std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeCube(App::ParsingShape &cube)
+std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeParallelepiped(App::ParsingShape &parallelepiped)
 {
-    Math::Vector3D center = cube.getPosition();
-    Math::Vector3D size = cube.getSize();
-    float radius = size.x;
-    RayTracer::IMaterial *material = nullptr;
+    Math::Vector3D center = parallelepiped.getPosition();
+    Math::Vector3D size = parallelepiped.getSize();
 
-    (void)center;
-    (void)radius;
-    (void)material;
-    return std::make_shared<RayTracer::Cube>();
+    std::shared_ptr<RayTracer::IShape> shape = std::make_shared<RayTracer::Parallelepiped>(center, size.x, size.y, size.z, makeMaterial(parallelepiped.getMaterial()));
+    if (parallelepiped.getTransformations().size() > 0) {
+        for (auto &trans : parallelepiped.getTransformations()) {
+            if (trans.getType() == "translation") {
+                std::shared_ptr<RayTracer::ITransformation> translation = std::make_shared<RayTracer::Translation>(trans.getPosition());
+                shape = std::make_shared<RayTracer::TransformedShape>(shape, translation);
+            } else if (trans.getType() == "rotation") {
+                std::shared_ptr<RayTracer::ITransformation> rotation = std::make_shared<RayTracer::Rotation>(Math::Vector3D(trans.getPosition().x * M_PI / 180,
+                trans.getPosition().y * M_PI / 180, trans.getPosition().z * M_PI / 180));
+                shape = std::make_shared<RayTracer::TransformedShape>(shape, rotation);
+            } else if (trans.getType() == "scale") {
+                std::shared_ptr<RayTracer::ITransformation> scale = std::make_shared<RayTracer::Scale>(trans.getPosition());
+                shape = std::make_shared<RayTracer::TransformedShape>(shape, scale);
+            } else if (trans.getType() == "shear") {
+                std::shared_ptr<RayTracer::ITransformation> shear = std::make_shared<RayTracer::Shear>(trans.getPosition());
+                shape = std::make_shared<RayTracer::TransformedShape>(shape, shear);
+            }
+        }
+    }
+    return shape;
 }
 
 std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeCylinder(App::ParsingShape &cylinder)
 {
     Math::Vector3D center = cylinder.getPosition();
-    Math::Vector3D size = cylinder.getSize();
-    float radius = size.x;
+    double radius = (double) cylinder.getRadius();
 
-    (void)center;
-    (void)radius;
-    return std::make_shared<RayTracer::Cylinder>();
+    std::shared_ptr<RayTracer::IShape> shape = std::make_shared<RayTracer::CylinderInfinite>(center, radius, makeMaterial(cylinder.getMaterial()));
+    if (cylinder.getTransformations().size() > 0) {
+        for (auto &trans : cylinder.getTransformations()) {
+            if (trans.getType() == "translation") {
+                std::shared_ptr<RayTracer::ITransformation> translation = std::make_shared<RayTracer::Translation>(trans.getPosition());
+                shape = std::make_shared<RayTracer::TransformedShape>(shape, translation);
+            } else if (trans.getType() == "rotation") {
+                std::shared_ptr<RayTracer::ITransformation> rotation = std::make_shared<RayTracer::Rotation>(Math::Vector3D(trans.getPosition().x * M_PI / 180,
+                trans.getPosition().y * M_PI / 180, trans.getPosition().z * M_PI / 180));
+                shape = std::make_shared<RayTracer::TransformedShape>(shape, rotation);
+            } else if (trans.getType() == "scale") {
+                std::shared_ptr<RayTracer::ITransformation> scale = std::make_shared<RayTracer::Scale>(trans.getPosition());
+                shape = std::make_shared<RayTracer::TransformedShape>(shape, scale);
+            } else if (trans.getType() == "shear") {
+                std::shared_ptr<RayTracer::ITransformation> shear = std::make_shared<RayTracer::Shear>(trans.getPosition());
+                shape = std::make_shared<RayTracer::TransformedShape>(shape, shear);
+            }
+        }
+    }
+    return shape;
+}
+
+std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeLimitedCylinder(App::ParsingShape &cylinder)
+{
+    Math::Vector3D center = cylinder.getPosition();
+    double radius = (double) cylinder.getRadius();
+    double height = (double) cylinder.getHeight();
+
+    std::shared_ptr<RayTracer::IShape> shape = std::make_shared<RayTracer::CylinderLimited>(center, radius, height, makeMaterial(cylinder.getMaterial()));
+    if (cylinder.getTransformations().size() > 0) {
+        for (auto &trans : cylinder.getTransformations()) {
+            if (trans.getType() == "translation") {
+                std::shared_ptr<RayTracer::ITransformation> translation = std::make_shared<RayTracer::Translation>(trans.getPosition());
+                shape = std::make_shared<RayTracer::TransformedShape>(shape, translation);
+            } else if (trans.getType() == "rotation") {
+                std::shared_ptr<RayTracer::ITransformation> rotation = std::make_shared<RayTracer::Rotation>(Math::Vector3D(trans.getPosition().x * M_PI / 180,
+                trans.getPosition().y * M_PI / 180, trans.getPosition().z * M_PI / 180));
+                shape = std::make_shared<RayTracer::TransformedShape>(shape, rotation);
+            } else if (trans.getType() == "scale") {
+                std::shared_ptr<RayTracer::ITransformation> scale = std::make_shared<RayTracer::Scale>(trans.getPosition());
+                shape = std::make_shared<RayTracer::TransformedShape>(shape, scale);
+            } else if (trans.getType() == "shear") {
+                std::shared_ptr<RayTracer::ITransformation> shear = std::make_shared<RayTracer::Shear>(trans.getPosition());
+                shape = std::make_shared<RayTracer::TransformedShape>(shape, shear);
+            }
+        }
+    }
+    return shape;
 }
 
 std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeTorus(App::ParsingShape &torus)

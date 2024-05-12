@@ -30,7 +30,6 @@ RayTracer::Shear::Shear(const Math::Vector3D &coords)
         _x_coord = &Math::Point3D::x;
         _y_coord = &Math::Point3D::z;
     } else {
-        std::cout << "FBEYF" << std::endl;
         _xShear = coords.x;
         _yShear = coords.y;
 
