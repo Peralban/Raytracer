@@ -52,6 +52,6 @@ namespace RayTracer {
              *
              * @return The emitted light of the material.
              */
-            virtual Math::Vector3D emitted() const = 0;
+            virtual Math::Vector3D emitted(double uPos, double vPos, const Math::Vector3D &point) const = 0;
     };
 }
