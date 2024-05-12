@@ -24,7 +24,7 @@ bool RayTracer::Plane::hit(const Math::Ray3D &ray, double tmin, double tmax, hit
     Math::Vector3D intersection_point = ray.getOrigin() + ray.getDirection() * t;
 
     // Check if the ray is hitting the plane from the opposite side
-    if (denom < 0) {
+    if (denom > 0) {
         hit.normal = -_normal; // Invert the normal
     } else {
         hit.normal = _normal;
