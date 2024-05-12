@@ -9,7 +9,8 @@
 #include "Camera.hpp"
 #include <cmath>
 
-/*
+/**
+ * @brief Scheme of the camera's view.
     ^   y
     |
     |

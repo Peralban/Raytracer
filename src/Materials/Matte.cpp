@@ -5,8 +5,12 @@
 ** Matte material
 */
 
-#include "Matte.hpp"
+/**
+ * @file Matte.cpp
+ * @brief Matte material implementation
+ */
 
+#include "Matte.hpp"
 
 static Math::Vector3D randomInUnitSphere()
 {

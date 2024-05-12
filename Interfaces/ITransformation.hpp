@@ -11,6 +11,11 @@
     #include <optional>
     #include "Math/Point3D.hpp"
 
+/**
+ * @namespace RayTracer
+ * @brief The main namespace for the ray tracing project.
+ * Contains all the classes for the shapes.
+ */
 namespace RayTracer {
     class ITransformation {
         public:

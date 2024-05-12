@@ -18,6 +18,10 @@
 #include "Raytracer/Camera.hpp"
 #include "Shapes/ShapeList.hpp"
 
+/**
+ * @namespace App
+ * @brief Contains the applicative classes and functions.
+ */
 namespace App {
     /**
      * @class Cluster

@@ -5,8 +5,12 @@
 ** Glass material
 */
 
-#include "Glass.hpp"
+/**
+ * @file Glass.cpp
+ * @brief Glass material class for the raytracer program
+ */
 
+#include "Glass.hpp"
 
 RayTracer::Glass::Glass(float refractionIndexValue, Math::Vector3D albedoValue)
         : refractionIndex(refractionIndexValue), albedo(albedoValue)

@@ -569,6 +569,15 @@ namespace App {
             ErrorNoCFGFile() : AError("CFG file not found") {}
         };
 
+        class ErrorParseException : public AError {
+        public:
+            /**
+             * @brief Display an error message.
+             * @param message The error message to display. Defaults to "Invalid type of file".
+             */
+            ErrorParseException() : AError("Error while the reading of the cfg file (check it)") {}
+        };
+
         /**
          * @brief Default constructor for the Parsing class.
          */

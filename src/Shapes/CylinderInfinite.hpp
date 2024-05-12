@@ -7,7 +7,6 @@
 
 #pragma once
 
-
 #include <optional>
 #include "Math/Vector3D.hpp"
 #include "Interfaces/IShape.hpp"
