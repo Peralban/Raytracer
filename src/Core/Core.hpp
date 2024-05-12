@@ -5,6 +5,9 @@
 #include "DataRetriever/Parsing.hpp"
 #include <iostream>
 
+/**
+ * @brief The main namespace of the application.
+ */
 namespace Core {
 
     /**

@@ -11,7 +11,7 @@
 #include "Interfaces/ITransformation.hpp"
 #include "Vector3D.hpp"
 
-namespace Raytracer {
+namespace RayTracer {
     class ITransformation;
 }
 namespace Math {

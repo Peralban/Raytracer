@@ -5,10 +5,27 @@
 ** DESCRIPTION
 */
 
+/**
+ * @file CFGGenerator.cpp
+ * @brief CFGGenerator class implementation
+ */
+
 #include "CFGGenerator.hpp"
 #include <functional>
 #include <type_traits>
 
+/**
+ * @brief Template function to check user input.
+ *
+ * This function checks the user input against a provided condition. If the input is not valid, it prompts the user with a message until a valid input is provided.
+ *
+ * @tparam T The type of the value to check.
+ * @param value The value to check.
+ * @param message The message to display if the input is not valid.
+ * @param bool_condition The condition to check the input against.
+ *
+ * @note This function is enabled only when T is not an array type. This is controlled by the std::enable_if<!std::is_array<T>::value, void>::type mechanism.
+ */
 template<typename T>
 typename std::enable_if<!std::is_array<T>::value, void>::type
 checkCin(T& value, std::string message, std::function<bool(T)> bool_condition) {
@@ -19,6 +36,18 @@ checkCin(T& value, std::string message, std::function<bool(T)> bool_condition) {
     }
 }
 
+/**
+ * @brief Template function to check user input for an array.
+ *
+ * This function checks the user input for each element of an array against a provided condition. If the input is not valid, it prompts the user with a message until a valid input is provided.
+ *
+ * @tparam T The type of the values to check.
+ * @tparam N The size of the array.
+ * @param value The array of values to check.
+ * @param message The message to display if the input is not valid.
+ * @param bool_condition The condition to check the input against. (lambda function) (functional paradigm)
+ * @param type The type of the array (used to customize the message).
+ */
 template<typename T, std::size_t N>
 void checkCin(T (&value)[N], std::string message, std::function<bool(T)> bool_condition, Bonus::ARRAY_TYPES type) {
     for (std::size_t i = 0; i < N; i++) {
@@ -47,6 +76,13 @@ void checkCin(T (&value)[N], std::string message, std::function<bool(T)> bool_co
     }
 }
 
+/**
+ * @brief Collects information from the user to generate a configuration.
+ *
+ * This function prompts the user for various parameters needed to generate a configuration for the ray tracing application.
+ * It asks for the output file name, the number of shapes, lights, and obj files, and calls other functions to gather more specific information.
+ * The gathered information is stored in member variables of the CFGGenerator class.
+ */
 void Bonus::CFGGenerator::GetInfo()
 {
     std::string output_file;
@@ -54,6 +90,7 @@ void Bonus::CFGGenerator::GetInfo()
     int number_of_lights;
     int number_of_obj_files;
 
+    // Prompt for the output file name
     std::cout << "Enter the name of the output file: ";
     std::cin >> output_file;
     _output_file = output_file;
@@ -61,21 +98,26 @@ void Bonus::CFGGenerator::GetInfo()
     output_file[output_file.size() - 3] != 'c' && output_file[output_file.size() - 4] != '.'))
         _output_file += ".cfg";
 
+    // Prompt for the number of shapes
     std::cout << "Enter the number of shapes: ";
     checkCin<int>(number_of_shapes, "Invalid position, please enter a valid integer: ", []([[maybe_unused]]int ex) { return ex >= 0; });
     for (int i = 0; i < number_of_shapes; i++)
-        askShape();
-    askCamera();
+        askShape(); // Ask for shape information
+    askCamera(); // Ask for camera information
+
+    // Prompt for the number of lights
     std::cout << "Enter the number of lights: ";
     checkCin<int>(number_of_lights, "Invalid position, please enter a valid integer: ", []([[maybe_unused]]int ex) { return ex >= 0; });
     for (int i = 0; i < number_of_lights; i++)
-        askLight();
-    askBackground();
-    askPrecision();
+        askLight(); // Ask for light information
+    askBackground(); // Ask for background information
+    askPrecision(); // Ask for precision information
+
+    // Prompt for the number of obj files
     std::cout << "Enter the number of obj files: ";
     checkCin<int>(number_of_obj_files, "Invalid position, please enter a valid integer: ", []([[maybe_unused]]int ex) { return ex >= 0; });
     for (int i = 0; i < number_of_obj_files; i++)
-        askObjFiles();
+        askObjFiles(); // Ask for obj file information
 }
 
 static Bonus::ParsingMaterial askMaterial()
