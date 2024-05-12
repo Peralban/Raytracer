@@ -87,7 +87,6 @@ void Bonus::CFGGenerator::GetInfo()
 {
     std::string output_file;
     int number_of_shapes;
-    int number_of_lights;
     int number_of_obj_files;
 
     // Prompt for the output file name
@@ -104,12 +103,6 @@ void Bonus::CFGGenerator::GetInfo()
     for (int i = 0; i < number_of_shapes; i++)
         askShape(); // Ask for shape information
     askCamera(); // Ask for camera information
-
-    // Prompt for the number of lights
-    std::cout << "Enter the number of lights: ";
-    checkCin<int>(number_of_lights, "Invalid position, please enter a valid integer: ", []([[maybe_unused]]int ex) { return ex >= 0; });
-    for (int i = 0; i < number_of_lights; i++)
-        askLight(); // Ask for light information
     askBackground(); // Ask for background information
     askPrecision(); // Ask for precision information
 
@@ -126,10 +119,11 @@ static Bonus::ParsingMaterial askMaterial()
     float albedo[ALL_INDEXES];
     float fuzz;
     float ref_idx;
+    double intensity;
     std::string material_type;
 
-    std::cout << "Enter the type of the material (matte, metal, glass): ";
-    checkCin<std::string>(material_type, "Invalid type, please enter a valid type: ", []([[maybe_unused]]std::string ex) { return ex == "matte" || ex == "metal" || ex == "glass"; });
+    std::cout << "Enter the type of the material (matte, metal, glass, light): ";
+    checkCin<std::string>(material_type, "Invalid type, please enter a valid type: ", []([[maybe_unused]]std::string ex) { return ex == "matte" || ex == "metal" || ex == "glass" || ex == "light"; });
     if (material_type == "matte") {
         std::cout << "Enter the color of the material (first the R and enter, then the G and enter, then the B and enter):";
         checkCin<int, ALL_INDEXES>(color, "Invalid color, please enter a valid color for the color ", []([[maybe_unused]]int ex) { return ex >= 0 && ex <= 255; }, Bonus::C);
@@ -140,12 +134,18 @@ static Bonus::ParsingMaterial askMaterial()
         std::cout << "Enter the fuzziness of the material (float between 0 and 1): ";
         checkCin<float>(fuzz, "Invalid fuzziness, please enter a valid fuzziness (between 0 and 1): ", []([[maybe_unused]]float ex) { return ex >= 0 && ex <= 1; });
         return Bonus::ParsingMaterial(material_type, fuzz, color[Bonus::R], color[Bonus::G], color[Bonus::B]);
-    } else {
+    } else if (material_type == "glass") {
         std::cout << "Enter the albedo of the material (first the X and enter, then the Y and enter, then the Z and enter, each between 0 and 1):";
         checkCin<float, ALL_INDEXES>(albedo, "Invalid albedo, please enter a valid albedo for the albedo ", []([[maybe_unused]]float ex) { return ex >= 0 && ex <= 1; }, Bonus::A);
         std::cout << "Enter the refraction index of the material (float, between 0 and 1): ";
         checkCin<float>(ref_idx, "Invalid refraction index, please enter a valid refraction index: ", []([[maybe_unused]]float ex) { return ex >= 0 && ex <= 1; });
         return Bonus::ParsingMaterial(material_type, albedo[Bonus::R], albedo[Bonus::G], albedo[Bonus::B], ref_idx);
+    } else {
+        std::cout << "Enter the color of the light (first the R and enter, then the G and enter, then the B and enter):";
+        checkCin<int, ALL_INDEXES>(color, "Invalid color, please enter a valid color for the color ", []([[maybe_unused]]int ex) { return ex >= 0 && ex <= 255; }, Bonus::C);
+        std::cout << "Enter the intensity of the light (double): ";
+        checkCin<double>(intensity, "Invalid intensity, please enter a valid intensity: ", []([[maybe_unused]]double ex) { return ex >= 0; });
+        return Bonus::ParsingMaterial(material_type, intensity, color[Bonus::R], color[Bonus::G], color[Bonus::B]);
     }
 }
 
@@ -283,27 +283,6 @@ void Bonus::CFGGenerator::askCamera()
     view_at[X], view_at[Y], view_at[Z], view_up[X], view_up[Y], view_up[Z],
     rotation[X], rotation[Y], rotation[Z], fov, aperture, focus_dist, resolution[WIDTH], resolution[HEIGHT]);
     _camera = new_camera;
-}
-
-void Bonus::CFGGenerator::askLight()
-{
-    float position[ALL_INDEXES];
-    int color[ALL_INDEXES];
-    float intensity;
-    float rotation[ALL_INDEXES];
-    std::string type;
-    std::cout << "Enter the position of the light (first the X and enter, then the Y and enter, then the Z and enter): ";
-    checkCin<float, ALL_INDEXES>(position, "Invalid position, please enter a valid position for the position ", []([[maybe_unused]]float ex) {return true;}, A);
-    std::cout << "Enter the color of the light (first the R and enter, then the G and enter, then the B and enter): ";
-    checkCin<int, ALL_INDEXES>(color, "Invalid color, please enter a valid color for the color ", []([[maybe_unused]]int ex) { return ex >= 0 && ex <= 255; }, C);
-    std::cout << "Enter the intensity of the light (float between 0 and 1): ";
-    checkCin<float>(intensity, "Invalid intensity, please enter a valid intensity (between 0 and 1): ", []([[maybe_unused]]float ex) { return ex >= 0 && ex <= 1; });
-    std::cout << "Enter the rotation of the light (first the X and enter, then the Y and enter, then the Z and enter): ";
-    checkCin<float, ALL_INDEXES>(rotation, "Invalid rotation, please enter a valid rotation for the rotation ", []([[maybe_unused]]float ex) { return true; }, A);
-    std::cout << "Enter the type of the light (point, directional, spot): ";
-    checkCin<std::string>(type, "Invalid type of light, please enter a valid type (point, directional or spot): ", []([[maybe_unused]]std::string ex) { return ex == "point" || ex == "directional" || ex == "spot"; });
-    ParsingLight new_light(position[X], position[Y], position[Z], color[R], color[G], color[B], intensity, rotation[X], rotation[Y], rotation[Z], type);
-    _lights.push_back(new_light);
 }
 
 void Bonus::CFGGenerator::askBackground()

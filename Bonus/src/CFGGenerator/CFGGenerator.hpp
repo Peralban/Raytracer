@@ -89,6 +89,9 @@ namespace Bonus {
         ParsingMaterial(std::string type, float albedo_r, float albedo_g, float albedo_b, float ref_idx)
                 : _type(type), _albedo_r(albedo_r), _albedo_g(albedo_g), _albedo_b(albedo_b), _ref_idx(ref_idx) {}
 
+        ParsingMaterial(std::string type, double intensity, int r, int g, int b)
+                : _type(type), _intensity(intensity), _r(r), _g(g), _b(b) {}
+
         std::string getType() { return _type; }
 
         /**
@@ -131,9 +134,16 @@ namespace Bonus {
          */
         float getRefIdx() { return _ref_idx; }
 
+        /**
+         * @brief Getter for the intensity of the material.
+         * @return The intensity of the material.
+         */
+        double getIntensity() { return _intensity; }
+
     private:
         std::string _type; ///< The type of the material.
         float _fuzz; ///< The fuzziness of the material.
+        double _intensity; ///< The intensity of the material.
         int _r; ///< The red component of the material color.
         int _g; ///< The green component of the material color.
         int _b; ///< The blue component of the material color.
