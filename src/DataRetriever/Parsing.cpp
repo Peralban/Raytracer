@@ -236,7 +236,8 @@ void App::ParsingMaterial::output(std::ostream &os)  const noexcept
         os << "        Type: " << _type << std::endl;
         os << "        Color: " << _color << std::endl;
         os << "        Fuzziness: " << _fuzziness << std::endl;
-        if (_AsTexture) {
+        if (_HasTexture) {
+            os << "        Has Texture: " << _HasTexture << std::endl;
             os << "        Texture Path: " << _path << std::endl;
             os << "        Scale: " << _textureScale << std::endl;
             if (_path == "chessboard") {
@@ -250,7 +251,8 @@ void App::ParsingMaterial::output(std::ostream &os)  const noexcept
         os << "        Type: " << _type << std::endl;
         os << "        Albedo: " << _albedo << std::endl;
         os << "        Refraction Index: " << _refractive_index << std::endl;
-        if (_AsTexture) {
+        if (_HasTexture) {
+            os << "        Has Texture: " << _HasTexture << std::endl;
             os << "        Texture Path: " << _path << std::endl;
             os << "        Scale: " << _textureScale << std::endl;
             if (_path == "chessboard") {
@@ -263,7 +265,8 @@ void App::ParsingMaterial::output(std::ostream &os)  const noexcept
         os << "    {" << std::endl;
         os << "        Type: " << _type << std::endl;
         os << "        Color: " << _color << std::endl;
-        if (_AsTexture) {
+        if (_HasTexture) {
+            os << "        Has Texture: " << _HasTexture << std::endl;
             os << "        Texture Path: " << _path << std::endl;
             os << "        Scale: " << _textureScale << std::endl;
             if (_path == "chessboard") {
@@ -277,7 +280,8 @@ void App::ParsingMaterial::output(std::ostream &os)  const noexcept
         os << "        Type: " << _type << std::endl;
         os << "        Color: " << _color << std::endl;
         os << "        Intensity: " << _lightIntensity << std::endl;
-        if (_AsTexture) {
+        if (_HasTexture) {
+            os << "        Has Texture: " << _HasTexture << std::endl;
             os << "        Texture Path: " << _path << std::endl;
             os << "        Scale: " << _textureScale << std::endl;
             if (_path == "chessboard") {
@@ -313,7 +317,29 @@ void App::ParsingShape::output(std::ostream &os)  const noexcept
 {
     os << "    Type: " << _type << std::endl;
     os << "    Position: " << _position << std::endl;
-    os << "    Size: " << _size << std::endl;
+    if (_type == "sphere") {
+        os << "    Radius: " << _radius << std::endl;
+    } else if (_type == "plane") {
+        os << "    Normal: " << _normal << std::endl;
+    } else if (_type == "cylinder") {
+        os << "    Radius: " << _radius << std::endl;
+    } else if (_type == "limited_cylinder") {
+        os << "    Radius: " << _radius << std::endl;
+        os << "    Height: " << _height << std::endl;
+    } else if (_type == "cone") {
+        os << "    Angle: " << _angle << std::endl;
+    } else if (_type == "limited_cone") {
+        os << "    Angle: " << _angle << std::endl;
+        os << "    Height: " << _height << std::endl;
+    } else if (_type == "torus") {
+        os << "    Max Radius: " << _max_radius << std::endl;
+        os << "    Min Radius: " << _min_radius << std::endl;
+    } else if (_type == "parallelepiped") {
+        os << "    Size: " << _size << std::endl;
+    } else if (_type == "tangle_cube") {
+        os << "    Max Radius: " << _max_radius << std::endl;
+        os << "    Min Radius: " << _min_radius << std::endl;
+    }
     os << "    Transformations: " << std::endl;
     os << "    Material: " << std::endl << _material;
     for (auto &transformation : _transformations) {

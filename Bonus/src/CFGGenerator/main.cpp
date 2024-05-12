@@ -18,9 +18,9 @@ static void makeMaterial(libconfig::Setting &shape_material, Bonus::ParsingMater
         color.add(libconfig::Setting::TypeInt) = material.getG();
         color.add(libconfig::Setting::TypeInt) = material.getB();
         shape_material.add("texture_is_enabled", libconfig::Setting::TypeBoolean) = material.IsTexture();
+        shape_material.add("texture_path", libconfig::Setting::TypeString) = material.getTexturePath();
         if (material.IsTexture()) {
             shape_material.add("scale", libconfig::Setting::TypeFloat) = (float) material.getScale();
-            shape_material.add("texture_path", libconfig::Setting::TypeString) = material.getTexturePath();
             if (material.getTexturePath() == "chessboard") {
                 libconfig::Setting &texture_color = shape_material.add("color1", libconfig::Setting::TypeArray);
                 texture_color.add(libconfig::Setting::TypeInt) = material.get1R();
