@@ -90,9 +90,8 @@ static std::shared_ptr<RayTracer::IMaterial> makeMaterial(App::ParsingMaterial m
     Math::Vector3D material_color(color.x / 255, color.y / 255, color.z / 255);
     Math::Vector3D material_color1 = material.getColor1();
     Math::Vector3D material_color2 = material.getColor2();
-    double scale = material.getScale();
     Math::Vector3D albedo = material.getAlbedo();
-    Bool hasTexture = material.HasTexture();
+    bool hasTexture = material.hasTexture();
     std::string texture = material.getPath(); // path of texture  or chessboard
 
     if (type == "matte") {

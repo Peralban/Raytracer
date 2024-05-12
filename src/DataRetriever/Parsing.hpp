@@ -38,16 +38,16 @@ namespace App {
          * @param albedo The albedo of the material.
          */
         ParsingMaterial(std::string type, Math::Vector3D color, bool AsTexture, double textureScale, Math::Vector3D color1, Math::Vector3D color2, std::string path)
-        : _type(type), _color(color), _AsTexture(AsTexture), _textureScale(textureScale), _color1(color1), _color2(color2), _path(path) {}
+        : _type(type), _color(color), _HasTexture(AsTexture), _textureScale(textureScale), _color1(color1), _color2(color2), _path(path) {}
 
         ParsingMaterial(std::string type, Math::Vector3D albedo, float refractive_index, bool AsTexture, double textureScale, Math::Vector3D color1, Math::Vector3D color2, std::string path)
-        : _type(type), _albedo(albedo), _refractive_index(refractive_index), _AsTexture(AsTexture), _textureScale(textureScale), _color1(color1), _color2(color2), _path(path) {}
+        : _type(type), _albedo(albedo), _refractive_index(refractive_index), _HasTexture(AsTexture), _textureScale(textureScale), _color1(color1), _color2(color2), _path(path) {}
 
         ParsingMaterial(std::string type, float fuzziness, Math::Vector3D color, bool AsTexture, double textureScale, Math::Vector3D color1, Math::Vector3D color2, std::string path)
-        : _type(type), _color(color), _fuzziness(fuzziness), _AsTexture(AsTexture), _textureScale(textureScale), _color1(color1), _color2(color2), _path(path) {}
+        : _type(type), _color(color), _fuzziness(fuzziness), _HasTexture(AsTexture), _textureScale(textureScale), _color1(color1), _color2(color2), _path(path) {}
 
         ParsingMaterial(std::string type, Math::Vector3D color, double lightIntensity, bool AsTexture, double textureScale, Math::Vector3D color1, Math::Vector3D color2, std::string path)
-        : _type(type), _color(color), _lightIntensity(lightIntensity), _AsTexture(AsTexture), _textureScale(textureScale), _color1(color1), _color2(color2), _path(path) {}
+        : _type(type), _color(color), _lightIntensity(lightIntensity), _HasTexture(AsTexture), _textureScale(textureScale), _color1(color1), _color2(color2), _path(path) {}
 
         /**
          * @brief Getter for the type of the material.
@@ -92,6 +92,11 @@ namespace App {
         void output(std::ostream &os) const noexcept;
 
         /**
+         * @brief Getter for the boolean indicating if the material has a texture.
+         */
+        bool hasTexture() { return _HasTexture; }
+
+        /**
          * @brief Getter for the color1 of the material.
          */
         Math::Vector3D getColor1() { return _color1; }
@@ -109,7 +114,7 @@ namespace App {
         /**
          * @brief Getter for the path or the name of the texture.
          */
-        std::string getPath() { return _type; }
+        std::string getPath() { return _path; }
 
         /**
          * @brief Set for the refractive index of the material.
@@ -123,7 +128,7 @@ namespace App {
         Math::Vector3D _albedo; ///< The albedo of the material.
         float _refractive_index; ///< The refractive index of the material.
         double _lightIntensity; ///< The light intensity of the material.
-        bool _AsTexture;
+        bool _HasTexture;
         double _textureScale;
         Math::Vector3D _color1;
         Math::Vector3D _color2;
