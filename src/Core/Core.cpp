@@ -16,12 +16,8 @@
 namespace Core {
 
     Engine::Engine(int argc, char **argv) : _parser(), _factory(), _clusterManagement(2160, 1080) {
-        try {
-            _parser.checkArguments(argc, argv);
-            initialize();
-        } catch (const std::exception &e) {
-            std::cerr << e.what() << std::endl;
-        }
+        _parser.checkArguments(argc, argv);
+        initialize();
     }
 
     void Engine::run() {
