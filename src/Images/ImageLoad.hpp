@@ -40,7 +40,7 @@ namespace Images {
             int row_padded = (_width*3 + 3) & (~3);
             imageData = new unsigned char[row_padded * _height];
 
-            for (int y = 0; y < _height; ++y) {
+            for (int y = _height - 1; y >= 0; --y) {
                 file.read(reinterpret_cast<char*>(imageData + y * row_padded), row_padded);
             }
 
