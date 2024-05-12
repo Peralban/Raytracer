@@ -42,7 +42,7 @@ Test(Parsing, checkArgumentsCFGFile)
 {
     App::Parsing parser;
     try {
-        parser.checkArguments(2, (char **) ((const char *[]){"./raytracer", "Tests/Templates/shapes_config.cfg"}));
+        parser.checkArguments(2, (char **) ((const char *[]){"./raytracer", "Tests/Templates/test.cfg"}));
     } catch (std::exception &e) {
         cr_assert_str_eq(e.what(), "aaaaaaaaaaaaaaaaaaaaa");
         exit(0);
