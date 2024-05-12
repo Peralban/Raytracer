@@ -94,9 +94,9 @@ BONUS_LIBS	=	-lconfig++
 
 #-------------- Phony & Silent Rules --------------#
 
-.PHONY: all clean fclean re tests_run tests_compile tests_launch
+.PHONY: all clean fclean re tests_run tests_compile tests_launch doc doc_clean doc_re bonus_compile bonus_run bonus_clean bonus_fclean bonus_re all_clean
 
-.SILENT: clean fclean re tests_launch tests_run
+.SILENT: clean fclean re tests_launch tests_run tests_compile doc doc_clean doc_re bonus_compile bonus_run bonus_clean bonus_fclean bonus_re all_clean
 
 #-------------- Rules --------------#
 
