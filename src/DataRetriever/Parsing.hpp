@@ -46,6 +46,9 @@ namespace App {
         ParsingMaterial(std::string type, float fuzziness, Math::Vector3D color)
         : _type(type), _color(color), _fuzziness(fuzziness) {}
 
+        ParsingMaterial(std::string type, Math::Vector3D color, double lightIntensity)
+        : _type(type), _color(color), _lightIntensity(lightIntensity) {}
+
         /**
          * @brief Getter for the type of the material.
          * @return The type of the material.
@@ -77,6 +80,12 @@ namespace App {
         float getRefractiveIndex() { return _refractive_index; }
 
         /**
+         * @brief Getter for the light intensity of the material.
+         * @return The light intensity of the material.
+         */
+        double getLightIntensity() { return _lightIntensity; }
+
+        /**
          * @brief Outputs the material data to the provided ostream.
          * @param os The ostream to output to.
          */
@@ -88,6 +97,7 @@ namespace App {
         float _fuzziness; ///< The fuzziness of the material.
         Math::Vector3D _albedo; ///< The albedo of the material.
         float _refractive_index; ///< The refractive index of the material.
+        double _lightIntensity; ///< The light intensity of the material.
     };
 
     /**

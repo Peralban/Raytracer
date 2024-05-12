@@ -69,20 +69,25 @@ static App::ParsingMaterial parseMaterial(const libconfig::Setting &materials)
 {
     Math::Vector3D color;
     Math::Vector3D albedo;
+    double lightIntensity;
     float fuzz;
     float ref_idx;
     std::string type = materials["type"];
     if (type == "metal") {
         color = createVector3Di(materials["color"]);
         fuzz = materials["fuzziness"];
-        return App::ParsingMaterial(type, fuzz, color);
+        return {type, fuzz, color};
     } else if (type == "glass") {
         albedo = createVector3Df(materials["albedo"]);
         ref_idx = materials["refraction_index"];
-        return App::ParsingMaterial(type, albedo, ref_idx);
-    } else {
+        return {type, albedo, ref_idx};
+    } else if (type == "matte") {
         color = createVector3Di(materials["color"]);
-        return App::ParsingMaterial(type, color);
+        return {type, color};
+    } else { //light
+        color = createVector3Di(materials["color"]);
+        lightIntensity = materials["intensity"];
+        return {type, color, lightIntensity};
     }
 }
 
@@ -217,10 +222,16 @@ void App::ParsingMaterial::output(std::ostream &os)  const noexcept
         os << "        Albedo: " << _albedo << std::endl;
         os << "        Refraction Index: " << _refractive_index << std::endl;
         os << "    }" << std::endl;
-    } else {
+    } else if (_type == "matte") {
         os << "    {" << std::endl;
         os << "        Type: " << _type << std::endl;
         os << "        Color: " << _color << std::endl;
+        os << "    }" << std::endl;
+    } else if (_type == "light") {
+        os << "    {" << std::endl;
+        os << "        Type: " << _type << std::endl;
+        os << "        Color: " << _color << std::endl;
+        os << "        Intensity: " << _lightIntensity << std::endl;
         os << "    }" << std::endl;
     }
 }
