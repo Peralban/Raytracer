@@ -64,9 +64,11 @@ static Math::Vector3D color(const Math::Ray3D &ray, RayTracer::IShape *scene, in
         else
             return emitted;
     } else {
-        Math::Vector3D unitDirection = ray.getDirection().getUnitVector();
-        double t = 0.5 * (unitDirection.y + 1.0);
-        return background * (1.0 - t) + Math::Vector3D(0.5, 0.7, 1.0) * t;
+        //Math::Vector3D unitDirection = ray.getDirection().getUnitVector();
+        //double t = 0.5 * (unitDirection.y + 1.0);
+        //return background * (1.0 - t) + Math::Vector3D(0.5, 0.7, 1.0) * t;
+
+        return background;
     }
 }
 
