@@ -29,6 +29,12 @@ static void makeMaterial(libconfig::Setting &shape_material, Bonus::ParsingMater
         albedo.add(libconfig::Setting::TypeFloat) = material.getAlbedoG();
         albedo.add(libconfig::Setting::TypeFloat) = material.getAlbedoB();
         shape_material.add("refraction_index", libconfig::Setting::TypeFloat) = material.getRefIdx();
+    } else if (material.getType() == "light") {
+        libconfig::Setting &color = shape_material.add("color", libconfig::Setting::TypeArray);
+        color.add(libconfig::Setting::TypeInt) = material.getR();
+        color.add(libconfig::Setting::TypeInt) = material.getG();
+        color.add(libconfig::Setting::TypeInt) = material.getB();
+        shape_material.add("intensity", libconfig::Setting::TypeFloat) = material.getIntensity();
     }
 }
 
@@ -150,7 +156,6 @@ void makeBackground(libconfig::Setting &background, Bonus::ParsingBackground bac
     background_color.add(libconfig::Setting::TypeInt) = backgroundInfo.getColorR();
     background_color.add(libconfig::Setting::TypeInt) = backgroundInfo.getColorG();
     background_color.add(libconfig::Setting::TypeInt) = backgroundInfo.getColorB();
-    background_color.add(libconfig::Setting::TypeInt) = 1;
     background.add("texture_path", libconfig::Setting::TypeString) = backgroundInfo.getTexturePath();
 }
 

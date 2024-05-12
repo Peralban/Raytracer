@@ -135,21 +135,6 @@ void App::Parsing::parseShapes(const libconfig::Setting &shapes)
     }
 }
 
-void App::Parsing::parseLights(const libconfig::Setting &lights)
-{
-    for (int i = 0; i < lights.getLength(); i++) {
-        const libconfig::Setting &light = lights[i];
-        Math::Vector3D pos = createVector3Df(light["position"]);
-        Math::Vector3D color = createVector3Di(light["color"]);
-        float intensity = light["intensity"];
-        Math::Vector3D direction = createVector3Df(light["rotation"]);
-        std::string type = light["type"];
-        ParsingLight new_light(pos, color, intensity, direction, type);
-        _lights.push_back(new_light);
-    }
-
-}
-
 void App::Parsing::parseObjFiles(const libconfig::Setting &obj_files)
 {
     for (int i = 0; i < obj_files.getLength(); i++) {
@@ -201,7 +186,6 @@ void App::Parsing::parseConfigFile()
 
     const libconfig::Setting &root = cfg.getRoot();
     parseShapes(root["Shapes"]);
-    parseLights(root["Lights"]);
     parseObjFiles(root["Obj_paths"]);
     parseBackground(root["Background"]);
     parseCamera(root["Camera"]);
@@ -275,21 +259,6 @@ std::ostream &operator<<(std::ostream &os, const App::ParsingShape &shape)
     return os;
 }
 
-void App::ParsingLight::output(std::ostream &os)  const noexcept
-{
-    os << "    Position: " << _position  << std::endl;
-    os << "    Color: " << _color << std::endl;
-    os << "    Intensity: " << _intensity << std::endl;
-    os << "    Direction: " << _direction << std::endl;
-    os << "    Type: " << _type << std::endl;
-}
-
-std::ostream &operator<<(std::ostream &os, const App::ParsingLight &light)
-{
-    light.output(os);
-    return os;
-}
-
 void App::ParsingCamera::output(std::ostream &os)  const noexcept
 {
     os << "    View From: " << _view_from << std::endl;
@@ -341,10 +310,6 @@ void App::Parsing::output(std::ostream &os)  const noexcept
     os << "Shapes: " << std::endl;
     for (auto &shape : _shapes) {
         os << shape << std::endl;
-    }
-    os << "Lights: " << std::endl;
-    for (auto &light : _lights) {
-        os << light << std::endl;
     }
     os << "Obj Files: " << std::endl;
     for (auto &obj_file : _obj_files) {
