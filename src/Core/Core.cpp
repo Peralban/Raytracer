@@ -16,23 +16,8 @@
 namespace Core {
 
     Engine::Engine(int argc, char **argv) : _parser(), _factory(), _clusterManagement(2160, 1080) {
-        try {
             _parser.checkArguments(argc, argv);
             initialize();
-        } catch (const std::exception &e) {
-            if (std::string(e.what()) == "Too many arguments")
-                throw App::Parsing::ErrorTooManyArguments();
-            if (std::string(e.what()) == "Too few arguments")
-                throw App::Parsing::ErrorTooFewArguments();
-            if (std::string(e.what()) == "Error in treatment of the configuration file")
-                throw App::Parsing::ErrorCFGFile();
-            if (std::string(e.what()) == "Invalid type of file")
-                throw App::Parsing::ErrorInvalidType();
-            if (std::string(e.what()) == "CFG file not found")
-                throw App::Parsing::ErrorNoCFGFile();
-            if (std::string(e.what()) == "ParseException")
-                throw App::Parsing::ErrorParseException();
-        }
     }
 
     void Engine::run() {
