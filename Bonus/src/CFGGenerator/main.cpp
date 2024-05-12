@@ -17,24 +17,84 @@ static void makeMaterial(libconfig::Setting &shape_material, Bonus::ParsingMater
         color.add(libconfig::Setting::TypeInt) = material.getR();
         color.add(libconfig::Setting::TypeInt) = material.getG();
         color.add(libconfig::Setting::TypeInt) = material.getB();
+        shape_material.add("texture_is_enabled", libconfig::Setting::TypeBoolean) = material.IsTexture();
+        shape_material.add("texture_path", libconfig::Setting::TypeString) = material.getTexturePath();
+        if (material.IsTexture()) {
+            shape_material.add("scale", libconfig::Setting::TypeFloat) = (float) material.getScale();
+            if (material.getTexturePath() == "chessboard") {
+                libconfig::Setting &texture_color = shape_material.add("color1", libconfig::Setting::TypeArray);
+                texture_color.add(libconfig::Setting::TypeInt) = material.get1R();
+                texture_color.add(libconfig::Setting::TypeInt) = material.get1G();
+                texture_color.add(libconfig::Setting::TypeInt) = material.get1B();
+                libconfig::Setting &texture_color2 = shape_material.add("color2", libconfig::Setting::TypeArray);
+                texture_color2.add(libconfig::Setting::TypeInt) = material.get2R();
+                texture_color2.add(libconfig::Setting::TypeInt) = material.get2G();
+                texture_color2.add(libconfig::Setting::TypeInt) = material.get2B();
+            }
+        }
     } else if (material.getType() == "metal") {
         libconfig::Setting &color = shape_material.add("color", libconfig::Setting::TypeArray);
         color.add(libconfig::Setting::TypeInt) = material.getR();
         color.add(libconfig::Setting::TypeInt) = material.getG();
         color.add(libconfig::Setting::TypeInt) = material.getB();
         shape_material.add("fuzziness", libconfig::Setting::TypeFloat) = material.getFuzz();
+        shape_material.add("texture_is_enabled", libconfig::Setting::TypeBoolean) = material.IsTexture();
+        if (material.IsTexture()) {
+            shape_material.add("scale", libconfig::Setting::TypeFloat) = (float) material.getScale();
+            shape_material.add("texture_path", libconfig::Setting::TypeString) = material.getTexturePath();
+            if (material.getTexturePath() == "chessboard") {
+                libconfig::Setting &texture_color = shape_material.add("color1", libconfig::Setting::TypeArray);
+                texture_color.add(libconfig::Setting::TypeInt) = material.get1R();
+                texture_color.add(libconfig::Setting::TypeInt) = material.get1G();
+                texture_color.add(libconfig::Setting::TypeInt) = material.get1B();
+                libconfig::Setting &texture_color2 = shape_material.add("color2", libconfig::Setting::TypeArray);
+                texture_color2.add(libconfig::Setting::TypeInt) = material.get2R();
+                texture_color2.add(libconfig::Setting::TypeInt) = material.get2G();
+                texture_color2.add(libconfig::Setting::TypeInt) = material.get2B();
+            }
+        }
     } else if (material.getType() == "glass") {
         libconfig::Setting &albedo = shape_material.add("albedo", libconfig::Setting::TypeArray);
         albedo.add(libconfig::Setting::TypeFloat) = material.getAlbedoR();
         albedo.add(libconfig::Setting::TypeFloat) = material.getAlbedoG();
         albedo.add(libconfig::Setting::TypeFloat) = material.getAlbedoB();
         shape_material.add("refraction_index", libconfig::Setting::TypeFloat) = material.getRefIdx();
+        shape_material.add("texture_is_enabled", libconfig::Setting::TypeBoolean) = material.IsTexture();
+        if (material.IsTexture()) {
+            shape_material.add("scale", libconfig::Setting::TypeFloat) = (float) material.getScale();
+            shape_material.add("texture_path", libconfig::Setting::TypeString) = material.getTexturePath();
+            if (material.getTexturePath() == "chessboard") {
+                libconfig::Setting &texture_color = shape_material.add("color1", libconfig::Setting::TypeArray);
+                texture_color.add(libconfig::Setting::TypeInt) = material.get1R();
+                texture_color.add(libconfig::Setting::TypeInt) = material.get1G();
+                texture_color.add(libconfig::Setting::TypeInt) = material.get1B();
+                libconfig::Setting &texture_color2 = shape_material.add("color2", libconfig::Setting::TypeArray);
+                texture_color2.add(libconfig::Setting::TypeInt) = material.get2R();
+                texture_color2.add(libconfig::Setting::TypeInt) = material.get2G();
+                texture_color2.add(libconfig::Setting::TypeInt) = material.get2B();
+            }
+        }
     } else if (material.getType() == "light") {
         libconfig::Setting &color = shape_material.add("color", libconfig::Setting::TypeArray);
         color.add(libconfig::Setting::TypeInt) = material.getR();
         color.add(libconfig::Setting::TypeInt) = material.getG();
         color.add(libconfig::Setting::TypeInt) = material.getB();
         shape_material.add("intensity", libconfig::Setting::TypeFloat) = material.getIntensity();
+        shape_material.add("texture_is_enabled", libconfig::Setting::TypeBoolean) = material.IsTexture();
+        if (material.IsTexture()) {
+            shape_material.add("scale", libconfig::Setting::TypeFloat) = (float) material.getScale();
+            shape_material.add("texture_path", libconfig::Setting::TypeString) = material.getTexturePath();
+            if (material.getTexturePath() == "chessboard") {
+                libconfig::Setting &texture_color = shape_material.add("color1", libconfig::Setting::TypeArray);
+                texture_color.add(libconfig::Setting::TypeInt) = material.get1R();
+                texture_color.add(libconfig::Setting::TypeInt) = material.get1G();
+                texture_color.add(libconfig::Setting::TypeInt) = material.get1B();
+                libconfig::Setting &texture_color2 = shape_material.add("color2", libconfig::Setting::TypeArray);
+                texture_color2.add(libconfig::Setting::TypeInt) = material.get2R();
+                texture_color2.add(libconfig::Setting::TypeInt) = material.get2G();
+                texture_color2.add(libconfig::Setting::TypeInt) = material.get2B();
+            }
+        }
     }
 }
 
@@ -80,7 +140,6 @@ void makeShape(libconfig::Setting &shapes, std::vector<Bonus::ParsingShape> shap
         shape_position.add(libconfig::Setting::TypeFloat) = shape.getPositionY();
         shape_position.add(libconfig::Setting::TypeFloat) = shape.getPositionZ();
         writeSize(shapeSetting, shape);
-        shapeSetting.add("texture_path", libconfig::Setting::TypeString) = shape.getPath();
         libconfig::Setting &shape_material = shapeSetting.add("material", libconfig::Setting::TypeGroup);
         makeMaterial(shape_material, shape.getMaterial());
         libconfig::Setting &shape_transformations = shapeSetting.add("transformations", libconfig::Setting::TypeList);

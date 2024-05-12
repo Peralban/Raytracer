@@ -37,17 +37,17 @@ namespace App {
          * @param refractive_index The refractive index of the material.
          * @param albedo The albedo of the material.
          */
-        ParsingMaterial(std::string type, Math::Vector3D color)
-        : _type(type), _color(color) {}
+        ParsingMaterial(std::string type, Math::Vector3D color, bool AsTexture, double textureScale, Math::Vector3D color1, Math::Vector3D color2, std::string path)
+        : _type(type), _color(color), _HasTexture(AsTexture), _textureScale(textureScale), _color1(color1), _color2(color2), _path(path) {}
 
-        ParsingMaterial(std::string type, Math::Vector3D albedo, float refractive_index)
-        : _type(type), _albedo(albedo), _refractive_index(refractive_index) {}
+        ParsingMaterial(std::string type, Math::Vector3D albedo, float refractive_index, bool AsTexture, double textureScale, Math::Vector3D color1, Math::Vector3D color2, std::string path)
+        : _type(type), _albedo(albedo), _refractive_index(refractive_index), _HasTexture(AsTexture), _textureScale(textureScale), _color1(color1), _color2(color2), _path(path) {}
 
-        ParsingMaterial(std::string type, float fuzziness, Math::Vector3D color)
-        : _type(type), _color(color), _fuzziness(fuzziness) {}
+        ParsingMaterial(std::string type, float fuzziness, Math::Vector3D color, bool AsTexture, double textureScale, Math::Vector3D color1, Math::Vector3D color2, std::string path)
+        : _type(type), _color(color), _fuzziness(fuzziness), _HasTexture(AsTexture), _textureScale(textureScale), _color1(color1), _color2(color2), _path(path) {}
 
-        ParsingMaterial(std::string type, Math::Vector3D color, double lightIntensity)
-        : _type(type), _color(color), _lightIntensity(lightIntensity) {}
+        ParsingMaterial(std::string type, Math::Vector3D color, double lightIntensity, bool AsTexture, double textureScale, Math::Vector3D color1, Math::Vector3D color2, std::string path)
+        : _type(type), _color(color), _lightIntensity(lightIntensity), _HasTexture(AsTexture), _textureScale(textureScale), _color1(color1), _color2(color2), _path(path) {}
 
         /**
          * @brief Getter for the type of the material.
@@ -91,6 +91,36 @@ namespace App {
          */
         void output(std::ostream &os) const noexcept;
 
+        /**
+         * @brief Getter for the boolean indicating if the material has a texture.
+         */
+        bool hasTexture() { return _HasTexture; }
+
+        /**
+         * @brief Getter for the color1 of the material.
+         */
+        Math::Vector3D getColor1() { return _color1; }
+
+        /**
+         * @brief Getter for the color2 of the material.
+         */
+        Math::Vector3D getColor2() { return _color2; }
+
+        /**
+         * @brief Getter for the texture scale of the material.
+         */
+        double getScale() { return _textureScale; }
+
+        /**
+         * @brief Getter for the path or the name of the texture.
+         */
+        std::string getPath() { return _path; }
+
+        /**
+         * @brief Set for the refractive index of the material.
+         */
+        void setRefractiveIndex(float refractive_index) { _refractive_index = refractive_index; }
+
     private:
         std::string _type; ///< The type of the material.
         Math::Vector3D _color; ///< The color of the material.
@@ -98,6 +128,11 @@ namespace App {
         Math::Vector3D _albedo; ///< The albedo of the material.
         float _refractive_index; ///< The refractive index of the material.
         double _lightIntensity; ///< The light intensity of the material.
+        bool _HasTexture;
+        double _textureScale;
+        Math::Vector3D _color1;
+        Math::Vector3D _color2;
+        std::string _path;
     };
 
     /**
@@ -154,10 +189,10 @@ namespace App {
          * @param material The material of the shape as a ParsingMaterial.
          * @param transformations The transformations of the shape as a vector of ParsingTransformation.
          */
-        ParsingShape(std::string type, Math::Vector3D position, Math::Vector3D size, std::string path,
+        ParsingShape(std::string type, Math::Vector3D position, Math::Vector3D size,
                      ParsingMaterial material, std::vector <ParsingTransformation> transformations,
                      float radius, Math::Vector3D normal, float angle, float height, float max_radius, float min_radius)
-                : _type(type), _position(position), _size(size), _path(path),
+                : _type(type), _position(position), _size(size),
                   _material(material), _transformations(transformations),
                   _radius(radius), _normal(normal), _angle(angle), _height(height), _max_radius(max_radius), _min_radius(min_radius) {}
 
@@ -191,12 +226,6 @@ namespace App {
          */
         Math::Vector3D getSize() { return _size; }
 
-        /**
-         * @brief Getter for the path to the shape file.
-         * @return The path to the shape file.
-         */
-        std::string getPath() { return _path; }
-
         float getRadius() { return _radius; }
 
         Math::Vector3D getNormal() { return _normal; }
@@ -221,7 +250,6 @@ namespace App {
         std::string _type; ///< The type of the shape.
         Math::Vector3D _position; ///< The position of the shape.
         Math::Vector3D _size; ///< The size of the shape.
-        std::string _path; ///< The path to the shape file.
         ParsingMaterial _material; ///< The material of the shape.
         std::vector <ParsingTransformation> _transformations; ///< The transformations of the shape.
         float _radius; ///< The radius of the shape.
@@ -592,7 +620,7 @@ namespace App {
          * @brief Parse the shapes from the configuration file.
          * @param shapes A libconfig::Setting representing the shapes in the configuration file.
          */
-        void parseShapes(const libconfig::Setting &shapes);
+        void parseShapes(const libconfig::Setting &shapes, bool enable_refractions);
 
         /**
          * @brief Parse the materials from the configuration file.

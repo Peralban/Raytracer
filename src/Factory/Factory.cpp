@@ -23,6 +23,8 @@
 #include "Transformations/Scale.hpp"
 #include "Transformations/Shear.hpp"
 #include "Textures/SolidColor.hpp"
+#include "Textures/ChessBoardTexture.hpp"
+#include "Textures/FromImage.hpp"
 #include <cmath>
 
 Factory::SceneFactory::SceneFactory() {}
@@ -46,9 +48,6 @@ std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::createPrimitive(App::P
         }},
         {"limited_cylinder", [this](App::ParsingShape& shapeArgs) {
             return makeLimitedCylinder(shapeArgs);
-        }},
-        {"torus", [this](App::ParsingShape& shapeArgs) {
-            return makeTorus(shapeArgs); 
         }},
         {"plane", [this](App::ParsingShape& shapeArgs) {
             return makePlane(shapeArgs); 
@@ -87,17 +86,46 @@ static std::shared_ptr<RayTracer::IMaterial> makeMaterial(App::ParsingMaterial m
     std::string type = material.getType();
     Math::Vector3D color = material.getColor();
     Math::Vector3D material_color(color.x / 255, color.y / 255, color.z / 255);
+    Math::Vector3D material_color1 = material.getColor1();
+    Math::Vector3D material_color2 = material.getColor2();
+    Math::Vector3D albedo = material.getAlbedo();
+    bool hasTexture = material.hasTexture();
+    std::string texture = material.getPath(); // path of texture  or chessboard
 
     if (type == "matte") {
+        if (hasTexture && texture == "chessboard") {
+            return std::make_shared<RayTracer::Matte>(std::make_shared<RayTracer::ChessBoardTexture>(material_color1, material_color2, material.getScale()));
+        }
+        if (hasTexture) {
+            return std::make_shared<RayTracer::Matte>(std::make_shared<RayTracer::FromImage>(texture));
+        }
         return std::make_shared<RayTracer::Matte>(std::make_shared<RayTracer::SolidColor>(material_color));
     }
     if (type == "metal") {
+        if (hasTexture && texture == "chessboard") {
+            return std::make_shared<RayTracer::Metal>(std::make_shared<RayTracer::ChessBoardTexture>(material_color1, material_color2, material.getScale()), material.getFuzziness());
+        }
+        if (hasTexture) {
+            return std::make_shared<RayTracer::Metal>(std::make_shared<RayTracer::FromImage>(texture), material.getFuzziness());
+        }
         return std::make_shared<RayTracer::Metal>(std::make_shared<RayTracer::SolidColor>(material_color), material.getFuzziness());
     }
     if (type == "glass") {
-        return std::make_shared<RayTracer::Glass>(material.getRefractiveIndex(), std::make_shared<RayTracer::SolidColor>(material_color));
+        if (hasTexture && texture == "chessboard") {
+            return std::make_shared<RayTracer::Glass>(material.getRefractiveIndex(), std::make_shared<RayTracer::ChessBoardTexture>(material_color1, material_color2, material.getScale()));
+        }
+        if (hasTexture) {
+            return std::make_shared<RayTracer::Glass>(material.getRefractiveIndex(), std::make_shared<RayTracer::FromImage>(texture));
+        }
+        return std::make_shared<RayTracer::Glass>(material.getRefractiveIndex(), std::make_shared<RayTracer::SolidColor>(albedo));
     }
     if (type == "light") {
+        if (hasTexture && texture == "chessboard") {
+            return std::make_shared<RayTracer::LightDirectional>(std::make_shared<RayTracer::ChessBoardTexture>(material_color1, material_color2, material.getScale()), material.getLightIntensity());
+        }
+        if (hasTexture) {
+            return std::make_shared<RayTracer::LightDirectional>(std::make_shared<RayTracer::FromImage>(texture), material.getLightIntensity());
+        }
         return std::make_shared<RayTracer::LightDirectional>(std::make_shared<RayTracer::SolidColor>(material_color), material.getLightIntensity());
     }
     throw Factory::ErrorMaterial();
@@ -268,17 +296,4 @@ std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeLimitedCylinder(Ap
         }
     }
     return shape;
-}
-
-std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeTorus(App::ParsingShape &torus)
-{
-    Math::Vector3D center = torus.getPosition();
-    Math::Vector3D size = torus.getSize();
-    float radius = size.x;
-    RayTracer::IMaterial *material = nullptr;
-
-    (void)center;
-    (void)radius;
-    (void)material;
-    return std::make_shared<RayTracer::Torus>();
 }

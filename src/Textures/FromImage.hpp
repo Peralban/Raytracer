@@ -2,37 +2,39 @@
 ** EPITECH PROJECT, 2024
 ** Raytracer
 ** File description:
-** SolidColor
+** IShape
 */
-
-#include "Interfaces/ITextures.hpp"
 
 #pragma once
 
+#include "Interfaces/ITextures.hpp"
+#include "Images/ImageLoad.hpp"
+
+
 namespace RayTracer {
-    class SolidColor : public ITextures {
+    class FromImage : public ITextures {
     public:
 
         /**
-         * @brief Default constructor for the SolidColor class.
+         * @brief Default constructor for the FromImage class.
          *
-         * Initializes a new instance of the SolidColor class with default color.
+         * Initializes a new instance of the FromImage class with default color.
          */
-        SolidColor() = default;
+        FromImage() = default;
 
         /**
-         * @brief Constructor for the SolidColor class.
+         * @brief Constructor for the FromImage class.
          *
-         * Initializes a new instance of the SolidColor class with a given color.
+         * Initializes a new instance of the FromImage class with a given color.
          *
-         * @param color The color of the texture.
+         * @param imagePath The path to the image file.
          */
-        SolidColor(const Math::Vector3D &color);
+        FromImage(const std::string &imagePath);
 
         /**
-         * @brief Default destructor for the SolidColor class.
+         * @brief Default destructor for the FromImage class.
          */
-        ~SolidColor() = default;
+        ~FromImage() = default;
 
         /**
          * @brief Determines the color of the texture at a given point.
@@ -47,6 +49,8 @@ namespace RayTracer {
         Math::Vector3D get(double u, double v, const Math::Vector3D &p) const override;
 
     private:
-        Math::Vector3D _color; ///< The color of the texture.
+        Images::ImageReader *reader;
+        unsigned char *imageData;
+        std::string _imagePath;
     };
 }

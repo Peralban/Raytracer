@@ -13,6 +13,7 @@ RayTracer::Sphere::Sphere(const Math::Vector3D &centerValue, float radiusValue, 
     : center(centerValue), radius(radiusValue), material(std::move(materialValue))
 {}
 
+// get the uv coordinates of the sphere (used only for the texture form an image)
 static void get_sphere_uv(const Math::Vector3D &p, double &uPos, double &vPos)
 {
     double phi = atan2(p.z, p.x);

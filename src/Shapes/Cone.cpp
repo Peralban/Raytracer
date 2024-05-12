@@ -6,6 +6,7 @@
 */
 
 #include "Cone.hpp"
+#include <cmath>
 
 #define SQ(x) ((x)*(x))
 
@@ -14,6 +15,12 @@ RayTracer::Cone::Cone(const Math::Vector3D &origin, double angle, std::shared_pt
     : _origin(origin), _tan(std::tan(angle)), _sqtan(SQ(_tan)), _material(std::move(material))
 {}
 
+static void get_cone_uv(const Math::Vector3D &p, double &uPos, double &vPos)
+{
+    double phi = atan2(p.z, p.x);
+    uPos = 1 - (phi + M_PI) / (2 * M_PI);
+    vPos = p.y;
+}
 
 bool RayTracer::Cone::hit(const Math::Ray3D &ray, double tmin, double tmax, hits &hit) const
 {
@@ -48,6 +55,7 @@ bool RayTracer::Cone::hit(const Math::Ray3D &ray, double tmin, double tmax, hits
     hit.point = ray.pointOnRay(hit.t);
     hit.normal = __getNormalAt(hit.point);
     hit.material = _material;
+    get_cone_uv(hit.normal, hit.uPos, hit.vPos);
     return true;
 }
 

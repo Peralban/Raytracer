@@ -13,7 +13,6 @@
 #include "Interfaces/IShape.hpp"
 #include "Shapes/Sphere.hpp"
 #include "Shapes/Cone.hpp"
-#include "Shapes/Torus.hpp"
 #include "Shapes/Parallelepiped.hpp"
 #include "Shapes/Plane.hpp"
 #include "Shapes/CylinderInfinite.hpp"
@@ -97,12 +96,6 @@ namespace Factory {
          */
         std::shared_ptr<RayTracer::IShape> makeLimitedCylinder(App::ParsingShape &limitedCylinder);
 
-        /**
-         * @brief Creates a torus shape.
-         * @param torus - Parsing data for creating the torus.
-         * @return std::shared_ptr<RayTracer::IShape> - Pointer to the created torus shape.
-         */
-        std::shared_ptr<RayTracer::IShape> makeTorus(App::ParsingShape &torus);
     };
 
     class ErrorMaterial : public AError {

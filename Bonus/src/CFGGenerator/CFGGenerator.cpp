@@ -117,35 +117,111 @@ static Bonus::ParsingMaterial askMaterial()
 {
     int color[ALL_INDEXES];
     float albedo[ALL_INDEXES];
+    bool enable_texture = false;
+    std::string path;
     float fuzz;
     float ref_idx;
     double intensity;
     std::string material_type;
+    int color1[ALL_INDEXES] = {0, 0, 0};
+    int color2[ALL_INDEXES] = {0, 0, 0};
+    double scale = 0;
 
     std::cout << "Enter the type of the material (matte, metal, glass, light): ";
     checkCin<std::string>(material_type, "Invalid type, please enter a valid type: ", []([[maybe_unused]]std::string ex) { return ex == "matte" || ex == "metal" || ex == "glass" || ex == "light"; });
     if (material_type == "matte") {
         std::cout << "Enter the color of the material (first the R and enter, then the G and enter, then the B and enter):";
         checkCin<int, ALL_INDEXES>(color, "Invalid color, please enter a valid color for the color ", []([[maybe_unused]]int ex) { return ex >= 0 && ex <= 255; }, Bonus::C);
-        return Bonus::ParsingMaterial(material_type, color[Bonus::R], color[Bonus::G], color[Bonus::B]);
+
+        std::cout << "Enable texture? (1 for yes, 0 for no): ";
+        checkCin<bool>(enable_texture, "Invalid input, please enter a valid input (1 for yes, 0 for no): ", []([[maybe_unused]]bool ex) { return ex == 0 || ex == 1; });
+        if (enable_texture) {
+            std::cout << "Enter the path to the texture of the shape or chessboard: ";
+            checkCin<std::string>(path, "Invalid path, please enter a valid path: ", []([[maybe_unused]]std::string ex) { return ex == "chessboard" || std::filesystem::exists(ex); });
+            std::cout << "Enter the scale of the texture (float): ";
+            checkCin<double>(scale, "Invalid scale, please enter a valid scale: ", []([[maybe_unused]]double ex) { return ex >= 0; });
+            if (path == "chessboard") {
+                std::cout << "Enter the color of the first square (first the R and enter, then the G and enter, then the B and enter): ";
+                checkCin<int, ALL_INDEXES>(color1, "Invalid color, please enter a valid color for the color ", []([[maybe_unused]]int ex) { return ex >= 0 && ex <= 255; }, Bonus::C);
+                std::cout << "Enter the color of the second square (first the R and enter, then the G and enter, then the B and enter): ";
+                checkCin<int, ALL_INDEXES>(color2, "Invalid color, please enter a valid color for the color ", []([[maybe_unused]]int ex) { return ex >= 0 && ex <= 255; }, Bonus::C);
+            }
+        } else {
+            path = "none";
+        }
+        return Bonus::ParsingMaterial(material_type, color[Bonus::R], color[Bonus::G], color[Bonus::B], enable_texture, path, color1[Bonus::R], color1[Bonus::G], color1[Bonus::B], color2[Bonus::R], color2[Bonus::G], color2[Bonus::B], scale);
     } else if (material_type == "metal") {
         std::cout << "Enter the color of the material (first the R and enter, then the G and enter, then the B and enter):";
         checkCin<int, ALL_INDEXES>(color, "Invalid color, please enter a valid color for the color ", []([[maybe_unused]]int ex) { return ex >= 0 && ex <= 255; }, Bonus::C);
         std::cout << "Enter the fuzziness of the material (float between 0 and 1): ";
         checkCin<float>(fuzz, "Invalid fuzziness, please enter a valid fuzziness (between 0 and 1): ", []([[maybe_unused]]float ex) { return ex >= 0 && ex <= 1; });
-        return Bonus::ParsingMaterial(material_type, fuzz, color[Bonus::R], color[Bonus::G], color[Bonus::B]);
+
+
+        std::cout << "Enable texture? (1 for yes, 0 for no): ";
+        checkCin<bool>(enable_texture, "Invalid input, please enter a valid input (1 for yes, 0 for no): ", []([[maybe_unused]]bool ex) { return ex == 0 || ex == 1; });
+        std::cout << "Enter the scale of the texture (float): ";
+        checkCin<double>(scale, "Invalid scale, please enter a valid scale: ", []([[maybe_unused]]double ex) { return ex >= 0; });
+        if (enable_texture) {
+            std::cout << "Enter the path to the texture of the shape or chessboard: ";
+            checkCin<std::string>(path, "Invalid path, please enter a valid path: ", []([[maybe_unused]]std::string ex) { return ex == "chessboard" || std::filesystem::exists(ex); });
+            if (path == "chessboard") {
+                std::cout << "Enter the color of the first square (first the R and enter, then the G and enter, then the B and enter): ";
+                checkCin<int, ALL_INDEXES>(color1, "Invalid color, please enter a valid color for the color ", []([[maybe_unused]]int ex) { return ex >= 0 && ex <= 255; }, Bonus::C);
+                std::cout << "Enter the color of the second square (first the R and enter, then the G and enter, then the B and enter): ";
+                checkCin<int, ALL_INDEXES>(color2, "Invalid color, please enter a valid color for the color ", []([[maybe_unused]]int ex) { return ex >= 0 && ex <= 255; }, Bonus::C);
+            }
+        } else {
+            path = "none";
+        }
+        return Bonus::ParsingMaterial(material_type, fuzz, color[Bonus::R], color[Bonus::G], color[Bonus::B], enable_texture, path, color1[Bonus::R], color1[Bonus::G], color1[Bonus::B], color2[Bonus::R], color2[Bonus::G], color2[Bonus::B], scale);
     } else if (material_type == "glass") {
         std::cout << "Enter the albedo of the material (first the X and enter, then the Y and enter, then the Z and enter, each between 0 and 1):";
         checkCin<float, ALL_INDEXES>(albedo, "Invalid albedo, please enter a valid albedo for the albedo ", []([[maybe_unused]]float ex) { return ex >= 0 && ex <= 1; }, Bonus::A);
         std::cout << "Enter the refraction index of the material (float, between 0 and 1): ";
         checkCin<float>(ref_idx, "Invalid refraction index, please enter a valid refraction index: ", []([[maybe_unused]]float ex) { return ex >= 0 && ex <= 1; });
-        return Bonus::ParsingMaterial(material_type, albedo[Bonus::R], albedo[Bonus::G], albedo[Bonus::B], ref_idx);
+
+
+        std::cout << "Enable texture? (1 for yes, 0 for no): ";
+        checkCin<bool>(enable_texture, "Invalid input, please enter a valid input (1 for yes, 0 for no): ", []([[maybe_unused]]bool ex) { return ex == 0 || ex == 1; });
+        std::cout << "Enter the scale of the texture (float): ";
+        checkCin<double>(scale, "Invalid scale, please enter a valid scale: ", []([[maybe_unused]]double ex) { return ex >= 0; });
+        if (enable_texture) {
+            std::cout << "Enter the path to the texture of the shape or chessboard: ";
+            checkCin<std::string>(path, "Invalid path, please enter a valid path: ", []([[maybe_unused]]std::string ex) { return ex == "chessboard" || std::filesystem::exists(ex); });
+            if (path == "chessboard") {
+                std::cout << "Enter the color of the first square (first the R and enter, then the G and enter, then the B and enter): ";
+                checkCin<int, ALL_INDEXES>(color1, "Invalid color, please enter a valid color for the color ", []([[maybe_unused]]int ex) { return ex >= 0 && ex <= 255; }, Bonus::C);
+                std::cout << "Enter the color of the second square (first the R and enter, then the G and enter, then the B and enter): ";
+                checkCin<int, ALL_INDEXES>(color2, "Invalid color, please enter a valid color for the color ", []([[maybe_unused]]int ex) { return ex >= 0 && ex <= 255; }, Bonus::C);
+            }
+        } else {
+            path = "none";
+        }
+        return Bonus::ParsingMaterial(material_type, albedo[Bonus::R], albedo[Bonus::G], albedo[Bonus::B], ref_idx, enable_texture, path, color1[Bonus::R], color1[Bonus::G], color1[Bonus::B], color2[Bonus::R], color2[Bonus::G], color2[Bonus::B], scale);
     } else {
         std::cout << "Enter the color of the light (first the R and enter, then the G and enter, then the B and enter):";
         checkCin<int, ALL_INDEXES>(color, "Invalid color, please enter a valid color for the color ", []([[maybe_unused]]int ex) { return ex >= 0 && ex <= 255; }, Bonus::C);
         std::cout << "Enter the intensity of the light (double): ";
         checkCin<double>(intensity, "Invalid intensity, please enter a valid intensity: ", []([[maybe_unused]]double ex) { return ex >= 0; });
-        return Bonus::ParsingMaterial(material_type, intensity, color[Bonus::R], color[Bonus::G], color[Bonus::B]);
+
+
+        std::cout << "Enable texture? (1 for yes, 0 for no): ";
+        checkCin<bool>(enable_texture, "Invalid input, please enter a valid input (1 for yes, 0 for no): ", []([[maybe_unused]]bool ex) { return ex == 0 || ex == 1; });
+        std::cout << "Enter the scale of the texture (float): ";
+        checkCin<double>(scale, "Invalid scale, please enter a valid scale: ", []([[maybe_unused]]double ex) { return ex >= 0; });
+        if (enable_texture) {
+            std::cout << "Enter the path to the texture of the shape or chessboard: ";
+            checkCin<std::string>(path, "Invalid path, please enter a valid path: ", []([[maybe_unused]]std::string ex) { return ex == "chessboard" || std::filesystem::exists(ex); });
+            if (path == "chessboard") {
+                std::cout << "Enter the color of the first square (first the R and enter, then the G and enter, then the B and enter): ";
+                checkCin<int, ALL_INDEXES>(color1, "Invalid color, please enter a valid color for the color ", []([[maybe_unused]]int ex) { return ex >= 0 && ex <= 255; }, Bonus::C);
+                std::cout << "Enter the color of the second square (first the R and enter, then the G and enter, then the B and enter): ";
+                checkCin<int, ALL_INDEXES>(color2, "Invalid color, please enter a valid color for the color ", []([[maybe_unused]]int ex) { return ex >= 0 && ex <= 255; }, Bonus::C);
+            }
+        } else {
+            path = "none";
+        }
+        return Bonus::ParsingMaterial(material_type, intensity, color[Bonus::R], color[Bonus::G], color[Bonus::B], enable_texture, path, color1[Bonus::R], color1[Bonus::G], color1[Bonus::B], color2[Bonus::R], color2[Bonus::G], color2[Bonus::B], scale);
     }
 }
 
@@ -156,7 +232,6 @@ void Bonus::CFGGenerator::askShape()
     int nb_transformations;
     float position[ALL_INDEXES];
     float size[ALL_INDEXES];
-    bool enable_texture = false;
     float radius;
     float normal[ALL_INDEXES];
     float height;
@@ -164,7 +239,6 @@ void Bonus::CFGGenerator::askShape()
     float max_radius;
     float min_radius;
 
-    std::string path;
     std::vector<ParsingTransformation> transformations;
     std::cout << "Enter the type of the shape (sphere, tangle_cube, cylinder, cone, plane, limited_cylinder, limited_cone, parallelepiped, torus): ";
     checkCin<std::string>(type, "Invalid type, please enter a valid type: ", []([[maybe_unused]]std::string ex) { return ex == "sphere" || ex == "tangle_cube" || ex == "cylinder" || ex == "cone" || ex == "plane" || ex == "limited_cylinder" || ex == "limited_cone" || ex == "parallelepiped" || ex == "torus"; });
@@ -201,15 +275,6 @@ void Bonus::CFGGenerator::askShape()
         std::cout << "Enter the min radius of the torus (float): ";
         checkCin<float>(min_radius, "Invalid min radius, please enter a valid min radius: ", []([[maybe_unused]]float ex) { return ex >= 0; });
     }
-    std::cout << "Enable texture? (1 for yes, 0 for no): ";
-    checkCin<bool>(enable_texture, "Invalid input, please enter a valid input (1 for yes, 0 for no): ", []([[maybe_unused]]bool ex) { return ex == 0 || ex == 1; });
-    if (enable_texture) {
-        std::cout << "Enter the path to the texture of the shape: ";
-        std::cin >> path;
-        checkCin<std::string>(path, "Invalid path, please enter a valid path: ", []([[maybe_unused]]std::string ex) { return std::filesystem::exists(ex); });
-    } else {
-        path = "none";
-    }
     std::cout << "Enable transformations? (1 for yes, 0 for no): ";
     checkCin<bool>(enable_transformation, "Invalid input, please enter a valid input (1 for yes, 0 for no): ", []([[maybe_unused]]bool ex) { return ex == 0 || ex == 1; });
     if (enable_transformation) {
@@ -220,35 +285,35 @@ void Bonus::CFGGenerator::askShape()
     }
     if (type == "sphere") {
         ParsingShape new_shape(type, position[X], position[Y], position[Z], 0, 0, 0, radius,
-        0, 0, 0, 0, 0, 0, 0, 0, path, askMaterial(), transformations);
+        0, 0, 0, 0, 0, 0, 0, 0, askMaterial(), transformations);
         _shapes.push_back(new_shape);
     } else if (type == "plane") {
         ParsingShape new_shape(type, position[X], position[Y], position[Z], 0, 0, 0, 0,
-        normal[X], normal[Y], normal[Z], 0, 0, 0, 0, 0, path, askMaterial(), transformations);
+        normal[X], normal[Y], normal[Z], 0, 0, 0, 0, 0, askMaterial(), transformations);
         _shapes.push_back(new_shape);
     } else if (type == "limited_cylinder") {
         ParsingShape new_shape(type, position[X], position[Y], position[Z], 0, 0, 0, radius,
-        0, 0, 0, 0, height, 0, 0, 0, path, askMaterial(), transformations);
+        0, 0, 0, 0, height, 0, 0, 0, askMaterial(), transformations);
         _shapes.push_back(new_shape);
     } else if (type == "cylinder") {
         ParsingShape new_shape(type, position[X], position[Y], position[Z], 0, 0, 0, radius,
-        0, 0, 0, 0, 0, 0, 0, 0, path, askMaterial(), transformations);
+        0, 0, 0, 0, 0, 0, 0, 0, askMaterial(), transformations);
         _shapes.push_back(new_shape);
     } else if (type == "cone") {
         ParsingShape new_shape(type, position[X], position[Y], position[Z], 0, 0, 0, 0,
-        0, 0, 0, angle, 0, 0, 0, 0, path, askMaterial(), transformations);
+        0, 0, 0, angle, 0, 0, 0, 0, askMaterial(), transformations);
         _shapes.push_back(new_shape);
     } else if (type == "limited_cone") {
         ParsingShape new_shape(type, position[X], position[Y], position[Z], 0, 0, 0, 0,
-        0, 0, 0, angle, height, 0, 0, 0, path, askMaterial(), transformations);
+        0, 0, 0, angle, height, 0, 0, 0, askMaterial(), transformations);
         _shapes.push_back(new_shape);
     } else if (type == "parallelepiped") {
         ParsingShape new_shape(type, position[X], position[Y], position[Z], size[X], size[Y], size[Z], 0,
-        0, 0, 0, 0, 0, 0, 0, 0, path, askMaterial(), transformations);
+        0, 0, 0, 0, 0, 0, 0, 0, askMaterial(), transformations);
         _shapes.push_back(new_shape);
     } else if (type == "torus") {
         ParsingShape new_shape(type, position[X], position[Y], position[Z], 0, 0, 0, 0,
-        0, 0, 0, 0, 0, max_radius, min_radius, 0, path, askMaterial(), transformations);
+        0, 0, 0, 0, 0, max_radius, min_radius, 0, askMaterial(), transformations);
         _shapes.push_back(new_shape);
     }
 }
@@ -296,7 +361,6 @@ void Bonus::CFGGenerator::askBackground()
     checkCin<bool>(enable_background, "Invalid input, please enter a valid input (1 for yes, 0 for no): ", []([[maybe_unused]]bool ex) { return ex == 0 || ex == 1; });
     if (enable_background) {
         std::cout << "Enter the path of the background texture: ";
-        std::cin >> path;
         checkCin<std::string>(path, "Invalid path, please enter a valid path: ", []([[maybe_unused]]std::string ex) { return std::filesystem::exists(ex); });
     } else {
         path = "none";

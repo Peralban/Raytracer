@@ -80,17 +80,17 @@ namespace Bonus {
          * @param g The green color value.
          * @param b The blue color value.
          */
-        ParsingMaterial(std::string type, int r, int g, int b)
-                : _type(type), _r(r), _g(g), _b(b) {}
+        ParsingMaterial(std::string type, int r, int g, int b, bool texture, std::string texture_path, int r1, int g1, int b1, int r2, int g2, int b2, double scale)
+                : _type(type), _r(r), _g(g), _b(b), _texture(texture), _texture_path(texture_path), _1r(r1), _1g(g1), _1b(b1), _2r(r2), _2g(g2), _2b(b2), _scale(scale) {}
 
-        ParsingMaterial(std::string type, float fuzz, int r, int g, int b)
-                : _type(type), _fuzz(fuzz), _r(r), _g(g), _b(b) {}
+        ParsingMaterial(std::string type, float fuzz, int r, int g, int b, bool texture, std::string texture_path, int r1, int g1, int b1, int r2, int g2, int b2, double scale)
+                : _type(type), _fuzz(fuzz), _r(r), _g(g), _b(b), _texture(texture), _texture_path(texture_path), _1r(r1), _1g(g1), _1b(b1), _2r(r2), _2g(g2), _2b(b2), _scale(scale) {}
 
-        ParsingMaterial(std::string type, float albedo_r, float albedo_g, float albedo_b, float ref_idx)
-                : _type(type), _albedo_r(albedo_r), _albedo_g(albedo_g), _albedo_b(albedo_b), _ref_idx(ref_idx) {}
+        ParsingMaterial(std::string type, float albedo_r, float albedo_g, float albedo_b, float ref_idx, bool texture, std::string texture_path, int r1, int g1, int b1, int r2, int g2, int b2, double scale)
+                : _type(type), _albedo_r(albedo_r), _albedo_g(albedo_g), _albedo_b(albedo_b), _ref_idx(ref_idx), _texture(texture), _texture_path(texture_path), _1r(r1), _1g(g1), _1b(b1), _2r(r2), _2g(g2), _2b(b2), _scale(scale) {}
 
-        ParsingMaterial(std::string type, double intensity, int r, int g, int b)
-                : _type(type), _intensity(intensity), _r(r), _g(g), _b(b) {}
+        ParsingMaterial(std::string type, double intensity, int r, int g, int b, bool texture, std::string texture_path, int r1, int g1, int b1, int r2, int g2, int b2, double scale)
+                : _type(type), _intensity(intensity), _r(r), _g(g), _b(b), _texture(texture), _texture_path(texture_path), _1r(r1), _1g(g1), _1b(b1), _2r(r2), _2g(g2), _2b(b2), _scale(scale) {}
 
         std::string getType() { return _type; }
 
@@ -140,6 +140,60 @@ namespace Bonus {
          */
         double getIntensity() { return _intensity; }
 
+        /**
+         * @brief Getter for the texture of the material.
+         * @return The boolean value of the texture of the material.
+         */
+        bool IsTexture() { return _texture; }
+
+        /**
+         * @brief Getter for the path to the texture of the material.
+         * @return The path to the texture of the material.
+         */
+        std::string getTexturePath() { return _texture_path; }
+
+        /**
+         * @brief Getter for the red component of the first color.
+         * @return The red component of the first color.
+         */
+        int get1R() { return _1r; }
+
+        /**
+         * @brief Getter for the green component of the first color.
+         * @return The green component of the first color.
+         */
+        int get1G() { return _1g; }
+
+        /**
+         * @brief Getter for the blue component of the first color.
+         * @return The blue component of the first color.
+         */
+        int get1B() { return _1b; }
+
+        /**
+         * @brief Getter for the red component of the second color.
+         * @return The red component of the second color.
+         */
+        int get2R() { return _2r; }
+
+        /**
+         * @brief Getter for the green component of the second color.
+         * @return The green component of the second color.
+         */
+        int get2G() { return _2g; }
+
+        /**
+         * @brief Getter for the blue component of the second color.
+         * @return The blue component of the second color.
+         */
+        int get2B() { return _2b; }
+
+        /**
+         * @brief Getter for the scale of the texture.
+         * @return The scale of the texture.
+         */
+        double getScale() { return _scale; }
+
     private:
         std::string _type; ///< The type of the material.
         float _fuzz; ///< The fuzziness of the material.
@@ -151,6 +205,15 @@ namespace Bonus {
         float _albedo_g; ///< The green component of the albedo.
         float _albedo_b; ///< The blue component of the albedo.
         float _ref_idx; ///< The refractive index of the material.
+        bool _texture; ///< The texture of the material.
+        std::string _texture_path; ///< The path to the texture of the material.
+        int _1r; ///< The red component of the first color.
+        int _1g; ///< The green component of the first color.
+        int _1b; ///< The blue component of the first color.
+        int _2r; ///< The red component of the second color.
+        int _2g; ///< The green component of the second color.
+        int _2b; ///< The blue component of the second color;
+        double _scale; ///< The scale of the texture.
     };
 
     /**
@@ -248,18 +311,17 @@ namespace Bonus {
          * @param max_radius The maximum radius of the shape.
          * @param min_radius The minimum radius of the shape.
          * @param size The size of the shape.
-         * @param path The path of the shape.
          * @param material The material of the shape.
          * @param transformations The transformations of the shape.
          */
         ParsingShape(std::string type, float position_x, float position_y, float position_z, float size_x, float size_y, float size_z, float radius,
                      float normal_x, float normal_y, float normal_z, float angle, float height, float max_radius, float min_radius,
-                     float size, std::string path, ParsingMaterial material, std::vector<ParsingTransformation> transformations) :
+                     float size, ParsingMaterial material, std::vector<ParsingTransformation> transformations) :
                 _type(type), _position_x(position_x), _position_y(position_y), _position_z(position_z),
                 _size_x(size_x), _size_y(size_y), _size_z(size_z), _radius(radius),
                 _normal_x(normal_x), _normal_y(normal_y), _normal_z(normal_z), _angle(angle),
                 _height(height), _max_radius(max_radius), _min_radius(min_radius), _size(size),
-                _path(path), _material(material), _transformations(transformations) {}
+                _material(material), _transformations(transformations) {}
 
         /**
          * @brief Getter for the type.
@@ -358,12 +420,6 @@ namespace Bonus {
         float getSize() { return _size; }
 
         /**
-         * @brief Getter for the path of the shape.
-         * @return The path of the shape.
-         */
-        std::string getPath() { return _path; }
-
-        /**
          * @brief Getter for the material.
          * @return The material of the shape.
          */
@@ -392,7 +448,6 @@ namespace Bonus {
         float _max_radius; ///< The maximum radius of the shape.
         float _min_radius; ///< The minimum radius of the shape.
         float _size; ///< The size of the shape.
-        std::string _path; ///< The path of the shape.
         ParsingMaterial _material; ///< The material of the shape.
         std::vector<ParsingTransformation> _transformations; ///< The transformations of the shape.
     };

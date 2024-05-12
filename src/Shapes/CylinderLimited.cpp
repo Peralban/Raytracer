@@ -7,11 +7,19 @@
 
 #include "CylinderLimited.hpp"
 #include <iostream>
+#include <cmath>
 
 
 RayTracer::CylinderLimited::CylinderLimited(const Math::Vector3D &centerValue, double radiusValue, double heightValue, std::shared_ptr<IMaterial> materialValue)
     : center(centerValue), radius(radiusValue), height(heightValue), material(std::move(materialValue))
 {}
+
+static void get_limit_cylinder_uv(const Math::Vector3D &p, double &uPos, double &vPos)
+{
+    double phi = atan2(p.z, p.x);
+    uPos = 1 - (phi + M_PI) / (2 * M_PI);
+    vPos = p.y / 2.0 + 0.5;
+}
 
 bool RayTracer::CylinderLimited::hit(const Math::Ray3D &ray, double tmin, double tmax, RayTracer::hits &hit) const {
     Math::Vector3D oc = ray.getOrigin() - center;
@@ -32,6 +40,7 @@ bool RayTracer::CylinderLimited::hit(const Math::Ray3D &ray, double tmin, double
         hit.point = ray.pointOnRay(hit.t);
         hit.normal = Math::Vector3D(hit.point.x - center.x, 0.0, hit.point.z - center.z) / radius;
         hit.material = material;
+        get_limit_cylinder_uv(hit.normal, hit.uPos, hit.vPos);
         return true;
     }
     temp = (-b + sqrt(discriminant)) / (2 * a);
@@ -43,6 +52,7 @@ bool RayTracer::CylinderLimited::hit(const Math::Ray3D &ray, double tmin, double
         hit.point = ray.pointOnRay(hit.t);
         hit.normal = Math::Vector3D(hit.point.x - center.x, 0.0, hit.point.z - center.z) / radius;
         hit.material = material;
+        get_limit_cylinder_uv(hit.normal, hit.uPos, hit.vPos);
         return true;
     }
     return false;

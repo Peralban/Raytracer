@@ -65,7 +65,7 @@ static std::vector<App::ParsingTransformation> parseTransfo(const libconfig::Set
     return transformations_vector;
 }
 
-static App::ParsingMaterial parseMaterial(const libconfig::Setting &materials)
+static App::ParsingMaterial parseMaterial(const libconfig::Setting &materials, bool enable_refractions)
 {
     Math::Vector3D color;
     Math::Vector3D albedo;
@@ -73,25 +73,61 @@ static App::ParsingMaterial parseMaterial(const libconfig::Setting &materials)
     float fuzz;
     float ref_idx;
     std::string type = materials["type"];
+    bool as_texture = materials["texture_is_enabled"];
+    double scale = 0;
+    std::string texture_path = materials["texture_path"];
+    Math::Vector3D texture_color1(0, 0, 0);
+    Math::Vector3D texture_color2(0, 0, 0);
     if (type == "metal") {
         color = createVector3Di(materials["color"]);
         fuzz = materials["fuzziness"];
-        return {type, fuzz, color};
+        if (as_texture) {
+            scale = materials["scale"];
+            if (texture_path == "chessboard") {
+                texture_color1 = createVector3Di(materials["color1"]);
+                texture_color2 = createVector3Di(materials["color2"]);
+            }
+        }
+        return {type, fuzz, color, as_texture, scale, texture_color1, texture_color2, texture_path};
     } else if (type == "glass") {
         albedo = createVector3Df(materials["albedo"]);
-        ref_idx = materials["refraction_index"];
-        return {type, albedo, ref_idx};
+        if (!enable_refractions)
+            ref_idx = 0;
+        else
+            ref_idx = materials["refraction_index"];
+        if (as_texture) {
+            scale = materials["scale"];
+            if (texture_path == "chessboard") {
+                texture_color1 = createVector3Di(materials["color1"]);
+                texture_color2 = createVector3Di(materials["color2"]);
+            }
+        }
+        return {type, albedo, ref_idx, as_texture, scale, texture_color1, texture_color2, texture_path};
     } else if (type == "matte") {
         color = createVector3Di(materials["color"]);
-        return {type, color};
+        if (as_texture) {
+            scale = materials["scale"];
+            if (texture_path == "chessboard") {
+                texture_color1 = createVector3Di(materials["color1"]);
+                texture_color2 = createVector3Di(materials["color2"]);
+            }
+        }
+        return {type, color, as_texture, scale, texture_color1, texture_color2, texture_path};
     } else { //light
         color = createVector3Di(materials["color"]);
         lightIntensity = materials["intensity"];
-        return {type, color, lightIntensity};
+        if (as_texture) {
+            scale = materials["scale"];
+            if (texture_path == "chessboard") {
+                texture_color1 = createVector3Di(materials["color1"]);
+                texture_color2 = createVector3Di(materials["color2"]);
+            }
+        }
+        return {type, color, lightIntensity, as_texture, scale, texture_color1, texture_color2, texture_path};
     }
 }
 
-void App::Parsing::parseShapes(const libconfig::Setting &shapes)
+void App::Parsing::parseShapes(const libconfig::Setting &shapes, bool enable_refractions)
 {
     float radius = 0;
     Math::Vector3D normal(0, 0, 0);
@@ -127,9 +163,8 @@ void App::Parsing::parseShapes(const libconfig::Setting &shapes)
             max_radius = shape["max_radius"];
             min_radius = shape["min_radius"];
         }
-        std::string texture_path = shape["texture_path"];
-        ParsingShape new_shape(type, pos, size, texture_path,
-            parseMaterial(shape["material"]), parseTransfo(shape["transformations"]),
+        ParsingShape new_shape(type, pos, size,
+            parseMaterial(shape["material"], enable_refractions), parseTransfo(shape["transformations"]),
             radius, normal, angle, height, max_radius, min_radius);
         _shapes.push_back(new_shape);
     }
@@ -158,6 +193,8 @@ void App::Parsing::parsePrecision(const libconfig::Setting &precision)
     bool enable_shadows = precision["enable_shadows"];
     bool enable_reflection = precision["enable_reflection"];
     bool enable_refraction = precision["enable_refraction"];
+    if (!enable_reflection)
+        nb_bounces = 0;
     _precision = ParsingPrecision(samples, nb_bounces, enable_shadows, enable_reflection, enable_refraction);
 }
 
@@ -185,11 +222,11 @@ void App::Parsing::parseConfigFile()
     }
 
     const libconfig::Setting &root = cfg.getRoot();
-    parseShapes(root["Shapes"]);
+    parsePrecision(root["Precision"]);
+    parseShapes(root["Shapes"], _precision.getEnableRefractions());
     parseObjFiles(root["Obj_paths"]);
     parseBackground(root["Background"]);
     parseCamera(root["Camera"]);
-    parsePrecision(root["Precision"]);
 }
 
 void App::ParsingMaterial::output(std::ostream &os)  const noexcept
@@ -199,23 +236,59 @@ void App::ParsingMaterial::output(std::ostream &os)  const noexcept
         os << "        Type: " << _type << std::endl;
         os << "        Color: " << _color << std::endl;
         os << "        Fuzziness: " << _fuzziness << std::endl;
+        if (_HasTexture) {
+            os << "        Has Texture: " << _HasTexture << std::endl;
+            os << "        Texture Path: " << _path << std::endl;
+            os << "        Scale: " << _textureScale << std::endl;
+            if (_path == "chessboard") {
+                os << "        Texture Color 1: " << _color1 << std::endl;
+                os << "        Texture Color 2: " << _color2 << std::endl;
+            }
+        }
         os << "    }" << std::endl;
     } else if (_type == "glass") {
         os << "    {" << std::endl;
         os << "        Type: " << _type << std::endl;
         os << "        Albedo: " << _albedo << std::endl;
         os << "        Refraction Index: " << _refractive_index << std::endl;
+        if (_HasTexture) {
+            os << "        Has Texture: " << _HasTexture << std::endl;
+            os << "        Texture Path: " << _path << std::endl;
+            os << "        Scale: " << _textureScale << std::endl;
+            if (_path == "chessboard") {
+                os << "        Texture Color 1: " << _color1 << std::endl;
+                os << "        Texture Color 2: " << _color2 << std::endl;
+            }
+        }
         os << "    }" << std::endl;
     } else if (_type == "matte") {
         os << "    {" << std::endl;
         os << "        Type: " << _type << std::endl;
         os << "        Color: " << _color << std::endl;
+        if (_HasTexture) {
+            os << "        Has Texture: " << _HasTexture << std::endl;
+            os << "        Texture Path: " << _path << std::endl;
+            os << "        Scale: " << _textureScale << std::endl;
+            if (_path == "chessboard") {
+                os << "        Texture Color 1: " << _color1 << std::endl;
+                os << "        Texture Color 2: " << _color2 << std::endl;
+            }
+        }
         os << "    }" << std::endl;
     } else if (_type == "light") {
         os << "    {" << std::endl;
         os << "        Type: " << _type << std::endl;
         os << "        Color: " << _color << std::endl;
         os << "        Intensity: " << _lightIntensity << std::endl;
+        if (_HasTexture) {
+            os << "        Has Texture: " << _HasTexture << std::endl;
+            os << "        Texture Path: " << _path << std::endl;
+            os << "        Scale: " << _textureScale << std::endl;
+            if (_path == "chessboard") {
+                os << "        Texture Color 1: " << _color1 << std::endl;
+                os << "        Texture Color 2: " << _color2 << std::endl;
+            }
+        }
         os << "    }" << std::endl;
     }
 }
@@ -244,8 +317,29 @@ void App::ParsingShape::output(std::ostream &os)  const noexcept
 {
     os << "    Type: " << _type << std::endl;
     os << "    Position: " << _position << std::endl;
-    os << "    Size: " << _size << std::endl;
-    os << "    Path: " << _path << std::endl;
+    if (_type == "sphere") {
+        os << "    Radius: " << _radius << std::endl;
+    } else if (_type == "plane") {
+        os << "    Normal: " << _normal << std::endl;
+    } else if (_type == "cylinder") {
+        os << "    Radius: " << _radius << std::endl;
+    } else if (_type == "limited_cylinder") {
+        os << "    Radius: " << _radius << std::endl;
+        os << "    Height: " << _height << std::endl;
+    } else if (_type == "cone") {
+        os << "    Angle: " << _angle << std::endl;
+    } else if (_type == "limited_cone") {
+        os << "    Angle: " << _angle << std::endl;
+        os << "    Height: " << _height << std::endl;
+    } else if (_type == "torus") {
+        os << "    Max Radius: " << _max_radius << std::endl;
+        os << "    Min Radius: " << _min_radius << std::endl;
+    } else if (_type == "parallelepiped") {
+        os << "    Size: " << _size << std::endl;
+    } else if (_type == "tangle_cube") {
+        os << "    Max Radius: " << _max_radius << std::endl;
+        os << "    Min Radius: " << _min_radius << std::endl;
+    }
     os << "    Transformations: " << std::endl;
     os << "    Material: " << std::endl << _material;
     for (auto &transformation : _transformations) {

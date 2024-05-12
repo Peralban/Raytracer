@@ -23,7 +23,6 @@ SRC		= 		main.cpp								\
 				Shapes/Sphere.cpp						\
 				Shapes/Plane.cpp						\
 				Shapes/Parallelepiped.cpp				\
-				Shapes/Torus.cpp						\
 				Shapes/Cone.cpp							\
 				Shapes/CylinderInfinite.cpp				\
 				Shapes/CylinderLimited.cpp				\
@@ -36,6 +35,10 @@ SRC		= 		main.cpp								\
 				Transformations/Shear.cpp				\
 				Materials/LightDirectional.cpp			\
 				Textures/SolidColor.cpp					\
+				Textures/ChessBoardTexture.cpp			\
+				Textures/FromImage.cpp					\
+				Images/ImageLoad.cpp					\
+
 
 TRUE_SRC 	= 	$(patsubst %,src/%, $(SRC))
 
