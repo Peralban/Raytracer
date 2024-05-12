@@ -54,7 +54,7 @@ VALGRIND	=	-g3
 
 LIBS		=	-lconfig++ -lSDL2 -lSDL2_image -lSDL2_ttf
 
-CXXFLAGS	=	$(INCLUDE) $(WARNINGS) $(LIBS) #$(VALGRIND)
+CXXFLAGS	=	$(INCLUDE) $(WARNINGS) $(LIBS) -Ofast #$(VALGRIND)
 
 #-------------- Tests Variables --------------#
 
