@@ -7,6 +7,8 @@
 
 #include "Interfaces/ITextures.hpp"
 
+#pragma once
+
 namespace RayTracer {
     class SolidColor : public ITextures {
     public:
