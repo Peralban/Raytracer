@@ -132,6 +132,11 @@ namespace App {
             void setSample(int sample) { _sample = sample; }
 
             /**
+             * @brief Set the number of bounces.
+             */
+            void setNbBounces(int nbBounces) { _nbBounces = nbBounces; }
+
+            /**
              * @brief Set the size of the window.
              */
             void setWindowSize(unsigned int width, unsigned int height) { _windowWidth = width; _windowHeight = height; }
@@ -140,7 +145,11 @@ namespace App {
              * @brief Set the color of the background.
              * @param color The color of the background.
              */
-            void setColor(Math::Vector3D color) { _color = color; }
+            void setColor(Math::Vector3D color) {
+                _color.x = color.x / 255.0;
+                _color.y = color.y / 255.0;
+                _color.z = color.z / 255.0;
+            }
 
         // Sorter
             /**
@@ -178,6 +187,7 @@ namespace App {
             volatile unsigned int _windowWidth;
             volatile unsigned int _windowHeight;
             volatile int _sample;
+            int _nbBounces;
             Math::Vector3D _color;
             std::vector<std::shared_ptr<Cluster>> _clusters;
             std::vector<std::pair<std::pair<unsigned int, unsigned int>, std::string>> _config;

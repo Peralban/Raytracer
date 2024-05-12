@@ -34,6 +34,7 @@ namespace Core {
     void Engine::parseConfigFile() {
         _parser.parseConfigFile();
         _clusterManagement.setSample(_parser.getPrecision().getSamples());
+        _clusterManagement.setNbBounces(_parser.getPrecision().getNumberOfBounces());
         unsigned int width = _parser.getCamera().getResolution().first;
         unsigned int height = _parser.getCamera().getResolution().second;
         _clusterManagement.setWindowSize(width, height);

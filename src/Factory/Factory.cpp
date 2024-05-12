@@ -16,11 +16,13 @@
 #include "Materials/Matte.hpp"
 #include "Materials/Metal.hpp"
 #include "Materials/Glass.hpp"
+#include "Materials/LightDirectional.hpp"
 #include "Shapes/TransformedShape.hpp"
 #include "Transformations/Translation.hpp"
 #include "Transformations/Rotation.hpp"
 #include "Transformations/Scale.hpp"
 #include "Transformations/Shear.hpp"
+#include "Textures/SolidColor.hpp"
 #include <cmath>
 
 Factory::SceneFactory::SceneFactory() {}
@@ -37,7 +39,7 @@ std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::createPrimitive(App::P
             return makeCone(shapeArgs); 
         }},
         {"parallelepiped", [this](App::ParsingShape& shapeArgs) {
-            return makeParallelepiped(shapeArgs); 
+            return makeParallelepiped(shapeArgs);
         }},
         {"cylinder", [this](App::ParsingShape& shapeArgs) {
             return makeCylinder(shapeArgs); 
@@ -104,13 +106,16 @@ static std::shared_ptr<RayTracer::IMaterial> makeMaterial(App::ParsingMaterial m
     Math::Vector3D material_color(color.x / 255, color.y / 255, color.z / 255);
 
     if (type == "matte") {
-        return std::make_shared<RayTracer::Matte>(material_color);
+        return std::make_shared<RayTracer::Matte>(std::make_shared<RayTracer::SolidColor>(material_color));
     }
     if (type == "metal") {
-        return std::make_shared<RayTracer::Metal>(material_color, material.getFuzziness());
+        return std::make_shared<RayTracer::Metal>(std::make_shared<RayTracer::SolidColor>(material_color), material.getFuzziness());
     }
     if (type == "glass") {
-        return std::make_shared<RayTracer::Glass>(material.getRefractiveIndex(), material.getAlbedo());
+        return std::make_shared<RayTracer::Glass>(material.getRefractiveIndex(), std::make_shared<RayTracer::SolidColor>(material_color));
+    }
+    if (type == "light") {
+        return std::make_shared<RayTracer::LightDirectional>(std::make_shared<RayTracer::SolidColor>(material_color), material.getLightIntensity());
     }
     throw Factory::ErrorMaterial();
 }

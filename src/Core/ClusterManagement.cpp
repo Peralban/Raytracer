@@ -13,6 +13,7 @@
 #include "ClusterManagement.hpp"
 #include "Interfaces/IMaterial.hpp"
 #include <time.h>
+#include <parallel/algorithm>
 
 #include <algorithm>
 #include <fstream>
@@ -28,7 +29,8 @@ App::ClusterManagement::ClusterManagement(int width, int height)
     :   _nbThreads(std::thread::hardware_concurrency()),
         _windowWidth(width),
         _windowHeight(height),
-        _sample(50),
+        _sample(25),
+        _nbBounces(20),
         _clusters(),
         _config()
 {
@@ -53,21 +55,25 @@ App::ClusterManagement::~ClusterManagement()
     _clusters.clear();
 }
 
-static Math::Vector3D color(const Math::Ray3D &ray, RayTracer::IShape *scene, int depth)
+static Math::Vector3D color(const Math::Ray3D &ray, RayTracer::IShape *scene, int depth, int nbBounces, Math::Vector3D background)
 {
     RayTracer::hits  hit;
     if (scene->hit(ray, 0.001, 10000.0, hit)) {
         Math::Ray3D scattered;
         Math::Vector3D attenuation;
-        if (depth < 50 && hit.material->scatter(ray, hit, attenuation, scattered)) {
-            return attenuation * color(scattered, scene, depth + 1);
-        } else {
-            return {0, 0, 0};
-        }
+        Math::Vector3D emitted = hit.material->emitted(hit.uPos, hit.vPos, hit.point);
+        if (depth < nbBounces && hit.material->scatter(ray, hit, attenuation, scattered))
+            return emitted + (attenuation * color(scattered, scene, depth + 1, nbBounces, background));
+        else if (hit.material->scatter(ray, hit, attenuation, scattered))
+            return emitted + attenuation;
+        else
+            return emitted;
     } else {
-        Math::Vector3D unitDirection = ray.getDirection().getUnitVector();
-        double t = 0.5 * (unitDirection.y + 1.0);
-        return Math::Vector3D(1.0, 1.0, 1.0) * (1.0 - t) + Math::Vector3D(0.5, 0.7, 1.0) * t;
+        //Math::Vector3D unitDirection = ray.getDirection().getUnitVector();
+        //double t = 0.5 * (unitDirection.y + 1.0);
+        //return background * (1.0 - t) + Math::Vector3D(0.5, 0.7, 1.0) * t;
+
+        return background;
     }
 }
 
@@ -82,7 +88,7 @@ void App::ClusterManagement::render(std::pair<unsigned int, unsigned int> _axesY
             float v = float(y + drand48()) / float(height);
             Math::Ray3D ray = camera->getRay(u, v);
             Math::Vector3D p = ray.pointOnRay(2.0);
-            col += color(ray, scene.get(), 0);
+            col += color(ray, scene.get(), 0, _nbBounces, _color);
         }
         col /= float(samples);
         col = Math::Vector3D(sqrt(col.x), sqrt(col.y), sqrt(col.z));
@@ -121,7 +127,8 @@ void App::ClusterManagement::executeRendering(std::shared_ptr<RayTracer::ShapeLi
 
 void App::ClusterManagement::sortConfig()
 {
-    std::sort(_config.begin(), _config.end(), [](const std::pair<std::pair<unsigned int, unsigned int>, std::string> &a, const std::pair<std::pair<unsigned int, unsigned int>, std::string> &b) {
+    __gnu_parallel::sort(_config.begin(), _config.end(), [](const std::pair<std::pair<unsigned int, unsigned int>,
+            std::string> &a, const std::pair<std::pair<unsigned int, unsigned int>, std::string> &b) {
         if (a.first.second == b.first.second)
             return a.first.first > b.first.first;
         else

@@ -25,11 +25,14 @@ namespace RayTracer {
      *
      * The hits struct contains information about a ray hitting a shape, including the hit point, the normal at the hit point, and the material of the shape.
      */
-    struct hits {
+    class hits {
+    public:
         float t; ///< The parameter t from the ray equation that represents the hit point.
         Math:: Vector3D point; ///< The point in 3D space where the ray hit the shape.
         Math::Vector3D normal; ///< The normal vector at the hit point.
         std::shared_ptr<IMaterial> material; ///< The material of the shape that was hit.
+        double uPos; ///< The u position of the hit point on the shape.
+        double vPos; ///< The v position of the hit point on the shape.
     };
 
     /**

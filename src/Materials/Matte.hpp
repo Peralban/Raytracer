@@ -8,6 +8,7 @@
 #pragma once
 
 #include "Interfaces/IMaterial.hpp"
+#include "Interfaces/ITextures.hpp"
 
 namespace RayTracer {
     /**
@@ -25,7 +26,7 @@ namespace RayTracer {
          *
          * @param albedo The albedo of the material.
          */
-        Matte(const Math::Vector3D &albedo);
+        Matte(std::shared_ptr<ITextures> albedo);
 
         /**
          * @brief Default destructor for the Matte class.
@@ -46,6 +47,20 @@ namespace RayTracer {
         bool scatter(const Math::Ray3D &ray, const hits &hit, Math::Vector3D &attenuation,
                      Math::Ray3D &scattered) const override;
 
-        Math::Vector3D albedo; ///< The albedo of the material. Albedo is the proportion of the light that is reflected by the surface.
+        /**
+         * @brief Determines the emitted light of the material.
+         *
+         * This method calculates the emitted light of the material.
+         *
+         * @return The emitted light of the material.
+         *
+         * @note This method is not used for glass materials.
+         *      It is only implemented to satisfy the IMaterial interface.
+         *      It always returns a black color.
+         */
+        Math::Vector3D emitted([[maybe_unused]]double uPos, [[maybe_unused]]double vPos, [[maybe_unused]]const Math::Vector3D &point) const override {return {0, 0, 0};}
+
+        private:
+        std::shared_ptr<ITextures> _albedo; ///< The albedo of the material.
     };
 }

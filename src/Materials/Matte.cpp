@@ -21,8 +21,8 @@ static Math::Vector3D randomInUnitSphere()
     return p;
 }
 
-RayTracer::Matte::Matte(const Math::Vector3D &albedoValue)
-        : albedo(albedoValue)
+RayTracer::Matte::Matte(std::shared_ptr<ITextures> texture)
+        : _albedo(std::move(texture))
 {
 }
 
@@ -30,6 +30,6 @@ bool RayTracer::Matte::scatter([[maybe_unused]] const Math::Ray3D &ray, const hi
 {
     Math::Vector3D reflectedRay = hit.point + hit.normal + randomInUnitSphere();
     scattered = Math::Ray3D(hit.point, reflectedRay-hit.point);
-    attenuation = albedo;
+    attenuation = _albedo->get(hit.uPos, hit.vPos, hit.point);
     return true;
 }

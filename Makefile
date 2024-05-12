@@ -34,6 +34,8 @@ SRC		= 		main.cpp								\
 				Transformations/Rotation.cpp			\
 				Transformations/Scale.cpp				\
 				Transformations/Shear.cpp				\
+				Materials/LightDirectional.cpp			\
+				Textures/SolidColor.cpp					\
 
 TRUE_SRC 	= 	$(patsubst %,src/%, $(SRC))
 
@@ -92,16 +94,24 @@ BONUS_LIBS	=	-lconfig++
 
 #-------------- Phony & Silent Rules --------------#
 
-.PHONY: all clean fclean re tests_run tests_compile tests_launch
+.PHONY: all clean fclean re tests_run tests_compile tests_launch doc doc_clean doc_re bonus_compile bonus_run bonus_clean bonus_fclean bonus_re all_clean
 
-.SILENT: clean fclean re tests_launch tests_run
+.SILENT: clean fclean re tests_launch tests_run tests_compile doc doc_clean doc_re bonus_compile bonus_run bonus_clean bonus_fclean bonus_re all_clean
 
 #-------------- Rules --------------#
 
 all:	$(NAME)
 
+%.o:	%.cpp
+	@g++ -fopenmp -c -o $@ $< $(CXXFLAGS)
+	@if [ -f $@ ]; then \
+		printf "\033[1;32mCompiled $< ✅\033[0m\n"; \
+	else \
+		printf "\033[1;31mCompilation failed for $< ❌\033[0m\n"; \
+	fi
+
 $(NAME):	$(OBJ)
-	g++ -o $(NAME) $(OBJ) $(CXXFLAGS)
+	@g++ -fopenmp -o $(NAME) $(OBJ) $(CXXFLAGS)
 	@if [ -f $(NAME) ]; then \
 		printf "\033[1;32mCompilation completed ✅\033[0m\n"; \
 	else \
@@ -126,7 +136,7 @@ re:	fclean all
 #-------------- Tests --------------#
 
 tests_compile: fclean
-	g++ -o unit_tests $(TEST_TRUE_SRC) $(TESTS_FLAGS)
+	g++ -fopenmp -o unit_tests $(TEST_TRUE_SRC) $(TESTS_FLAGS)
 	@if [ -f unit_tests ]; then \
 		printf "\033[1;32mTests compiled ✅\033[0m\n"; \
 	else \
@@ -146,7 +156,7 @@ tests_run: tests_compile tests_launch
 #-------------- Bonus --------------#
 
 bonus_compile:
-	g++ -o $(BONUS_NAME) $(BONUS_TRUE_SRC) $(CXXFLAGS)
+	g++ -fopenmp -o $(BONUS_NAME) $(BONUS_TRUE_SRC) $(CXXFLAGS)
 	@if [ -f $(BONUS_NAME) ]; then \
 		printf "\033[1;32mBonus compiled ✅\033[0m\n"; \
 	else \
