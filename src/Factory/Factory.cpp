@@ -16,6 +16,7 @@
 #include "Materials/Matte.hpp"
 #include "Materials/Metal.hpp"
 #include "Materials/Glass.hpp"
+#include "Materials/LightDirectional.hpp"
 #include "Shapes/TransformedShape.hpp"
 #include "Transformations/Translation.hpp"
 #include "Transformations/Rotation.hpp"
@@ -125,6 +126,9 @@ static std::shared_ptr<RayTracer::IMaterial> makeMaterial(App::ParsingMaterial m
     }
     if (type == "glass") {
         return std::make_shared<RayTracer::Glass>(material.getRefractiveIndex(), std::make_shared<RayTracer::SolidColor>(material_color));
+    }
+    if (type == "light") {
+        return std::make_shared<RayTracer::LightDirectional>(std::make_shared<RayTracer::SolidColor>(material_color), material.getLightIntensity());
     }
     throw Factory::ErrorMaterial();
 }
