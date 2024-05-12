@@ -20,7 +20,18 @@ namespace Core {
             _parser.checkArguments(argc, argv);
             initialize();
         } catch (const std::exception &e) {
-            std::cerr << e.what() << std::endl;
+            if (std::string(e.what()) == "Too many arguments")
+                throw App::Parsing::ErrorTooManyArguments();
+            if (std::string(e.what()) == "Too few arguments")
+                throw App::Parsing::ErrorTooFewArguments();
+            if (std::string(e.what()) == "Error in treatment of the configuration file")
+                throw App::Parsing::ErrorCFGFile();
+            if (std::string(e.what()) == "Invalid type of file")
+                throw App::Parsing::ErrorInvalidType();
+            if (std::string(e.what()) == "CFG file not found")
+                throw App::Parsing::ErrorNoCFGFile();
+            if (std::string(e.what()) == "ParseException")
+                throw App::Parsing::ErrorParseException();
         }
     }
 
