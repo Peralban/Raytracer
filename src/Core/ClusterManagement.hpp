@@ -131,6 +131,8 @@ namespace App {
              * @brief Set the number of bounces.
              */
             void setNbBounces(int nbBounces) { _nbBounces = nbBounces; }
+
+            /**
              * @brief Set the size of the window.
              */
             void setWindowSize(unsigned int width, unsigned int height) { _windowWidth = width; _windowHeight = height; }
