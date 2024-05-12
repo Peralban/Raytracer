@@ -15,20 +15,6 @@
 
 namespace Images {
     /**
-     * @brief A struct representing an RGB color.
-     *
-     * This struct represents an RGB color with three float values.
-     */
-    class RGB {
-        public:
-            float r;
-            float g;
-            float b;
-
-            RGB(float r, float g, float b) : r(r), g(g), b(b) {}
-            RGB() = default;
-    };
-    /**
      * @class ImageReader
      * @brief A class representing an image reader.
      *
@@ -36,68 +22,49 @@ namespace Images {
      */
     class ImageReader {
     public:
+        ImageReader(const std::string& imagePath) {
+            std::ifstream file(imagePath, std::ios::binary);
+            if (!file) {
+                throw std::runtime_error("Could not open or find the image");
+            }
 
-        /**
-         * @brief Default constructor for the ImageReader class.
-         *
-         * Initializes a new instance of the ImageReader class.
-         */
-        ImageReader() = default;
+            // Read the BMP file header
+            unsigned char header[54];
+            file.read(reinterpret_cast<char*>(header), 54);
 
-        /**
-         * @brief Default destructor for the ImageReader class.
-         *
-         * Deletes the ImageReader instance.
-         */
-        ~ImageReader() = default;
-        /**
-         * @brief Constructor for the ImageReader class.
-         *
-         * Initializes a new instance of the ImageReader class with a given image path.
-         *
-         * @param imagePath The path to the image file.
-         */
-        ImageReader(const std::string& imagePath);
+            // Get image dimensions
+            _width = *reinterpret_cast<int*>(&header[18]);
+            _height = *reinterpret_cast<int*>(&header[22]);
 
-        /**
-         * @brief Reads the image file.
-         *
-         * This method reads the image file and stores its data in the imageData vector.
-         */
-        const std::vector<std::vector<RGB>>& getImageData() const;
+            // Read the image data
+            int row_padded = (_width*3 + 3) & (~3);
+            imageData = new unsigned char[row_padded * _height];
 
-        /**
-         * @brief Gets the pixel at a given position.
-         *
-         * This method gets the pixel at a given position in the image.
-         *
-         * @param x The x coordinate of the pixel.
-         * @param y The y coordinate of the pixel.
-         * @return The pixel at the given position.
-         */
-        const RGB & getPixel(int x, int y) const;
+            for (int y = 0; y < _height; ++y) {
+                file.read(reinterpret_cast<char*>(imageData + y * row_padded), row_padded);
+            }
 
-        /**
-         * @brief Gets the width of the image.
-         *
-         * This method gets the width of the image.
-         *
-         * @return The width of the image.
-         */
-        int width() const;
+            file.close();
+        }
 
-        /**
-         * @brief Gets the height of the image.
-         *
-         * This method gets the height of the image.
-         *
-         * @return The height of the image.
-         */
-        int height() const;
+        ~ImageReader() {
+            delete[] imageData;
+        }
+
+        int width() const {
+            return _width;
+        }
+
+        int height() const {
+            return _height;
+        }
+
+        unsigned char* getImageData() const {
+            return imageData;
+        }
 
     private:
-        std::vector<std::vector<RGB>> imageData; ///< The image data.
-        int _width; ///< The width of the image.
-        int _height; ///< The height of the image.
+        int _width, _height;
+        unsigned char* imageData;
     };
 } // namespace Images
