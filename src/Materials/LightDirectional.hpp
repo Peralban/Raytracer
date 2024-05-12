@@ -20,7 +20,7 @@ namespace RayTracer {
          *
          * Initializes a new instance of the LightDirectional class with default color.
          */
-        LightDirectional(std::shared_ptr<ITextures> color);
+        LightDirectional(std::shared_ptr<ITextures> color, double lightIntensity);
 
         /**
          * @brief Default destructor for the LightDirectional class.
@@ -48,7 +48,17 @@ namespace RayTracer {
          */
         Math::Vector3D emitted(double uPos, double vPos, const Math::Vector3D &p) const override;
 
+        /**
+         * @brief Gets the light intensity of the material.
+         *
+         * This method gets the light intensity of the material.
+         *
+         * @return The light intensity of the material.
+         */
+        double getLightIntensity() const;
+
     private:
         std::shared_ptr<ITextures> _color;
+        double _lightIntensity;
     };
 }
