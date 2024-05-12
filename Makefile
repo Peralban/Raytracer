@@ -173,11 +173,13 @@ doc:
 	@which doxygen >/dev/null 2>&1 || { printf "\033[1;31mDoxygen is not installed. Aborting.\033[0m\n"; exit 1; }
 	@which pdflatex >/dev/null 2>&1 || { printf "\033[1;31mpdflatex is not installed. Aborting.\033[0m\n"; exit 1; }
 	@doxygen Doc/Doxyfile && make -C Doc/doxygen/latex
-	@mv Doc/doxygen/latex/refman.pdf ./Doc
+	@mv Doc/doxygen/latex/refman.pdf ./Doc/Raytracer_Documentation.pdf
+	@rm -rf Doc/refman.pdf
 	@printf "\033[1;35mDocumentation generated ✅\033[0m\n"
 
 doc_clean:
 	@rm -rf $(DOXYGEN_PATH)
+	@rm -f Doc/Raytracer_Documentation.pdf
 	@printf "\033[1;35mDocumentation removed ✅\033[0m\n"
 
 doc_re: doc_clean doc
