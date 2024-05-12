@@ -129,7 +129,7 @@ static Bonus::ParsingMaterial askMaterial()
     double intensity;
     std::string material_type;
 
-    std::cout << "Enter the type of the material (matte, metal, glass): ";
+    std::cout << "Enter the type of the material (matte, metal, glass, light): ";
     checkCin<std::string>(material_type, "Invalid type, please enter a valid type: ", []([[maybe_unused]]std::string ex) { return ex == "matte" || ex == "metal" || ex == "glass" || ex == "light"; });
     if (material_type == "matte") {
         std::cout << "Enter the color of the material (first the R and enter, then the G and enter, then the B and enter):";
