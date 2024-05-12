@@ -87,7 +87,6 @@ void Bonus::CFGGenerator::GetInfo()
 {
     std::string output_file;
     int number_of_shapes;
-    int number_of_lights;
     int number_of_obj_files;
 
     // Prompt for the output file name
