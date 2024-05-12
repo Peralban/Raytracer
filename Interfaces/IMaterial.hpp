@@ -10,6 +10,11 @@
 #include "Math/Ray3D.hpp"
 #include "IShape.hpp"
 
+/**
+ * @namespace RayTracer
+ * @brief The main namespace for the ray tracing project.
+ * Contains all the classes for the shapes.
+ */
 namespace RayTracer {
      /**
      * @class IMaterial

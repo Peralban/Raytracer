@@ -14,7 +14,6 @@ SRC		= 		main.cpp								\
 				Math/Vector3D.cpp						\
 				Math/Point3D.cpp						\
 				Raytracer/Camera.cpp					\
-				Raytracer/Background.cpp				\
 				Raytracer/Light.cpp						\
 				Factory/Factory.cpp						\
 				Materials/Glass.cpp						\
@@ -23,9 +22,7 @@ SRC		= 		main.cpp								\
 				Shapes/ShapeList.cpp					\
 				Shapes/Sphere.cpp						\
 				Shapes/Plane.cpp						\
-				Shapes/Obj.cpp 							\
 				Shapes/Parallelepiped.cpp				\
-				Shapes/Prism.cpp						\
 				Shapes/Torus.cpp						\
 				Shapes/Cone.cpp							\
 				Shapes/CylinderInfinite.cpp				\
@@ -71,6 +68,16 @@ TEST_TRUE_SRC	=	$(patsubst %,Tests/src/%, $(TEST_SRC))	\
 					$(filter-out src/main.cpp, $(TRUE_SRC))
 
 TESTS_FLAGS		=	$(TESTS_INCLUDE) $(WARNINGS) $(TESTS_LIBS) $(TESTS_COMPILATION_FLAGS)
+
+#-------------- Doxygen --------------#
+
+DOXYFILE	=	Doc/Doxyfile
+
+DOXYGEN		=	doxygen
+
+DOXYGEN_PDF	=	make -C Doc/doxygen/latex
+
+DOXYGEN_PATH	=	Doc/doxygen
 
 #-------------- Bonus --------------#
 
@@ -170,7 +177,24 @@ bonus_fclean: bonus_clean
 
 bonus_re: bonus_fclean bonus_compile
 
+#-------------- Docs --------------#
+
+doc:
+	@which doxygen >/dev/null 2>&1 || { printf "\033[1;31mDoxygen is not installed. Aborting.\nInstall doxygen\033[0m\n"; exit 1; }
+	@which pdflatex >/dev/null 2>&1 || { printf "\033[1;31mpdflatex is not installed. Aborting.\nInstall texlive-scheme-full\033[0m\n"; exit 1; }
+	@doxygen Doc/Doxyfile && make -C Doc/doxygen/latex
+	@mv Doc/doxygen/latex/refman.pdf ./Doc/Raytracer_Documentation.pdf
+	@rm -rf Doc/refman.pdf
+	@printf "\033[1;35mDocumentation generated ✅\033[0m\n"
+
+doc_clean:
+	@rm -rf $(DOXYGEN_PATH)
+	@rm -f Doc/Raytracer_Documentation.pdf
+	@printf "\033[1;35mDocumentation removed ✅\033[0m\n"
+
+doc_re: doc_clean doc
+
 #-------------- All Project --------------#
 
 all_clean: fclean bonus_fclean
-	printf "\033[1;35mAll object files removed ✅\033[0m\n"
+	@printf "\033[1;35mAll object files removed ✅\033[0m\n"

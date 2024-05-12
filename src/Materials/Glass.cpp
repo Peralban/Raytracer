@@ -5,6 +5,11 @@
 ** Glass material
 */
 
+/**
+ * @file Glass.cpp
+ * @brief Glass material class for the raytracer program
+ */
+
 #include "Glass.hpp"
 
 #include <utility>

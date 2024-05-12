@@ -5,6 +5,11 @@
 ** DESCRIPTION
 */
 
+/**
+ * @file ClusterManagement.cpp
+ * @brief ClusterManagement class implementation
+ */
+
 #include "ClusterManagement.hpp"
 #include "Interfaces/IMaterial.hpp"
 #include <time.h>

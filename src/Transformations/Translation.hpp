@@ -10,6 +10,11 @@
 
     #include "Interfaces/ITransformation.hpp"
 
+/**
+ * @namespace RayTracer
+ * @brief The main namespace for the ray tracing project.
+ * Contains all the classes for the shapes.
+ */
 namespace RayTracer {
     /// @brief Translation transformation class: moves
     /// a shape according to a translation vector

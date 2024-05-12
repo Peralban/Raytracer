@@ -50,9 +50,6 @@ std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::createPrimitive(App::P
         {"torus", [this](App::ParsingShape& shapeArgs) {
             return makeTorus(shapeArgs); 
         }},
-        {"prism", [this](App::ParsingShape& shapeArgs) {
-            return makePrism(shapeArgs); 
-        }},
         {"plane", [this](App::ParsingShape& shapeArgs) {
             return makePlane(shapeArgs); 
         }}
@@ -83,16 +80,6 @@ std::shared_ptr<RayTracer::Camera> Factory::SceneFactory::createCamera(App::Pars
     double focusDist = static_cast<double>(camera.getFocusDist());
 
     return std::make_shared<RayTracer::Camera>(viewFrom, viewAt, viewUp, fov, resolution, aperture, focusDist);
-}
-
-std::shared_ptr<RayTracer::Background> Factory::SceneFactory::createBackground(App::ParsingBackground &background)
-{
-    Math::Vector3D color = background.getColor();
-    std::string texture = background.getPath();
-
-    (void)color;
-    (void)texture;
-    return std::make_shared<RayTracer::Background>();
 }
 
 std::shared_ptr<RayTracer::Light> Factory::SceneFactory::createLight(App::ParsingLight &light)
@@ -159,19 +146,6 @@ std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeSphere(App::Parsin
         return shape;
     }
     return std::make_shared<RayTracer::Sphere>(center, radius, makeMaterial(sphere.getMaterial()));
-}
-
-std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeObj(App::ParsingShape &obj)
-{
-    Math::Vector3D center = obj.getPosition();
-    Math::Vector3D size = obj.getSize();
-    float radius = size.x;
-    RayTracer::IMaterial *material = nullptr;
-
-    (void)center;
-    (void)radius;
-    (void)material;
-    return std::make_shared<RayTracer::Obj>();
 }
 
 std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makePlane(App::ParsingShape &plane)
@@ -324,17 +298,4 @@ std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makeTorus(App::Parsing
     (void)radius;
     (void)material;
     return std::make_shared<RayTracer::Torus>();
-}
-
-std::shared_ptr<RayTracer::IShape> Factory::SceneFactory::makePrism(App::ParsingShape &prism)
-{
-    Math::Vector3D center = prism.getPosition();
-    Math::Vector3D size = prism.getSize();
-    float radius = size.x;
-    RayTracer::IMaterial *material = nullptr;
-
-    (void)center;
-    (void)radius;
-    (void)material;
-    return std::make_shared<RayTracer::Prism>();
 }

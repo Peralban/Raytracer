@@ -5,8 +5,12 @@
 ** Metal material
 */
 
-#include "Metal.hpp"
+/**
+ * @file Metal.cpp
+ * @brief Metal material implementation
+ */
 
+#include "Metal.hpp"
 
 static Math::Vector3D randomInUnitSphere()
 {
